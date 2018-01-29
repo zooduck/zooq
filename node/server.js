@@ -148,7 +148,7 @@ server.on("request", (request, response) => {
             });
         }
     } else if (path != "/") {
-        fs.readFile(`.${path}`, (err, file) => { // very important that the path is ./ and not / as / would navigate to the machine root like C:/
+        fs.readFile(`./public${path}`, (err, file) => { // very important that the path is ./ and not / as / would navigate to the machine root like C:/
             if (err) {
                 console.log(err);
             }
@@ -163,7 +163,7 @@ server.on("request", (request, response) => {
             response.end(file, "UTF-8");
         });
     } else {
-        fs.readFile("./index.html", (err, file) => {
+        fs.readFile("./public/index.html", (err, file) => {
             if (err) {
                 console.log(err);
             }
