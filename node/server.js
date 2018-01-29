@@ -4,8 +4,8 @@ const url = require("url");
 
 const server = http.createServer();
 const options = {
-    url: "zooq.herokuapp.com",
-    port: 8080
+    url: "localhost",
+    port: process.env.PORT || 8080
 };
 
 const requestMethodAlias = {
