@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.html",
   "dependencies": {
-    "ejs": "^2.5.7",
     "lodash": "^4.17.4",
     "luxon": "^0.2.12",
     "pusher": "^1.5.1",
