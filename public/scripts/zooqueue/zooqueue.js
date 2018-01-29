@@ -118,6 +118,9 @@ function ZooQueue() {
 		return staff__COPY;
 	};
 	const $calcMinutesUntilFree = (data) => {
+		if (!data) {
+			return 0;
+		}
 		// ----------------------------------------------------------
 		// NOTE: data = activeBreak, activeBusy or activeBooking
 		// ----------------------------------------------------------
