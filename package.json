@@ -1,0 +1,26 @@
+{
+  "name": "zooq",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "luxon": "^0.2.12",
+    "pusher": "^1.5.1",
+    "pusher-js": "^4.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zooduck/queue-moo-be-do.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zooduck/queue-moo-be-do/issues"
+  },
+  "homepage": "https://github.com/zooduck/queue-moo-be-do#readme"
+}
