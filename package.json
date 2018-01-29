@@ -11,16 +11,17 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node node/server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zooduck/queue-moo-be-do.git"
+    "url": "git+https://github.com/zooduck/zooq.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zooduck/queue-moo-be-do/issues"
+    "url": "https://github.com/zooduck/zooq/issues"
   },
-  "homepage": "https://github.com/zooduck/queue-moo-be-do#readme"
+  "homepage": "https://github.com/zooduck/zooq#readme"
 }
