@@ -16,15 +16,18 @@ const zooqueueApi = (function zooqueueApi () {
 	const $generateTicketRef = (lastTicketRef, serviceId) => {
 		let ticketRef = parseInt(lastTicketRef) + 1;
 		let serviceCode = zooqueue.getService(serviceId).code;
+		let queueCode = zooqueue.getCurrentQueue().code;
 		switch (ticketRef.toString().length) {
 			case 1: ticketRef = `00${ticketRef}`; break;
 			case 2: ticketRef = `0${ticketRef}`; break;
 		}
-		return serviceCode? `${ticketRef}${serviceCode}` : ticketRef;
+		return serviceCode? `${ticketRef}${queueCode}:${serviceCode}` : ticketRef;
 	};
+	let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 	const $convertQueueFormDataToJson = (formData) => {
 		const data = {
 			id: zooqueue.generateUniqueId(),
+			code: `${alphabet.pop()}${alphabet.shift()}`,
 			customers: [],
 			customersBeingServed: [],
 			serviceIds: [],
@@ -91,7 +94,11 @@ const zooqueueApi = (function zooqueueApi () {
 		const lastTicketRef = $getLastTicketRef(service.code);
 		data.ticketRef = $generateTicketRef(lastTicketRef, service.id);
 		const serviceCode = data.ticketRef.split("").pop();
-		data.ticketRefDisplay = `${serviceCode}${data.ticketRef.substr(0, data.ticketRef.length - 1)}`;
+		const ticketRefCode = data.ticketRef.match(/\D+/);
+		const ticketRefNumber = data.ticketRef.match(/\d+/);
+		data.ticketRefDisplay = `${ticketRefCode[0]}${ticketRefNumber[0]}`;
+		// console.log("ticketRefCode", ticketRefCode);
+		// data.ticketRefDisplay = `${serviceCode}${data.ticketRef.substr(0, data.ticketRef.length - 1)}`;
 
 		return JSON.stringify(data);
 	};

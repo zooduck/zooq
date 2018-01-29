@@ -46,14 +46,15 @@ function ZooQueue() {
 	  CUSTOMER_TO_SERVE_NOT_FOUND: "You are not qualified to serve any of the customers in the queue.",
 		SERVICE_NOT_SUPPORTED: "You are not qualified to serve the priority customer.",
 		CUSTOMER_FORM_FIRST_NAME_OR_SERVICE_INVALID: "Please enter a first name and select a service.",
-		QUEUE_FORM_QUEUE_NAME_OR_SERVICE_INVALID: "Please enter a name for the queue and assign at least one service."
+		QUEUE_FORM_QUEUE_NAME_OR_SERVICE_INVALID: "Please enter a name for the queue and assign at least one service.",
+		PRIORITY_CUSTOMER_CANNOT_BE_DELETED: "Priority customers cannot be removed from the queue."
 	}
 	let alertTimeout = null;
 	// =====================
 	// private methods...
 	// =====================
-	const $alertService = (type = "", msg = "BANANAS") => {
-		const message = alertKeys[type]? alertKeys[type] : msg;
+	const $alertService = (key = "", msg = "BANANAS") => {
+		const message = alertKeys[key]? alertKeys[key] : msg;
 		zooqueue.elements("alertMessage").innerHTML = message;
 		zooqueue.elements("alert").classList.add("--active");
 		if (alertTimeout) clearTimeout(alertTimeout);

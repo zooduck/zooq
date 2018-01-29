@@ -5,6 +5,7 @@ const deleteCustomerFromQueueCtrl__EVENT = (el) => {
     customerIsPriorityCustomer = (zooqueue.getCustomer(id).id == zooqueue.getCurrentQueue().priorityCustomer.id);
   }
   if (customerIsPriorityCustomer) {
+    zooqueue.alert("PRIORITY_CUSTOMER_CANNOT_BE_DELETED");
     return zooqueue.consoleError("PRIORITY_CUSTOMER_CANNOT_BE_DELETED");
   }
 

@@ -25,7 +25,7 @@ const queuesCreateOne = (function queuesCreateOne () {
 				// -------------------------
 				// payload error checking
 				// -------------------------
-				let queueInvalid = false;	
+				let queueInvalid = false;
 				if (payloadQueue.serviceIds.length < 1) {
 					// queue is not assigned to any services!
 					queueInvalid = true;
@@ -34,7 +34,7 @@ const queuesCreateOne = (function queuesCreateOne () {
 					// queue name already exists? (case-insensitive)
 					queueInvalid = queues[companyIdAsKey].find( (item) => {
 						return item.name.match(pattern);
-					});		
+					});
 				}
 				if (!queueInvalid) {
 					queues[companyIdAsKey].push(payloadQueue);

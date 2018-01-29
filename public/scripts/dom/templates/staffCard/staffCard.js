@@ -291,7 +291,7 @@ const addStaffCardToDOM = (staffMember) => {
 	if (staffMember.attendance_status == 4 || staffMember.activeBooking) {
 		// BUSY SERVING
 		sCard.classList.add("busy");
-		staffMemberStatus__el.innerHTML = `BUSY SERVING (from ${staffMember.activeQueue? staffMember.activeQueue.name : "UNKNOWN_QUEUE"})`;
+		staffMemberStatus__el.innerHTML = `BUSY SERVING (${staffMember.activeQueue? "from " + staffMember.activeQueue.name : "NOT FROM QUEUE"})`;
 		staffMemberStatus__el.classList.add("busy");
 		appointmentInfo__el.classList.add("--active");
 	}
