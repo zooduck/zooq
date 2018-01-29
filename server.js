@@ -178,8 +178,11 @@ server.on("request", (request, response) => {
 });
 
 // listen...
-server.listen(options.port, options.url);
-console.log(`Serving from http://${options.url}:${options.port}`);
+// server.listen(options.port, options.url);
+server.listen(options.port, () => {
+  console.log(`Serving from http://${options.url}:${options.port}`);
+});
+
 
 // register pusher...
 require("./pusher.js");
