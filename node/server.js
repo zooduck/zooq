@@ -47,6 +47,10 @@ server.on("request", (request, response) => {
     console.log("request.method: =>", request.method);
     console.log("request.url =>", request.url);
 
+    if (request.url.match(/(favicon.ico|luxon.min.js.map)/)) {
+      return console.log(`IGNORED ${request.url}!`);
+    }
+
     let path = url.parse(request.url).pathname;
     // =================================================
     // need to check if the path contains an id.
