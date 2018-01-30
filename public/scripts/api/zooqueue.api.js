@@ -187,6 +187,9 @@ const zooqueueApi = (function zooqueueApi () {
 		// ------------------------------------------------------------------------------------
 		return $http("PUT", `api/staff/?companyId=${zooqueue.companyId()}`, data, requestHeaders);
 	};
+	const $staffDeleteAll = () => {
+		return $http("DELETE", `api/staff/?companyId=${zooqueue.companyId()}`);
+	};
 	const $staffSetBookings = (data) => {
 		const requestHeaders = [["Content-Type", "application/json"]];
 		// -------------------------------------------------------------------------------------------------------------
@@ -420,6 +423,15 @@ const zooqueueApi = (function zooqueueApi () {
 				}, err => {
 					zooqueue.consoleError(err);
 					reject(err);
+				});
+			},
+			staffDeleteAll() {
+				return new Promise( (resolve, reject) => {
+					$staffDeleteAll().then( (result) => {
+						resolve(result);
+					}, err => {
+						reject(err);
+					})
 				});
 			},
 			staffSetBookings(data) {
