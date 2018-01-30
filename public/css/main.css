@@ -197,7 +197,7 @@ button.cancel:hover, button.cancel:active {
 	background-color: #eee;
 	background-image: url("http://projectyogisha.com/wp-content/uploads/2016/09/queues_cover-2.jpg");
 	background-position: center;
-	background-size: contain;
+	background-size: cover;
 	background-repeat: repeat-y;
 	background-blend-mode: soft-light;
 	overflow-y: auto;
