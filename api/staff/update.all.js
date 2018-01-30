@@ -74,7 +74,7 @@ const staffUpdateAll = (function staffUpdateAll () {
 
 				if (data != "") {
 					// ===================================================================================
-					// STAFF DATABASE ALREDY EXISTS, UPDATE BY:
+					// STAFF DATABASE ALREADY EXISTS, UPDATE BY:
 					// 1. ADDING NEW STAFF
 					// 2. UPDATING SPECIFIC PROPS OF STAFF THAT MIGHT HAVE CHANGED SINCE QUEUE BEGAN
 					//    - NOTE: AVOID PROPS SET BY THIS APPLICATION!
@@ -90,18 +90,21 @@ const staffUpdateAll = (function staffUpdateAll () {
 						let existingStaffMember = currentStaff.find( (item) => item.id == staffMember.id);
 						// update if existing, or add if new
 						if (existingStaffMember) {
-							existingStaffMember.name = staffMember.name;
-							existingStaffMember.service_ids = staffMember.service_ids;
+							existingStaffMember.name = staffMember.name; // maybe their name changed
+							existingStaffMember.service_ids = staffMember.service_ids; // maybe the list of services they support changed
 						} else currentStaff.push(staffMember);
 					}
 					// ====================================
 					// DELETE STAFF THAT NO LONGER EXIST
 					// ====================================
-					currentStaff.filter( (staffMember) => {
-						return staffMember.attendance_status == 4 || payloadStaff.find( (item) => item.id == staffMember.id);
-					});
+					currentStaff = currentStaff.filter( (staffMember) => payloadStaff.find( (item) => item.id == staffMember.id));
+					// currentStaff.filter( (staffMember) => {
+					// 	return staffMember.attendance_status == 4 || payloadStaff.find( (item) => item.id == staffMember.id);
+					// });
+					staffCollections[companyIdAsKey] = currentStaff;
 				}
 				// write db (staff)...
+				console.log("STAFF COLLECTIONS FROM BOOKINGBUG", staffCollections);
 				fs.writeFile(db, JSON.stringify(staffCollections), "utf8", (err) => {
 					if (err) {
 						console.log(err);

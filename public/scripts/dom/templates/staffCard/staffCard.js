@@ -74,7 +74,7 @@ const addStaffCardToDOM = (staffMember) => {
 	// "activeBooking" prop of the staffMember, and in that case we want to show the same styles and ctrl set as for attendance_status 4 (busy serving)
 	// ==================================================================================================================================================
 	// let statusKey = (staffMember.activeBookingType && staffMember.activeBookingType == "CALENDAR") || (staffMember.activeBooking && (staffMember.activeBookingType == "CALENDAR" || staffMember.attendance_status != 4))? 5 : staffMember.attendance_status;
-	let statusKey = staffMember.activeBookingType == "CALENDAR"? 5 : staffMember.attendance_status;
+	let statusKey = staffMember.activeBookingType == "CALENDAR" && staffMember.attendance_status == 4? 5 : staffMember.attendance_status;
 	for (ctrl of ctrlAttrsByAttendanceStatus[statusKey]) {
 		ctrl.parentNode.removeAttribute("hidden");
 	}

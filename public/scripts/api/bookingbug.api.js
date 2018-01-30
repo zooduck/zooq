@@ -172,6 +172,9 @@ const bookingbugApis = () => {
 					if (!servicesChanged && !peopleChanged) {
 						resolve({info: `peopleChanged (in bookingbug): ${peopleChanged}, servicesChanged (in bookingbug): ${servicesChanged}`});
 					}
+					if (servicesChanged && !peopleChanged || peopleChanged && !servicesChanged) {
+						promisesToResolve.pop();
+					}
 
 					if (servicesChanged) {
 						zooqueue.consoleLogC(`services CHANGED`, customLogStyles);

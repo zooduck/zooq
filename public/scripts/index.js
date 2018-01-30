@@ -1,6 +1,22 @@
 setLoading();
 loginComplete().then((result) => {
+
 	zooqueue.consoleLog(`auth-token: ${result}`);
+
+	const databaseEmpty = zooqueue.queryStringService().get("dbempty");
+	if (databaseEmpty && databaseEmpty == "staff") {
+		zooqueueApi().staffDeleteAll().then( (result) => {
+			zooqueue.consoleLog(JSON.parse(result));
+			zooqueueInit();
+		}, err => {
+			zooqueue.consoleError(err);
+		});
+	} else zooqueueInit();
+
+});
+
+
+function zooqueueInit() {
 	// ==============================
 	// initialisation code here...
 	// ==============================
@@ -57,8 +73,7 @@ loginComplete().then((result) => {
 	}, err => {
 		zooqueue.errorLog(err);
 	});
-
-});
+}
 
 function clearForm(form) {
 	const elements = Array.from(form.elements);
