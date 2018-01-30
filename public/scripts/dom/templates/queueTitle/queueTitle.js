@@ -4,7 +4,7 @@
 const setQueueTitleInDOM = () => {
 	if (zooqueue.hasQueues()) {
 		// zooqueue.elements("navBarInfoQueueName").querySelector("span").innerHTML = `${zooqueue.getCurrentQueue().name} (${zooqueue.getCurrentQueue().customers.length})`;
-		zooqueue.elements("navBarInfoQueueName").innerHTML = zooqueue.getCurrentQueue().name;
+		zooqueue.elements("navBarInfoQueueName").innerHTML = `${zooqueue.getCurrentQueue().name} (${zooqueue.getCurrentQueue().code})`;
 		zooqueue.elements("navBarInfoQueueCount").innerHTML = `${zooqueue.getCurrentQueue().customers.length}`;
 		zooqueue.elements("navBarInfoServices").innerHTML = zooqueue.getCurrentQueue().services.map( (item) => {
 			return `${item.name} (${item.code})`;

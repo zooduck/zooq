@@ -11,7 +11,7 @@ const serveNextCtrl__EVENT = (el, customer = null) => {
 
   const serviceSupported = staffMemberServing.service_ids.find( (item) => item == customerToServe.services[0].id);
   if (!serviceSupported) {
-    zooqueue.alert(null, `${staffMemberServing.name} is not qualified to serve ${customerToServe.firstName} ${customerToServe.lastName}`);
+    zooqueue.alert(null, `${staffMemberServing.name} is not qualified to serve ${customerToServe.firstName} ${customerToServe.lastName}.`);
     return zooqueue.consoleError("SERVICE_NOT_SUPPORTED");
   }
 
