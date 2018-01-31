@@ -132,6 +132,7 @@ function setEventListenersForStaticContent () {
 	// CTRL: CREATE CUSTOMER
 	zooqueue.elements("customerCreateForm__submitCtrl").addEventListener("click", function (e) {
 		if (!zooqueue.hasQueues()) {
+			zooqueue.alert("QUEUE_NOT_FOUND");
 			return zooqueue.consoleError("QUEUE_NOT_FOUND");
 		}
 		const formData = new FormData(zooqueue.elements("customerCreateForm").querySelector("form"));

@@ -47,7 +47,8 @@ function ZooQueue() {
 		SERVICE_NOT_SUPPORTED: "You are not qualified to serve the priority customer.",
 		CUSTOMER_FORM_FIRST_NAME_OR_SERVICE_INVALID: "Please enter a first name and select a service.",
 		QUEUE_FORM_QUEUE_NAME_OR_SERVICE_INVALID: "Please enter a name for the queue and assign at least one service.",
-		PRIORITY_CUSTOMER_CANNOT_BE_DELETED: "Priority customers cannot be removed from the queue."
+		PRIORITY_CUSTOMER_CANNOT_BE_DELETED: "Priority customers cannot be removed from the queue.",
+		QUEUE_NOT_FOUND: "No queue found. Please check that you have created a queue before trying to add a customer."
 	}
 	let alertTimeout = null;
 	// =====================
