@@ -6,10 +6,10 @@
   "dependencies": {
     "lodash": "^4.17.4",
     "luxon": "^0.2.12",
+    "mongodb": "^3.0.2",
     "pusher": "^1.5.1",
     "pusher-js": "^4.2.2"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
