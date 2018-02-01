@@ -14,6 +14,11 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 		}
 		payloadServices = payloadServices.filter( (service) => !service.queuing_disabled);
 
+		payload.dbo.collection("services").insertMany(payloadServices, (err, result) => {
+			if (err) return console.log(err);
+			console.log(`inserted ${result.insertedCount} docs into services`);
+		});
+
 		return new Promise((resolve, reject) => {
 			// read db...
 			fs.readFile(db, "utf8", (err, data) => {
