@@ -1,4 +1,3 @@
-
 // dependencies...
 const fs = require("fs");
 // methods...
@@ -14,6 +13,9 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 		}
 		payloadServices = payloadServices.filter( (service) => !service.queuing_disabled);
 
+		// ====================================================
+		// TEST UPDATE SERVICES COLLECTION IN MONGODB (MLAB)
+		// ====================================================
 		payload.dbo.collection("services").insertMany(payloadServices, (err, result) => {
 			if (err) return console.log(err);
 			console.log(`inserted ${result.insertedCount} docs into services`);
