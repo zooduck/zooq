@@ -30,7 +30,7 @@ const staffUpdateAll = (function staffUpdateAll () {
 						// DELETE _embedded (we don't need this!)
 						delete staffMember._embedded;
 						for (i in staffMember._links) {
-							if (i != "queuer") {
+							if (i != "queuer" && i != "images") {
 								// ============================================================================================================
 								// DELETE all links except "queuer" - we might need that to get details of any current bookings in progress
 								// although if that booking started earlier than the current day, then it will not be returned in the
