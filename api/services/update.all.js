@@ -21,6 +21,25 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 			console.log(`inserted ${result.insertedCount} docs into services`);
 		});
 
+		// ====================================================================================================================
+		// TODO: add services that are not there (but exist in payload), delete services which are there (but not in payload)
+		// ====================================================================================================================
+		payload.dbo.collection("services").find({}).toArray( (err, dbServices) => {
+			if (err) return console.log(err);
+			for (const service of dbServices) { // loop all docs...
+				// payload service exists in database?
+				const serviceExistsInDatabase = payloadServices.find( (item) => item.id == service.id);
+				if (!serviceExistsInDatabase) {
+					// TODO: add the service to the database
+				}
+				// database service exists in payload?
+				const serviceExistsInPayload = payload.dbo.collection("services").find(service).limit(1);
+				if (!serviceExistsInPayload) {
+					// TODO: delete the service from database
+				}
+			}
+		});
+
 		return new Promise((resolve, reject) => {
 			// read db...
 			fs.readFile(db, "utf8", (err, data) => {
