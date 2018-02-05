@@ -63,11 +63,13 @@ function zooqueueInit() {
 		// update the time data elements instead
 		// =============================================
 		setInterval( () => {
-			const filters = zooqueue.getFilters();
-			zooqueue.setEstimatedWaitTimes();
-			resetCards();
-			buildStaffCards(filters);
-			buildQueueCards(filters);
+			if (zooqueue.hasQueues()) {
+				const filters = zooqueue.getFilters();
+				zooqueue.setEstimatedWaitTimes();
+				resetCards();
+				buildStaffCards(filters);
+				buildQueueCards(filters);
+			}			
 		}, 60000); // each 60 seconds
 
 	}, err => {

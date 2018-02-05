@@ -104,7 +104,7 @@ const staffUpdateAll = (function staffUpdateAll () {
 					staffCollections[companyIdAsKey] = currentStaff;
 				}
 				// write db (staff)...
-				console.log("STAFF COLLECTIONS FROM BOOKINGBUG", staffCollections);
+				// console.log("STAFF COLLECTIONS FROM BOOKINGBUG", staffCollections);
 				fs.writeFile(db, JSON.stringify(staffCollections), "utf8", (err) => {
 					if (err) {
 						console.log(err);
