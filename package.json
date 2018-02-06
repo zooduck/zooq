@@ -1,9 +1,4 @@
 {
-  "author": {
-    "name": "zooduck",
-    "email": "zooduck@beniceoreatsomerice.com",
-    "url": "http://zooduck.com/"
-  },
   "name": "zooq",
   "version": "1.0.0",
   "description": "queue module prototype",
@@ -23,7 +18,11 @@
     "type": "git",
     "url": "git+https://github.com/zooduck/zooq.git"
   },
-  "author": "",
+  "author": {
+    "name": "zooduck",
+    "email": "zooduck@beniceoreatsomerice.com",
+    "url": "http://zooduck.com/"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/zooduck/zooq/issues"
