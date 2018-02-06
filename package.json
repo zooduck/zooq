@@ -12,8 +12,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js && open",
-    "open": "opn http://localhost:8080"
+    "open": "opn http://localhost:8080",
+    "start": "node server.js",
+    "serve": "npm run open && npm run start"
   },
   "repository": {
     "type": "git",
