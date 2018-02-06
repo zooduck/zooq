@@ -5,7 +5,6 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 	const $run = (payload) => {
 		return new Promise( (resolve, reject) => {
 			const companyIdAsKey = `_${payload.params.companyId}`;
-			const db = "./db/services.db.json";
 			let payloadServices = JSON.parse(payload.data);
 			let services = {};
 			for (const service of payloadServices) {
@@ -64,7 +63,7 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 						console.log(err);
 						return reject(err);
 					}
-					services[companyIdAsKey] = result;	
+					services[companyIdAsKey] = result;
 					return resolve(JSON.stringify(services));
 				});
 			});
