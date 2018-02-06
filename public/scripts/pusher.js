@@ -13,7 +13,7 @@ channel.bind("queue-event", function(data) {
     // NOTE: queuesGet() gets and sets
     // =================================
     if (data.type == "q.db.json") {
-      zooqueueApi().queuesGet().then( () => {      
+      zooqueueApi().queuesGet().then( () => {
         buildDom();
       }, err => {
         zooqueue.consoleError(err);
@@ -34,7 +34,11 @@ channel.bind("queue-event", function(data) {
     // get latest services data...
     // ==============================
     if (data.type == "services.db.json") {
-      buildDom();
+      zooqueueApi().servicesGet().then( () => {
+        buildDom();
+      }, err => {
+        zooqueue.consoleError(err);
+      });
     }
   }
 });

@@ -3,21 +3,16 @@ const fs = require("fs");
 // methods...
 const staffGetAll = (function staffGetAll () {
 	const $run = (payload) => {
-		const companyIdAsKey = `_${payload.params.companyId}`;
-		const db = "./db/staff.db.json";
-
 		return new Promise( (resolve, reject) => {
-			fs.readFile(db, "utf8", (err, data) => {
+			const companyIdAsKey = `_${payload.params.companyId}`;
+			payload.dbo.collection("staff").find({}).toArray( (err, dbStaff)  => {
 				if (err) {
 					console.log(err);
-					reject(err);
+					return reject(err);
 				}
-				if (data == "") {
-					let dbObj = {};
-					dbObj[companyIdAsKey] = [];
-					resolve(JSON.stringify(dbObj));
-					console.log(`DATABASE ${db} IS EMPTY`);
-				} else resolve(data); // all staff for all child companies
+				const staffCollections = {}
+				staffCollections[companyIdAsKey] = dbStaff;
+				return resolve(JSON.stringify(staffCollections));
 			});
 		});
 	}
