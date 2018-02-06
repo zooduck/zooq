@@ -1,7 +1,12 @@
 {
+  "author": {
+    "name": "zooduck",
+    "email": "zooduck@beniceoreatsomerice.com",
+    "url": "http://zooduck.com/"
+  },
   "name": "zooq",
   "version": "1.0.0",
-  "description": "",
+  "description": "queue module prototype",
   "main": "index.html",
   "dependencies": {
     "lodash": "^4.17.4",
