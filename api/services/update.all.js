@@ -1,12 +1,20 @@
 // dependencies...
 const fs = require("fs");
+const _ = require("lodash");
 // methods...
 const servicesUpdateAll = (function servicesUpdateAll () {
 	const $run = (payload) => {
+		let oldServices = [];
+		payload.dbo.collection("services").find({}).toArray( (err, result) => {
+			if (err) {
+				console.log(err);
+				return reject(err);
+			} else oldServices = result;
+		});
 		return new Promise( (resolve, reject) => {
 			const companyIdAsKey = `_${payload.params.companyId}`;
 			let payloadServices = JSON.parse(payload.data);
-			let services = {};
+			// let services = {};
 			for (const service of payloadServices) {
 				delete service._links;
 			}
@@ -63,7 +71,23 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 						console.log(err);
 						return reject(err);
 					}
+					const services = {}
 					services[companyIdAsKey] = result;
+					if (!_.isEqual(services, oldServices)) {
+						const Pusher = require('pusher');
+						const pusher = new Pusher({
+							appId: "451830",
+							key: "991a027aa0c940510776",
+							secret: "e1e453012d89603adc67",
+							cluster: "eu",
+							encrypted: true
+						});
+						// push message to client...
+						pusher.trigger("queue-channel", "queue-event", {
+							"message": "services.db.json: changed",
+							"type": "services.db.json"
+						});
+					}
 					return resolve(JSON.stringify(services));
 				});
 			});

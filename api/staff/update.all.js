@@ -2,44 +2,54 @@
 const fs = require("fs");
 const luxon = require("luxon");
 const $http = require("http");
+const _ = require("lodash");
 // methods...
 const staffUpdateAll = (function staffUpdateAll () {
 	const $run = (payload) => {
 		const companyIdAsKey = `_${payload.params.companyId}`;
-		const db = "./db/staff.db.json";
-		let staffCollections = {};
-		let currentStaff = [];
-		let staffToKeep = []; // current staff with status of "busy"
-		let staffToAdd = [];
 
 		// remove staff with queuing_disabled or who don't support any services...
 		let payloadStaff = JSON.parse(payload.data).filter( (staffMember) => !staffMember.queuing_disabled && staffMember.service_ids.length > 0);
 
-		return new Promise((resolve, reject) => {
-			// read db (staff)...
-			fs.readFile(db, "utf8", (err, data) => {
-				if (err) {
-					console.log(err);
-					reject(err);
-				}
-				if (data == "") {
-					// ============================================================
-					// STAFF DATABASE IS EMPTY AND MUST BE INITITALISED FOR USE
-					// ============================================================
-					for (let staffMember of payloadStaff) {
-						// DELETE _embedded (we don't need this!)
-						delete staffMember._embedded;
-						for (i in staffMember._links) {
-							if (i != "queuer" && i != "images") {
-								// ============================================================================================================
-								// DELETE all links except "queuer" - we might need that to get details of any current bookings in progress
-								// although if that booking started earlier than the current day, then it will not be returned in the
-								// bookings api call and in that case we can probably just ignore the one in _links anyway
-								// EXCEPT... there might be scenarios where a booking actually does carry over from one day to the next =D
-								// ============================================================================================================
-								delete staffMember._links[i];
-							}
+		let oldStaff = [];
+		payload.dbo.collection("staff").find({}).toArray( (err, result) => {
+			if (err) {
+				console.log(err);
+				return reject(err);
+			} else oldStaff = result;
+		});
+
+		return new Promise( (resolve, reject) => {
+			// ===================
+			// 1. INSERT if new
+			// 2. UPDATE if old
+			// 3. DELETE if gone
+			// ===================
+			for (let staffMember of payloadStaff) {
+				payload.dbo.collection("staff").findOne({id: staffMember.id}, (err, dbStaffMember) => {
+					if (err) {
+						console.log(err);
+						return reject(err);
+					}
+					if (dbStaffMember) {
+						// ===========
+						// UPDATE...
+						// ===========
+						const newVals = {
+							name: staffMember.name,
+							service_ids: staffMember.service_ids
 						}
+						payload.dbo.collection("staff").updateOne({id: staffMember.id}, {$set: newVals}, (err, result) => {
+							if (err) {
+								console.log(err);
+								return reject(err);
+							}
+						});
+					} else {
+						// ==========
+						// INSERT...
+						// ==========
+
 						// ===========================
 						// ATTENDANCE_STATUS LEGEND
 						// ===========================
@@ -67,53 +77,60 @@ const staffUpdateAll = (function staffUpdateAll () {
 						if (hoursDiff > 24) {
 							staffMember.attendance_status = 0;
 						}
+						payload.dbo.collection("staff").insertOne(staffMember, (err, result) => {
+							if (err) {
+								console.log(err);
+								return reject(err);
+							}
+						});
 					}
-					// staff database is empty, init with data from bookingbug...
-					staffCollections[companyIdAsKey] = payloadStaff;
-				}
-
-				if (data != "") {
-					// ===================================================================================
-					// STAFF DATABASE ALREADY EXISTS, UPDATE BY:
-					// 1. ADDING NEW STAFF
-					// 2. UPDATING SPECIFIC PROPS OF STAFF THAT MIGHT HAVE CHANGED SINCE QUEUE BEGAN
-					//    - NOTE: AVOID PROPS SET BY THIS APPLICATION!
-					// 3. DELETING STAFF THAT NO LONGER EXIST BECAUSE A. THEY NOW HAVE QUEUING DISABLED
-					//    OR B. THEY WERE FIRED - NOTE: DO NOT DELETE STAFF WITH ATTENDANCE_STATUS OF 4!
-					// ====================================================================================
-					staffCollections = JSON.parse(data);
-					currentStaff = staffCollections[companyIdAsKey];
-					// ======================================
-					// ADD NEW STAFF, UPDATE EXISTING STAFF
-					// ======================================
-					for (let staffMember of payloadStaff) {
-						let existingStaffMember = currentStaff.find( (item) => item.id == staffMember.id);
-						// update if existing, or add if new
-						if (existingStaffMember) {
-							existingStaffMember.name = staffMember.name; // maybe their name changed
-							existingStaffMember.service_ids = staffMember.service_ids; // maybe the list of services they support changed
-						} else currentStaff.push(staffMember);
-					}
-					// ====================================
-					// DELETE STAFF THAT NO LONGER EXIST
-					// ====================================
-					currentStaff = currentStaff.filter( (staffMember) => payloadStaff.find( (item) => item.id == staffMember.id));
-					// currentStaff.filter( (staffMember) => {
-					// 	return staffMember.attendance_status == 4 || payloadStaff.find( (item) => item.id == staffMember.id);
-					// });
-					staffCollections[companyIdAsKey] = currentStaff;
-				}
-				// write db (staff)...
-				// console.log("STAFF COLLECTIONS FROM BOOKINGBUG", staffCollections);
-				fs.writeFile(db, JSON.stringify(staffCollections), "utf8", (err) => {
-					if (err) {
-						console.log(err);
-						reject(err);
-					}
-					resolve(JSON.stringify(staffCollections)); // all staff for all child companies
 				});
+			}
+			payload.dbo.collection("staff").find({}).toArray( (err, result) => {
+				if (err) {
+					console.log(err);
+					return reject(err);
+				}
+				for (let dbStaffMember of result) {
+					if (!payloadStaff.find( (item) => item.id == dbStaffMember.id)) {
+						// ===========
+						// DELETE...
+						// ===========
+						payload.dbo.collection("staff").deleteOne({id: staffMember.id}, (err, result) => {
+							if (err) {
+								console.log(err);
+								return reject(err);
+							}
+						});
+					}
+				}
 			});
-		});
+			payload.dbo.collection("staff").find({}).toArray( (err, result) => {
+				if (err) {
+					console.log(err);
+					return reject(err);
+				}
+				const staff = {}
+				staff[companyIdAsKey] = result;
+				if (!_.isEqual(staff, oldStaff)) {
+					const Pusher = require('pusher');
+					const pusher = new Pusher({
+					  appId: "451830",
+					  key: "991a027aa0c940510776",
+					  secret: "e1e453012d89603adc67",
+					  cluster: "eu",
+					  encrypted: true
+					});
+					// push message to client...
+					pusher.trigger("queue-channel", "queue-event", {
+						"message": "staff.db.json: changed",
+						"type": "staff.db.json"
+					});
+				}
+				resolve(JSON.stringify(staff));
+			});
+
+		}); // return new Promise( (resolve, reject) => {
 	}
 	return function () {
 		return {

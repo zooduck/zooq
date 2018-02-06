@@ -5,13 +5,14 @@ const servicesGetAll = (function servicesGetAll () {
 	const $run = (payload) => {
 		return new Promise( (resolve, reject) => {
 			const companyIdAsKey = `_${payload.params.companyId}`;
-			let services = {}
 			payload.dbo.collection("services").find({}).toArray( (err, dbServices) => {
 				if (err) {
 					console.log(err);
 					return reject(err);
 				}
+				const services = {}
 				services[companyIdAsKey] = dbServices;
+				console.log("SERVICES CHANGED TO =>", services);
 				return resolve(JSON.stringify(services));
 			});
 		});
