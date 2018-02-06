@@ -301,7 +301,7 @@ const zooqueueApi = (function zooqueueApi () {
 						zooqueue.consoleError(err);
 						reject(err);
 					});
-				})
+				});
 			},
 			customerCreate(data) {
 				return new Promise((resolve, reject) => {
@@ -361,8 +361,8 @@ const zooqueueApi = (function zooqueueApi () {
 						resolve("q.db.json updated");
 					}, err => {
 						reject(err);
-					})
-				})
+					});
+				});
 			},
 			servicesSet(data) {
 				return new Promise((resolve, reject) => {
@@ -388,10 +388,11 @@ const zooqueueApi = (function zooqueueApi () {
 						}
 						zooqueue.setServices(JSON.parse(services));
 						resolve(JSON.parse(services));
-					})
-				}, err => {
-					zooqueue.consoleError(err);
-					reject(err);
+						// console.log(JSON.parse(services));
+					}, err => {
+						zooqueue.consoleError(err);
+						reject(err);
+					});
 				});
 			},
 			staffSet(data) {
@@ -402,7 +403,6 @@ const zooqueueApi = (function zooqueueApi () {
 						}
 						zooqueue.setStaff(JSON.parse(staff));
 						resolve("staff.db.json: updated");
-
 					}, err => {
 						reject(err);
 					});
@@ -419,10 +419,7 @@ const zooqueueApi = (function zooqueueApi () {
 					}, err => {
 						zooqueue.consoleError(err);
 						reject(err);
-					})
-				}, err => {
-					zooqueue.consoleError(err);
-					reject(err);
+					});
 				});
 			},
 			staffDeleteAll() {
@@ -431,7 +428,7 @@ const zooqueueApi = (function zooqueueApi () {
 						resolve(result);
 					}, err => {
 						reject(err);
-					})
+					});
 				});
 			},
 			staffSetBookings(data) {
@@ -459,9 +456,6 @@ const zooqueueApi = (function zooqueueApi () {
 						zooqueue.consoleError(err);
 						reject(err);
 					});
-				}, err => {
-					zooqueue.consoleError(err);
-					reject(err);
 				});
 			},
 			staffMemberSetBusy(id) {
@@ -472,9 +466,7 @@ const zooqueueApi = (function zooqueueApi () {
 					}, err => {
 						zooqueue.consoleError(err);
 						reject(err);
-					})
-				}, err => {
-					zooqueue.consoleError(err);
+					});
 				});
 			},
 			// staffMemberSetBusy__4(data) {
@@ -498,9 +490,7 @@ const zooqueueApi = (function zooqueueApi () {
 					}, err => {
 						zooqueue.consoleError(err);
 						reject(err);
-					})
-				}, err => {
-					zooqueue.consoleError(err);
+					});
 				});
 			},
 			staffMemberSetFree(id) {
@@ -511,9 +501,7 @@ const zooqueueApi = (function zooqueueApi () {
 					}, err => {
 						zooqueue.consoleError(err);
 						reject(err);
-					})
-				}, err => {
-					zooqueue.consoleError(err);
+					});
 				});
 			},
 			staffMemberEndShift(id) {
@@ -523,22 +511,10 @@ const zooqueueApi = (function zooqueueApi () {
 						console.log("updated staff member like: ", staffMember);
 						zooqueue.setStaffMember(staffMember);
 						resolve(result);
-
-						// $staffGet().then( (result) => {
-						// 	$staffSet(result).then( (result) => {
-						// 		zooqueue.consoleLog("staff.db.json: updated");
-						// 		resolve(result);
-						// 	});
-						// });
-						// zooqueue.consoleLog("staff.db.json: updated");
-						// resolve(JSON.parse(result));
 					}, err => {
 						zooqueue.consoleError(err);
 						reject(err);
-					})
-				}, err => {
-					zooqueue.consoleError(err);
-					reject(err);
+					});
 				});
 			}
 		}
