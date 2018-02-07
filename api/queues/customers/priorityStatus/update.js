@@ -1,36 +1,47 @@
-// dependencies...
-const fs = require("fs");
 // methods...
 const queuesUpdateOne = (function queuesUpdateOne () {
 	const $run = (payload) => {
 		const companyIdAsKey = `_${payload.params.companyId}`;
-		const priorityCustomerId = payload.data.id;
+		// const priorityCustomerId = payload.data.id;
+		const payloadCompanyId = parseInt(payload.params.companyId);
 		const payloadQueueId = payload.id;
     const payloadQueue = JSON.parse(payload.data);
-		const db = "./db/q.db.json";
+
+		const newData = {
+			$set: {
+				priorityCustomer: payloadQueue.priorityCustomer
+			}
+		}
 
 		return new Promise( (resolve, reject) => {
-			fs.readFile(db, "utf8", (err, data) => {
+			payload.dbo.collection("q").updateOne({id: payloadQueueId}, newData, (err, result) => {
 				if (err) {
 					console.log(err);
-					reject(err);
+					return reject(err);
 				}
-				if (data == "") {
-					let dbObj = {};
-					dbObj[companyIdAsKey] = [];
-					resolve(dbObj);
-				} else {
-					const queues = JSON.parse(data);
-					const queueToUpdateIndex = queues[companyIdAsKey].findIndex( (item) => item.id == payloadQueueId);
-          queues[companyIdAsKey][queueToUpdateIndex] = payloadQueue;
-          fs.writeFile(db, JSON.stringify(queues), "utf8", (err) => {
-            if (err) {
-              console.log(err);
-              reject(err);
-            }
-            resolve(JSON.stringify(queues));
-          });
-				}
+				console.log("QUEUE UPDATE modifiedCount =>", result.modifiedCount);
+				payload.dbo.collection("q").find({companyId: payloadCompanyId}).toArray( (err, result) => {
+					if (err) {
+						console.log(err);
+						return reject(err);
+					}
+					const Pusher = require('pusher');
+					const pusher = new Pusher({
+						appId: "451830",
+						key: "991a027aa0c940510776",
+						secret: "e1e453012d89603adc67",
+						cluster: "eu",
+						encrypted: true
+					});
+					// push message to client...
+					pusher.trigger("queue-channel", "queue-event", {
+						"message": "q.db.json: changed",
+						"type": "q.db.json"
+					});
+					const queues = {}
+					queues[companyIdAsKey] = result;
+					return resolve(JSON.stringify(queues));
+				});
 			});
 		});
 	}

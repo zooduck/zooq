@@ -3,60 +3,50 @@ const fs = require("fs");
 // methods...
 const customersCreateOne = (function customersCreateOne () {
 	const $run = (payload) => {
-	const companyIdAsKey = `_${payload.params.companyId}`;
-    const payloadQueueId = payload.params.queueId;
-	const payloadCustomer = JSON.parse(payload.data);
-    const db = "./db/q.db.json";
-    let queues = {}
+		const companyIdAsKey = `_${payload.params.companyId}`;
+		const payloadCompanyId = parseInt(payload.params.companyId);
+	  const payloadQueueId = payload.params.queueId;
+		const payloadCustomer = JSON.parse(payload.data);
 
-		return new Promise((resolve, reject) => {
-			// read db...
-			fs.readFile(db, "utf8", (err, data) => {
-				if (err) {
-					console.log(err);
-					reject(err);
-				}
-				if (data && data != "") {
-					queues = JSON.parse(data);
-				}
+		return new Promise( (resolve, reject) => {
 
-				// -------------------------
-				// payload error checking
-				// -------------------------
-		        let queueExists = false;
-		        let customerValid = false;
+			const customerValid = payloadCustomer.firstName && payloadCustomer.services && payloadCustomer.services.length > 0;
+			if (!customerValid) {
+				return resolve(JSON.stringify({error: `POST to api/customers/ failed logic test`}));
+			}
 
-		        // does queue exist?
-		        if (queues[companyIdAsKey]) {
-		          queue = queues[companyIdAsKey].find( (item) => {
-		            return item.id == payloadQueueId;
-		          });
-		          if (queue) {
-		            queueExists = true;
-		          }
-		        }
-		        // customer must have a serviceId, customer must have a firstName
-		        if (payloadCustomer.firstName && payloadCustomer.firstName.trim() != "" && payloadCustomer.services && payloadCustomer.services[0] && payloadCustomer.services[0].id) {
-		          customerValid = true;
-		        }
-
-		        if (queueExists && customerValid) {
-		          // push the customer to the relevant queue...
-		          queue.customers.push(payloadCustomer);
-					// write db...
-					fs.writeFile(db, JSON.stringify(queues), "utf8", (err) => {
+			payload.dbo.collection("q").update(
+				{ id: payloadQueueId },
+				{ $addToSet: { customers: payloadCustomer } },
+				(err, result) => {
+					if (err) {
+						console.log(err);
+						return reject(err);
+					}
+					payload.dbo.collection("q").find({companyId: payloadCompanyId}).toArray( (err, result) => {
 						if (err) {
 							console.log(err);
-							reject(err);
-						} else {
-							resolve(JSON.stringify(queues)); // all queues for all child companies
+							return reject(err);
 						}
+						const Pusher = require('pusher');
+						const pusher = new Pusher({
+							appId: "451830",
+							key: "991a027aa0c940510776",
+							secret: "e1e453012d89603adc67",
+							cluster: "eu",
+							encrypted: true
+						});
+						// push message to client...
+						pusher.trigger("queue-channel", "queue-event", {
+							"message": "q.db.json: changed",
+							"type": "q.db.json"
+						});
+						const queues = {}
+						queues[companyIdAsKey] = result;
+						return resolve(JSON.stringify(queues));
 					});
-				} else {
-					resolve(JSON.stringify({error: `POST to api/customers/ failed logic test`}));
-				}
-			});
-		});
+				});
+		}); // end Promise
 	}
 	return function () {
 		return {
