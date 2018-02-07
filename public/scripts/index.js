@@ -15,7 +15,6 @@ loginComplete().then((result) => {
 
 });
 
-
 function zooqueueInit() {
 	// ==============================
 	// initialisation code here...
@@ -69,7 +68,7 @@ function zooqueueInit() {
 				resetCards();
 				buildStaffCards(filters);
 				buildQueueCards(filters);
-			}			
+			}
 		}, 60000); // each 60 seconds
 
 	}, err => {
@@ -216,6 +215,7 @@ function setEventListenersForDynamicContent () {
 			const index = Array.from(form.children).indexOf(ctrl) - 1;
 			if (zooqueue.getCurrentQueueIndex() != index) {
 				zooqueue.setCurrentQueueIndex(index);
+				navBarHide();
 				buildDom();
 			}
 		});
@@ -236,5 +236,7 @@ function setSuperContainerPositionAndSize() {
 		} else superContainerMarginTop -= zooqueue.elements(item).offsetHeight;
 	});
 	zooqueue.elements("superContainer").style.marginTop = `${superContainerMarginTop}px`;
-	zooqueue.elements("superContainer").style.height = `${(window.innerHeight - superContainerMarginTop)}px`;
+	zooqueue.elements("superContainer").style.height = `${(window.innerHeight - superContainerMarginTop - 5)}px`;
 }
+
+// window.addEventListener("resize", setSuperContainerPositionAndSize);
