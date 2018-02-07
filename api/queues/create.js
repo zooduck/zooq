@@ -1,57 +1,50 @@
 // dependencies...
-const fs = require("fs");
+const _ = require("lodash");
 // methods...
 const queuesCreateOne = (function queuesCreateOne () {
 	const $run = (payload) => {
 		const companyIdAsKey = `_${payload.params.companyId}`;
-		const db = "./db/q.db.json";
-		let payloadQueue = JSON.parse(payload.data);
-		let queues = {}
-
-		return new Promise((resolve, reject) => {
-			// read db...
-			fs.readFile(db, "utf8", (err, data) => {
-				if (err) {
-					console.log(err);
-					reject(err);
-				}
-				if (data && data != "") {
-					queues = JSON.parse(data);
-				}
-				if (!queues[companyIdAsKey]) {
-					queues[companyIdAsKey] = [];
-				}
-
-				// -------------------------
-				// payload error checking
-				// -------------------------
-				let queueInvalid = false;
-				if (payloadQueue.serviceIds.length < 1) {
-					// queue is not assigned to any services!
-					queueInvalid = true;
-				} else {
-					let pattern = new RegExp(`^${payloadQueue.name}$`, "i");
-					// queue name already exists? (case-insensitive)
-					queueInvalid = queues[companyIdAsKey].find( (item) => {
-						return item.name.match(pattern);
-					});
-				}
-				if (!queueInvalid) {
-					queues[companyIdAsKey].push(payloadQueue);
-					// write db...
-					fs.writeFile(db, JSON.stringify(queues), "utf8", (err) => {
-						if (err) {
-							console.log(err);
-							reject(err);
-						} else {
-							resolve(JSON.stringify(queues)); // all queues for all child companies
-						}
-					});
-				} else {
-					resolve(JSON.stringify({error: "POST to api/queues/ failed logic test"}));
-				}
-			});
-		});
+    let payloadQueue = JSON.parse(payload.data);
+    let oldQueues = {}
+    payload.dbo.collection("q").find({}).toArray( (err, result) => {
+      if (err) {
+        console.log(err);
+        return reject(err);
+      }
+      oldQueues[companyIdAsKey] = result;
+    });
+    return new Promise( (resolve, reject) => {
+      payload.dbo.collection("q").insertOne(payloadQueue, (err, result) => {
+        if (err) {
+          console.log(err);
+          return reject(err);
+        }
+        payload.dbo.collection("q").find({}).toArray( (err, result) => {
+          if (err) {
+            console.log(err);
+            return reject(err);
+          }
+          const queues = {}
+          queues[companyIdAsKey] = result;
+          if (!_.isEqual(queues, oldQueues)) {
+            const Pusher = require('pusher');
+            const pusher = new Pusher({
+              appId: "451830",
+              key: "991a027aa0c940510776",
+              secret: "e1e453012d89603adc67",
+              cluster: "eu",
+              encrypted: true
+            });
+            // push message to client...
+            pusher.trigger("queue-channel", "queue-event", {
+              "message": "q.db.json: changed",
+              "type": "q.db.json"
+            });
+          }
+          return resolve(JSON.stringify(queues));
+        });
+      })
+    }); // end Promise
 	}
 	return function () {
 		return {
