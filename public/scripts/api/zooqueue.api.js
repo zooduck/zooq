@@ -28,6 +28,7 @@ const zooqueueApi = (function zooqueueApi () {
 		const data = {
 			id: zooqueue.generateUniqueId(),
 			code: `${alphabet.pop()}${alphabet.shift()}`,
+			companyId: zooqueue.companyId(),
 			customers: [],
 			customersBeingServed: [],
 			serviceIds: [],
