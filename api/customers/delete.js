@@ -1,5 +1,3 @@
-// dependencies...
-const fs = require("fs");
 // methods...
 const customersDeleteOne = (function customersDeleteOne () {
 	const $run = (payload) => {
@@ -10,43 +8,42 @@ const customersDeleteOne = (function customersDeleteOne () {
     const companyIdAsKey = `_${payload.params.companyId}`;
     const payloadQueueId = payload.params.queueId;
     const payloadCustomerId = payload.id;
-    const db = "./db/q.db.json";
 
-    return new Promise( (resolve, reject) => {
-      // read db (queues)...
-      fs.readFile(db, "utf8", (err, data) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        }
-        if (data && data != "") {
-          let allQueues = JSON.parse(data);
-          let queues = allQueues[companyIdAsKey];
-          let currentQueue = queues.find( (item) => {
-            return item.id == payloadQueueId;
-          });
-          if (currentQueue) {
-            let customerIndex = currentQueue.customers.findIndex( (item) => {
-              return item.id == payloadCustomerId;
-            });
-            currentQueue.customers.splice(customerIndex, 1);
-          } else reject(JSON.stringify({error: `PUT to api/customers/${payloadCustomerId}/ failed`}));
-          // write db (queues)...
-          fs.writeFile(db, JSON.stringify(allQueues), "utf8", (err) => {
-            if (err) {
-              console.log(err);
-              reject(err);
-            }
-            resolve(JSON.stringify(allQueues)); // all queues for all child companies
-          });
-        } else {
-          let dbObj = {};
-          dbObj[companyIdAsKey] = [];
-          resolve(JSON.stringify(dbObj));
-          console.log("DATABASE q.db.json IS EMPTY");
-        }
-      });
-    });
+		return new Promise( (resolve, reject) => {
+			payload.dbo.collection("q").update(
+				{id: payloadQueueId},
+				{$pull: {customers: {id: payloadCustomerId}}},
+				(err, result) => {
+					if (err) {
+						console.log(err);
+						return reject(err);
+					}
+					console.log(`DELETE CUSTOMER result.nModified => ${result.nModified}`);
+					payload.dbo.collection("q").find({}).toArray( (err, result) =>  {
+						if (err) {
+							console.log(err);
+							return reject(err);
+						}
+						const Pusher = require('pusher');
+						const pusher = new Pusher({
+							appId: "451830",
+							key: "991a027aa0c940510776",
+							secret: "e1e453012d89603adc67",
+							cluster: "eu",
+							encrypted: true
+						});
+						// push message to client...
+						pusher.trigger("queue-channel", "queue-event", {
+							"message": "q.db.json: changed",
+							"type": "q.db.json"
+						});
+						const queues = {}
+						queues[companyIdAsKey] = result;
+						return resolve(JSON.stringify(queues));
+					});
+				}
+			)
+		});
 	}
 	return function () {
 		return {
