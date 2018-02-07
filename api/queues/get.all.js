@@ -1,25 +1,18 @@
-// dependencies...
-const fs = require("fs");
 // methods...
 const queuesGetAll = (function queuesGetAll () {
 	const $run = (payload) => {
 		const companyIdAsKey = `_${payload.params.companyId}`;
-		const db = "./db/q.db.json";
-
-		return new Promise( (resolve, reject) => {
-			fs.readFile(db, "utf8", (err, data) => {
-				if (err) {
-					console.log(err);
-					reject(err);
-				}
-				if (data == "") {
-					let dbObj = {};
-					dbObj[companyIdAsKey] = [];
-					resolve(JSON.stringify(dbObj));
-					console.log(`DATABASE ${db} IS EMPTY`);
-				} else resolve(data);
-			});
-		});
+    return new Promise( (resolve, reject) => {
+      payload.dbo.collection("q").find({}).toArray( (err, result) => {
+        if (err) {
+          console.log(err);
+          return reject(err);
+        }
+        const queues = {}
+        queues[companyIdAsKey] = result;
+        return resolve(JSON.stringify(queues));
+      });
+    }); // end Promise
 	}
 	return function () {
 		return {
