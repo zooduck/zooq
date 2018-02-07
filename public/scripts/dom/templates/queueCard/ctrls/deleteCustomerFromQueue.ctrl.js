@@ -10,6 +10,7 @@ const deleteCustomerFromQueueCtrl__EVENT = (el) => {
   }
 
   setLoading();
+  
   zooqueueApi().customerDelete(el.getAttribute("customer-id")).then( (result) => {
     zooqueue.consoleLog(result);
     setLoaded();
