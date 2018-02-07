@@ -1,29 +1,14 @@
-// dependencies...
-const fs = require("fs");
 // methods...
 const queuesGetOne = (function queuesGetOne () {
 	const $run = (payload) => {
 		const companyIdAsKey = `_${payload.params.companyId}`;
 		const queueId = payload.id;
-		const db = "./db/q.db.json";
-
-		return new Promise( (resolve, reject) => {
-			fs.readFile(db, "utf8", (err, data) => {
+		return new Promie( (resolve, reject) => {
+			payload.dbo.collection("q").findOne({id: queueId}, (err, result) => {
 				if (err) {
 					console.log(err);
-					reject(err);
-				}
-				if (data == "") {
-					let dbObj = {};
-					dbObj[companyIdAsKey] = [];
-					resolve(dbObj);
-				} else {
-					const queues = JSON.parse(data)[companyIdAsKey];
-					const requestedQueue = queues.find( (item) => {
-						return item.id == queueId;
-					});
-					resolve(JSON.stringify(requestedQueue));
-				}
+					return reject(err);
+				} else return resolve(JSON.stringify(result));
 			});
 		});
 	}
