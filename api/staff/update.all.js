@@ -11,12 +11,12 @@ const staffUpdateAll = (function staffUpdateAll () {
 		// remove staff with queuing_disabled or who don't support any services...
 		let payloadStaff = JSON.parse(payload.data).filter( (staffMember) => !staffMember.queuing_disabled && staffMember.service_ids.length > 0);
 
-		let oldStaff = [];
+		let oldStaff = {}
 		payload.dbo.collection("staff").find({}).toArray( (err, result) => {
 			if (err) {
 				console.log(err);
 				return reject(err);
-			} else oldStaff = result;
+			} else oldStaff[companyIdAsKey] = result;
 		});
 
 		return new Promise( (resolve, reject) => {
