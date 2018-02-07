@@ -1,32 +1,58 @@
 // dependencies...
-const fs = require("fs");
+const _ = require("lodash");
 // methods...
 const staffUpdateAll = (function staffUpdateAll () {
 
-  const $run = (payload) => {  
+  const $run = (payload) => {
     const companyIdAsKey = `_${payload.params.companyId}`;
     const payloadStaff = JSON.parse(payload.data);
-    const staffDb = "./db/staff.db.json";
+
+    let oldStaff = {}
+    payload.dbo.collection("staff").find({}).toArray( (err, result) => {
+      if (err) {
+        console.log(err);
+        return reject(err);
+      } else oldStaff[companyIdAsKey] = result;
+    });
 
     return new Promise( (resolve, reject) => {
-      fs.readFile(staffDb, "utf8", (err, data) => {
+      payload.dbo.collection("staff").find({}).toArray( (err, result) => {
         if (err) {
           console.log(err);
-          reject(JSON.stringify({error: err}));
+          return reject(err);
         }
-        if (data && data != "") {
-          const staffCollections = JSON.parse(data);
-          staffCollections[companyIdAsKey] = payloadStaff;
-          fs.writeFile(staffDb, JSON.stringify(staffCollections), "utf8", (err) => {
+        payload.dbo.collection("staff").deleteMany({}, (err, result) => {
+          if (err) {
+            console.log(err);
+            return reject(err);
+          }
+          payload.dbo.collection("staff").insertMany(payloadStaff, (err, result) => {
             if (err) {
               console.log(err);
-              reject(JSON.stringify({error: err}));
+              return reject(err);
             }
-            resolve(JSON.stringify(staffCollections));
+            const staff = {}
+            staff[companyIdAsKey] = payloadStaff;
+            if (!_.isEqual(staff, oldStaff)) {
+              const Pusher = require('pusher');
+              const pusher = new Pusher({
+                appId: "451830",
+                key: "991a027aa0c940510776",
+                secret: "e1e453012d89603adc67",
+                cluster: "eu",
+                encrypted: true
+              });
+              // push message to client...
+              pusher.trigger("queue-channel", "queue-event", {
+                "message": "staff.db.json: changed",
+                "type": "staff.db.json"
+              });
+            }
+            resolve(JSON.stringify(staff));
           });
-        } else reject(JSON.stringify({error: "PUT to api/staff/bookings/ failed"}));
-      });
-    });
+        });
+      })
+    }); // end Promise
   }
   return function () {
     return {
