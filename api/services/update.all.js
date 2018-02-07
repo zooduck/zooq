@@ -4,24 +4,27 @@ const _ = require("lodash");
 // methods...
 const servicesUpdateAll = (function servicesUpdateAll () {
 	const $run = (payload) => {
-		let oldServices = [];
+		const companyIdAsKey = `_${payload.params.companyId}`;
+		let oldServices = {}
 		payload.dbo.collection("services").find({}).toArray( (err, result) => {
 			if (err) {
 				console.log(err);
 				return reject(err);
-			} else oldServices = result;
+			} else oldServices[companyIdAsKey] = result;
 		});
 		return new Promise( (resolve, reject) => {
-			const companyIdAsKey = `_${payload.params.companyId}`;
 			let payloadServices = JSON.parse(payload.data);
-			// let services = {};
-			for (const service of payloadServices) {
-				delete service._links;
-			}
 			payloadServices = payloadServices.filter( (service) => !service.queuing_disabled);
-			// ====================================================================================================================
-			// add services that are not there (but exist in payload), delete services which are there (but not in payload)
-			// ====================================================================================================================
+			const serviceCodes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+			payloadServices.forEach( (item, index, arr) => {
+				let code = serviceCodes.slice(index, index + 1) + serviceCodes.slice((index? index + 1 : 2) * -1, (index? index : 1) * -1);
+				item.code = code;
+				// console.log("CODE =>", code);
+			});
+			// ===========================================================
+			// INSERT services that are not there (but exist in payload)
+			// DELETE services which are there (but not in payload)
+			// ============================================================S
 			payload.dbo.collection("services").find({}).toArray( (err, dbServices) => {
 				if (err) {
 					console.log(err);
@@ -60,10 +63,12 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 					if (!serviceExists) {
 						// service is new, add it!
 						payload.dbo.collection("services").insertOne(payloadService, (err, result) => {
-							console.log(err);
-							return reject(err);
+							if (err) {
+								console.log(err);
+								return reject(err);
+							}
+							console.log(`INSERTED => ${result.insertedCount} docs into services`);
 						});
-						console.log(`INSERTED => ${result.insertedCount} docs into services`);
 					}
 				}
 				payload.dbo.collection("services").find({}).toArray( (err, result) => {
