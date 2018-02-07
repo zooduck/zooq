@@ -445,14 +445,25 @@ const zooqueueApi = (function zooqueueApi () {
 					});
 				});
 			},
+			// staffMemberSetOnBreak(id) {
+			// 	return new Promise( (resolve, reject) => {
+			// 		$staffMemberSetOnBreak(id).then( (staff) => {
+			// 			if (JSON.parse(staff).error) {
+			// 				return reject(JSON.parse(staff).error);
+			// 			}
+			// 			zooqueue.setStaff(JSON.parse(staff));
+			// 			resolve(JSON.parse(staff));
+			// 		}, err => {
+			// 			zooqueue.consoleError(err);
+			// 			reject(err);
+			// 		});
+			// 	});
+			// },
 			staffMemberSetOnBreak(id) {
 				return new Promise( (resolve, reject) => {
-					$staffMemberSetOnBreak(id).then( (staff) => {
-						if (JSON.parse(staff).error) {
-							return reject(JSON.parse(staff).error);
-						}
-						zooqueue.setStaff(JSON.parse(staff));
-						resolve(JSON.parse(staff));
+					$staffMemberSetOnBreak(id).then( (result) => {
+						zooqueue.consoleLog("staff.db.json: updated");
+						resolve(JSON.parse(result));
 					}, err => {
 						zooqueue.consoleError(err);
 						reject(err);
