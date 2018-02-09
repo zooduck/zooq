@@ -33,10 +33,22 @@ const customersDeleteOne = (function customersDeleteOne () {
 							encrypted: true
 						});
 						// push message to client...
+						const data = {
+							queue: {
+								customer: {
+									left: payloadCustomerId
+								}
+							}
+						}
 						pusher.trigger("queue-channel", "queue-event", {
-							"message": "q.db.json: changed",
-							"type": "q.db.json"
+							"data": data,
+							"type": "QUEUE__CUSTOMER_DELETE",
 						});
+						// // push message to client...
+						// pusher.trigger("queue-channel", "queue-event", {
+						// 	"message": "q.db.json: changed",
+						// 	"type": "q.db.json"
+						// });
 						const queues = {}
 						queues[companyIdAsKey] = result;
 						return resolve(JSON.stringify(queues));

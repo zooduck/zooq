@@ -202,6 +202,7 @@ button.cancel:hover, button.cancel:active {
 
 .nav-bar-wrapper {
 	position: fixed;
+	z-index: 1;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -679,6 +680,16 @@ button.cancel:hover, button.cancel:active {
 /* queue-card	*/
 /* ========== */
 
+.zooq__animation__SLIDE_IN_FROM_RIGHT {
+	animation-name: slideInFromRight;
+	animation-duration: .5s;
+}
+/* .zooq__animation__CUSTOMER__DELETE {
+	animation-name: slideOutToRight;
+	animation-duration: .5s;
+	animation-fill-mode: both;
+} */
+
 .content__columns__queue-container {
 	max-width: 650px;
 	flex-basis: 50%;
@@ -698,6 +709,7 @@ button.cancel:hover, button.cancel:active {
 	box-shadow: 2px 2px 10px #ccc;
 	user-select: none;
 	border: solid 2px #333;
+	overflow: hidden;
 }
 .queue-card:active {
 	/* transform: scale(.95);
