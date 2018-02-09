@@ -3,10 +3,11 @@ const zooqDOM = (function zooqDOM() {
     return {
       addCustomerToQueue(id) {
         const customer = zooqueue.getCustomer(id);
-        addQueueCardToDOM(customer);
+        const options = { animate: true }
+        addQueueCardToDOM(customer, options);
       },
       deleteCustomerFromQueue(id) {
-        removeQueueCardFromDom(id);      
+        removeQueueCardFromDom(id);
       }
     }
   }

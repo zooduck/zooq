@@ -1,14 +1,17 @@
 // ===========================
 // METHOD: addQueueCardToDOM
 // ===========================
-const addQueueCardToDOM = (customer) => {
+const addQueueCardToDOM = (customer, options = {animate: false}) => {
 
 	const queueCards = zooqueue.elements("queueCards");
 	const template = queueCards.querySelector("[template]");
 	const qCard = template.cloneNode(true);
 	qCard.removeAttribute("template");
 	qCard.setAttribute("id", customer.id);
-	qCard.classList.add("zooq__animation__SLIDE_IN_FROM_RIGHT");
+
+	if (options.animate === true) {
+		qCard.classList.add("zooq__animation__SLIDE_IN_FROM_RIGHT");
+	}
 
 	const priorityCustomer = zooqueue.hasPriorityCustomer() && zooqueue.getCurrentQueue().priorityCustomer.id == customer.id;
 
@@ -80,16 +83,16 @@ const addQueueCardToDOM = (customer) => {
 const removeQueueCardFromDom = (id) => {
 	const qCard = document.getElementById(id);
 	const oh = qCard.offsetHeight;
-	qCard.style.transition = "all .5s";
-	qCard.style.height = `${oh}px`;	
+	qCard.style.height = `${oh}px`;
+	qCard.style.opacity = 0;
 	setTimeout( () => {
+		qCard.style.transition = "all .5s";
 		qCard.style.height = 0;
 		qCard.style.marginTop = 0;
 		qCard.style.borderWidth = 0;
 		qCard.style.padding = 0;
-		qCard.style.opacity = 0;
-	}, 0);
+	}, 50);
 	setTimeout( () => {
 		qCard.parentNode.removeChild(qCard);
-	}, 500);
+	}, 550);
 }

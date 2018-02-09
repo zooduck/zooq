@@ -10,5 +10,5 @@ const filterStaffByCustomerCtrl__EVENT = (el) => {
     zooqueue.elements("staffCustomerFilterInfo").parentNode.classList.remove("--active");
   }
   buildDom();
-  window.scrollTo(0, 0);
+  zooqueue.elements("superContainer").scrollTo(0, 0);
 };

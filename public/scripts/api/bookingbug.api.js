@@ -35,7 +35,8 @@ const loginComplete = () => {
 // BOOKINGBUG SERVICES GET ALL
 // =================================
 const bookingbugServices_GET = (authToken) => {
-	const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${zooqueue.companyId()}/services`;
+	// const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${zooqueue.companyId()}/services`;
+	const endpoint = `${zooqueue.bookingbugApiUrl__ADMIN()}${zooqueue.companyId()}/services`;
 	requestHeaders[3] = ["auth-token", authToken];
 	return $http("GET", endpoint, null, requestHeaders);
 };
@@ -44,7 +45,7 @@ const bookingbugServices_GET = (authToken) => {
 // =================================
 const bookingbugPeople_GET = (authToken) => {
 	// const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${zooqueue.companyId()}/people?embed=immediate_schedule`;
-	const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${zooqueue.companyId()}/people`;
+	const endpoint = `${zooqueue.bookingbugApiUrl__ADMIN()}${zooqueue.companyId()}/people`;
 	requestHeaders[3] = ["auth-token", authToken];
 	return $http("GET", endpoint, null, requestHeaders);
 };
@@ -69,7 +70,8 @@ const bookingbugBookings_GET = () => {
 const bookingbugAddClient_POST = (data) => {
 	const authToken = localStorage.getItem("auth-token");
 	const company_id = data.default_company_id;
- 	const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${company_id}/client`;
+ 	// const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${company_id}/client`;
+	const endpoint = `${zooqueue.bookingbugApiUrl__ADMIN()}${company_id}/client`;
 
 	requestHeaders[3] = ["auth-token", authToken];
 
@@ -85,7 +87,8 @@ const bookingbugAddItem_POST = (data) => {
 	// ==========================================================================================
 	const authToken = zooqueue.queryStringService().get("auth-token");
 	const company_id = data.items[0].company_id;
-	const endpoint = `https://starfox.bookingbug.com/api/v1/${company_id}/basket/checkout`;
+	// const endpoint = `https://starfox.bookingbug.com/api/v1/${company_id}/basket/checkout`;
+	const endpoint = `${zooqueue.bookingbugApiUrl__PUBLIC()}${company_id}/basket/checkout`;
 
 	requestHeaders[3] = ["auth-token", authToken];
 
@@ -100,7 +103,8 @@ const bookingbugCancelBooking_POST = (booking) => {
 	// (the auth-token that I get when logging in via this application is no good)
 	// =================================================================================
 	const authToken = zooqueue.queryStringService().get("auth-token");
-	const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${booking.company_id}/bookings/${booking.id}/cancel?notify=false`;
+	// const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${booking.company_id}/bookings/${booking.id}/cancel?notify=false`;
+	const endpoint = `${zooqueue.bookingbugApiUrl__ADMIN()}${booking.company_id}/bookings/${booking.id}/cancel?notify=false`;
 
 	requestHeaders[3] = ["auth-token", authToken];
 

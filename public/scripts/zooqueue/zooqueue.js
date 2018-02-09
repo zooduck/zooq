@@ -373,7 +373,7 @@ function ZooQueue() {
 						time: data.item.time, // the time in format of minutes
 						company_id: data.item.company_id,
 						price: 0,
-						book: `https://starfox.bookingbug.com/api/v1/${data.item.company_id}/basket/add_item?service_id=${data.item.service_id}`,
+						book: `${bookingbugApiUrl__PUBLIC}${data.item.company_id}/basket/add_item?service_id=${data.item.service_id}`,
 						duration: data.item.duration,
 						settings: { resource: -1, person: data.item.person_id },
 						child_client_ids: [],
