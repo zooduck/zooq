@@ -24,3 +24,11 @@
 		transform: rotateY(0deg) rotateX(0deg);
 	}
 }
+@keyframes slideInFromRight {
+	0%{
+		transform: translateX(100%);
+	}
+	100% {
+		transform: translate(0%);
+	}
+}

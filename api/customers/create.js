@@ -37,9 +37,16 @@ const customersCreateOne = (function customersCreateOne () {
 							encrypted: true
 						});
 						// push message to client...
+						const data = {
+							queue: {
+								customer: {
+									joined: payloadCustomer.id
+								}
+							}
+						}
 						pusher.trigger("queue-channel", "queue-event", {
-							"message": "q.db.json: changed",
-							"type": "q.db.json"
+							"data": data,
+							"type": "QUEUE__CUSTOMER_ADD",
 						});
 						const queues = {}
 						queues[companyIdAsKey] = result;

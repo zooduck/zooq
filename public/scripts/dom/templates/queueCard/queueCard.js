@@ -2,12 +2,13 @@
 // METHOD: addQueueCardToDOM
 // ===========================
 const addQueueCardToDOM = (customer) => {
-	
+
 	const queueCards = zooqueue.elements("queueCards");
 	const template = queueCards.querySelector("[template]");
 	const qCard = template.cloneNode(true);
 	qCard.removeAttribute("template");
 	qCard.setAttribute("id", customer.id);
+	qCard.classList.add("zooq__animation__SLIDE_IN_FROM_RIGHT");
 
 	const priorityCustomer = zooqueue.hasPriorityCustomer() && zooqueue.getCurrentQueue().priorityCustomer.id == customer.id;
 
@@ -72,3 +73,23 @@ const addQueueCardToDOM = (customer) => {
 
 	queueCards.appendChild(qCard);
 };
+
+// ================================
+// METHOD: removeQueueCardFromDom
+// ================================
+const removeQueueCardFromDom = (id) => {
+	const qCard = document.getElementById(id);
+	const oh = qCard.offsetHeight;
+	qCard.style.transition = "all .5s";
+	qCard.style.height = `${oh}px`;	
+	setTimeout( () => {
+		qCard.style.height = 0;
+		qCard.style.marginTop = 0;
+		qCard.style.borderWidth = 0;
+		qCard.style.padding = 0;
+		qCard.style.opacity = 0;
+	}, 0);
+	setTimeout( () => {
+		qCard.parentNode.removeChild(qCard);
+	}, 500);
+}

@@ -8,6 +8,36 @@ let lastBuildDomRequestDate = luxon.DateTime.local();
 channel.bind("queue-event", function(data) {
   zooqueue.pusherLog(data);
   if (zooqueue.isReady()) {
+
+
+    
+    // ========================
+    // ADD CUSTOMER TO QUEUE
+    // ========================
+    if (data.type == "QUEUE__CUSTOMER_ADD") {
+      zooqueueApi().queuesGet().then( () => {
+        const customerId = data.data.queue.customer.joined;
+        zooqueue.setEstimatedWaitTimes();
+        zooqDOM().addCustomerToQueue(customerId);
+      }, err => {
+        zooqueue.consoleError(err);
+      });
+    }
+    // =============================
+    // DELETE CUSTOMER FROM QUEUE
+    // =============================
+    if (data.type == "QUEUE__CUSTOMER_DELETE") {
+      const customerId = data.data.queue.customer.left;
+      zooqDOM().deleteCustomerFromQueue(customerId);
+      zooqueueApi().queuesGet().then( () => {
+        // do nothing...
+      }, err => {
+        zooqueue.consoleError(err);
+      });
+    }
+
+
+
     // =================================
     // get latest queues data...
     // NOTE: queuesGet() gets and sets
