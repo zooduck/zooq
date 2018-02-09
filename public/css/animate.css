@@ -32,3 +32,7 @@
 		transform: translate(0%);
 	}
 }
+.zooq__animation__SLIDE_IN_FROM_RIGHT {
+	animation-name: slideInFromRight;
+	animation-duration: .5s;
+}
