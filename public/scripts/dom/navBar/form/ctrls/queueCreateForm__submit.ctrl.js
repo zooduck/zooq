@@ -10,6 +10,7 @@ const queueCreateForm__submitCtrl__EVENT = () => {
     clearForm(zooqueue.elements("queueCreateForm").querySelector("form"));
     const queueData = JSON.parse(data);
     zooqueue.alert(null, `The ${queueData.name} queue was successfully created.`);
+    navBarHide();
     zooqueue.consoleLog(result);
   }, err => {
     zooqueue.consoleError(err);
