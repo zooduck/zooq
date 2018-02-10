@@ -9,6 +9,8 @@ channel.bind("queue-event", function(data) {
   zooqueue.pusherLog(data);
 
   if (zooqueue.isReady()) {
+
+    
     // ==================
     // UPDATE ALL STAFF
     // ==================
@@ -59,6 +61,16 @@ channel.bind("queue-event", function(data) {
       zooqDOM().deleteCustomerFromQueue(customerId);
       zooqueueApi().queuesGet().then( () => {
         // do nothing...
+      }, err => {
+        zooqueue.consoleError(err);
+      });
+    }
+    // =================================
+    // SET PRIORITY CUSTOMER IN QUEUE
+    // =================================
+    if (data.type == "QUEUE__PRIORITY_CUSTOMER_SET") {
+      zooqueueApi().queuesGet().then( () => {
+        buildDom();
       }, err => {
         zooqueue.consoleError(err);
       });
