@@ -34,10 +34,14 @@
 	<script src="./scripts/dom/pusher.js"></script>
 	<script src="./scripts/dom/resetCards.js"></script>
 	<script src="./scripts/dom/resetDom.js"></script>
+	<script src="./scripts/dom/navBar/ctrls/navBarCtrl__customerCreate.ctrl.js"></script>
+	<script src="./scripts/dom/navBar/ctrls/navBarCtrl__queueCreate.ctrl.js"></script>
+	<script src="./scripts/dom/navBar/ctrls/navBarCtrl__queueSwitch.ctrl.js"></script>
+	<script src="./scripts/dom/navBar/queueListItem/queueListItem.js"></script>
+	<script src="./scripts/dom/navBar/queueTitle/queueTitle.js"></script>
 	<!-- templates -->
 	<script src="./scripts/dom/templates/loader/loader.js"></script>
 	<script src="./scripts/dom/templates/queueCard/queueCard.js"></script>
-	<script src="./scripts/dom/templates/queueListItem/queueListItem.js"></script>
 	<script src="./scripts/dom/templates/queueTitle/queueTitle.js"></script>
 	<script src="./scripts/dom/templates/serviceCheckbox/serviceCheckbox.js"></script>
 	<script src="./scripts/dom/templates/serviceOption/serviceOption.js"></script>
@@ -172,12 +176,15 @@
 			<div class="nav-bar__info">
 				<div class="nav-bar__info__queue" id="navBarInfoQueue">
 					<div class="nav-bar__info__queue-name" id="navBarInfoQueueName"></div>
-					(<i class="material-icons">people_outline</i>
+					<i class="material-icons">people_outline</i>
 					<span>x</span>
-					<span class="nav-bar__info__queue-count"id="navBarInfoQueueCount">0</span>)
+					<span class="nav-bar__info__queue-count"id="navBarInfoQueueCount">0</span>
 				</div>
 				<div class="nav-bar__info__datetime" id="navBarInfoDatetime"></div>
 			</div>
+			<!-- ===== -->
+			<!-- CTRLS -->
+			<!-- ===== -->
 			<div class="nav-bar__ctrls-wrapper">
 				<div class="nav-bar__ctrl" id="navBarCtrl__customerCreate">
 					<i class="material-icons">person_add</i>
@@ -343,12 +350,10 @@
 
 <alert class="alert">
 	<div class="alert__notify-row">
-		<span>NOTIFICATION: Warning</span>
+		<span></span>
 	</div>
 	<div class="alert__message-row">
-		<!-- <i class="material-icons">priority_high</i> -->
 		<span class="alert__message" id="alertMessage"></span>
-		<!-- <i class="material-icons">priority_high</i> -->
 	</div>
 </alert>
 
