@@ -1,6 +1,7 @@
 // dependencies...
 const _ = require("lodash");
 const luxon = require("luxon");
+const pusherService = require("../pusher/pusher.service.js");
 // methods...
 const queuesCreateOne = (function queuesCreateOne () {
 	const $run = (payload) => {
@@ -39,21 +40,16 @@ const queuesCreateOne = (function queuesCreateOne () {
 							return reject(err);
 						}
 						const queues = {}
-						queues[companyIdAsKey] = result;						
+						queues[companyIdAsKey] = result;
 						if (!_.isEqual(queues, oldQueues)) {
-							const Pusher = require('pusher');
-							const pusher = new Pusher({
-								appId: "451830",
-								key: "991a027aa0c940510776",
-								secret: "e1e453012d89603adc67",
-								cluster: "eu",
-								encrypted: true
-							});
 							// push message to client...
-							pusher.trigger("queue-channel", "queue-event", {
-								"message": "q.db.json: changed",
-								"type": "q.db.json"
-							});
+							const data = {
+								queue: {
+									create: payloadQueue.id
+								}
+							}
+							const type = "QUEUE__CREATE";
+							pusherService().trigger(data, type);
 						}
 						return resolve(JSON.stringify(queues));
 					});

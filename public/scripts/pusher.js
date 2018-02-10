@@ -41,6 +41,16 @@ channel.bind("queue-event", function(data) {
         zooqueue.consoleError(err);
       });
     }
+    // ====================
+    // CREATE NEW QUEUE
+    // ====================
+    if (data.type == "QUEUE__CREATE") {
+      zooqueueApi().queuesGet().then( () => {
+        buildDom();
+      }, err => {
+        zooqueue.consoleError(err);
+      });
+    }
     // =============================
     // DELETE CUSTOMER FROM QUEUE
     // =============================

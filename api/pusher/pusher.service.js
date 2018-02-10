@@ -12,7 +12,7 @@ const pusherService = (function pusherService (data, type) {
     });
     return {
       trigger(data, type) {
-        console.log("push notification of type", type);
+        console.log(`pusher.trigger: ${type}`);    
         pusher.trigger("queue-channel", "queue-event", {
           "data": data,
           "type": type
