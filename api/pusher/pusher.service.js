@@ -11,7 +11,8 @@ const pusherService = (function pusherService (data, type) {
       encrypted: true
     });
     return {
-      trigger: (data, type) => {
+      trigger(data, type) {
+        console.log("push notification of type", type);
         pusher.trigger("queue-channel", "queue-event", {
           "data": data,
           "type": type
