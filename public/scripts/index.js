@@ -111,23 +111,11 @@ function setEventListenersForStaticContent () {
 			contentColumns__el.insertBefore(farRightCards__el, contentColumns__el.childNodes[0]);
 		}
 	});
-
+	// ====================
 	// CTRL: CREATE QUEUE
+	// ====================
 	zooqueue.elements("queueCreateForm__submitCtrl").addEventListener("click", function (e) {
-		const formData = new FormData(zooqueue.elements("queueCreateForm").querySelector("form"));
-		const data = zooqueueApi().convertQueueFormDataToJson(formData);
-
-		if (data.error) {
-			return zooqueue.consoleError(data.error);
-		}
-
-		zooqueueApi().queueCreate(data).then( (result) => {
-			clearForm(zooqueue.elements("queueCreateForm").querySelector("form"));
-			zooqueue.consoleLog(result);
-			// buildDom(); // use pusher instead
-		}, err => {
-			zooqueue.consoleError(err);
-		});
+		queueCreateForm__submitCtrl__EVENT();
 	});
 
 	// CTRL: CREATE CUSTOMER

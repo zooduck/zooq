@@ -8,8 +8,12 @@ const addQueueListItemToDOM = (queue) => {
 	if (zooqueue.getCurrentQueue().id == queue.id) {
 		template.classList.add("--active");
 	}
-	const span__el = template.querySelector("span")
-	span__el.innerHTML = `${queue.name} (${queue.customers.length})`;
+	const queueName__el = template.querySelector(".switch-queue__item__name");
+	const queueCreatedAt__el = template.querySelector(".switch-queue__item__created-at");
+	const createdAt = luxon.DateTime.fromISO(queue.createdAt).toLocaleString(luxon.DateTime.DATETIME_MED);
+	// const span__el = template.querySelector("span")
+	queueName__el.innerHTML = `${queue.name} (${queue.customers.length})`;
+	queueCreatedAt__el.innerHTML = `created: ${createdAt}`;
 
 	form.appendChild(template);
 };
