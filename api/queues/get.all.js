@@ -3,7 +3,7 @@ const queuesGetAll = (function queuesGetAll () {
 	const $run = (payload) => {
 		const companyIdAsKey = `_${payload.params.companyId}`;
     return new Promise( (resolve, reject) => {
-      payload.dbo.collection("q").find({}).toArray( (err, result) => {
+      payload.dbo.collection("q").find({}).sort({createdAt: 1}).toArray( (err, result) => {
         if (err) {
           console.log(err);
           return reject(err);
