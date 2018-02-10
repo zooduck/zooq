@@ -110,7 +110,8 @@
 }
 .switch-queue__item {
 	display: flex;
-	align-items: center;
+	flex-direction: column;
+	/* align-items: center; */
 	/*flex-grow: 1;*/
 	justify-content: center;
 	background: #fff;
@@ -132,6 +133,12 @@
 	background: cornflowerblue;
 	color: #fff;
 	border-color: cornflowerblue;
+}
+.switch-queue__item__name {
+
+}
+.switch-queue__item__created-at {
+	font-size: 16px;
 }
 .nav-bar-wrapper__nav-bar {
 	display: flex;

@@ -23,11 +23,9 @@ const zooqueueApi = (function zooqueueApi () {
 		}
 		return serviceCode? `${ticketRef}${queueCode}:${serviceCode}` : ticketRef;
 	};
-	let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 	const $convertQueueFormDataToJson = (formData) => {
 		const data = {
 			id: zooqueue.generateUniqueId(),
-			code: `${alphabet.pop()}${alphabet.shift()}`,
 			companyId: zooqueue.companyId(),
 			customers: [],
 			customersBeingServed: [],
