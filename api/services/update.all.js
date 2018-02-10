@@ -1,6 +1,6 @@
 // dependencies...
-const fs = require("fs");
 const _ = require("lodash");
+const pusherService = require("../pusher/pusher.service.js");
 // methods...
 const servicesUpdateAll = (function servicesUpdateAll () {
 	const $run = (payload) => {
@@ -19,7 +19,6 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 			payloadServices.forEach( (item, index, arr) => {
 				let code = serviceCodes.slice(index, index + 1) + serviceCodes.slice((index? index + 1 : 2) * -1, (index? index : 1) * -1);
 				item.code = code;
-				// console.log("CODE =>", code);
 			});
 			// ===========================================================
 			// INSERT services that are not there (but exist in payload)
@@ -79,19 +78,10 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 					const services = {}
 					services[companyIdAsKey] = result;
 					if (!_.isEqual(services, oldServices)) {
-						const Pusher = require('pusher');
-						const pusher = new Pusher({
-							appId: "451830",
-							key: "991a027aa0c940510776",
-							secret: "e1e453012d89603adc67",
-							cluster: "eu",
-							encrypted: true
-						});
 						// push message to client...
-						pusher.trigger("queue-channel", "queue-event", {
-							"message": "services.db.json: changed",
-							"type": "services.db.json"
-						});
+						const data = {}
+						const type = "SERVICES__UPDATE_ALL";
+						pusherService().trigger(data, type);
 					}
 					return resolve(JSON.stringify(services));
 				});

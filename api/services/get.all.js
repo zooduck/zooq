@@ -12,7 +12,6 @@ const servicesGetAll = (function servicesGetAll () {
 				}
 				const services = {}
 				services[companyIdAsKey] = dbServices;
-				// console.log("SERVICES CHANGED TO =>", services);
 				return resolve(JSON.stringify(services));
 			});
 		});

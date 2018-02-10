@@ -9,17 +9,26 @@ channel.bind("queue-event", function(data) {
   zooqueue.pusherLog(data);
 
   if (zooqueue.isReady()) {
-    // =============
-    // INIT STAFF
-    // =============
+    // ==================
+    // UPDATE ALL STAFF
+    // ==================
     if (data.type == "STAFF__UPDATE_ALL") {
-      zooqueueApi().staffGet().then( () => {      
+      zooqueueApi().staffGet().then( () => {
         buildDom();
       }, err => {
         zooqueue.consoleError(err);
       });
     }
-
+    // =======================
+    // UPDATE ALL SERVICES
+    // =======================
+    if (data.type == "SERVICES__UPDATE_ALL") {
+      zooqueueApi().servicesGet().then( () => {
+        buildDom();
+      }, err => {
+        zooqueue.consoleError(err);
+      });
+    }
     // ========================
     // ADD CUSTOMER TO QUEUE
     // ========================
