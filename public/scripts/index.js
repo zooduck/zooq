@@ -153,35 +153,25 @@ function setEventListenersForStaticContent () {
 		});
 	});
 
+	// ============================
 	// CTRL: NAV BAR SWITCH QUEUE
+	// ============================
 	zooqueue.elements("navBarCtrl__queueSwitch").addEventListener("click", function (e) {
-
-		navBarHide({exceptions:["queueSwitchForm", "navBarCtrl__queueSwitch"]});
-
-		this.classList.toggle("--active");
-		zooqueue.elements("queueSwitchForm").classList.toggle("--active");
+		navBarCtrl__queueSwitch__EVENT(this);
 	});
 
+  // ===============================
 	// CTRL: NAV BAR CREATE CUSTOMER
+	// ===============================
 	zooqueue.elements("navBarCtrl__customerCreate").addEventListener("click", function (e) {
-
-		navBarHide({exceptions:["customerCreateForm", "navBarCtrl__customerCreate"]});
-
-		this.classList.toggle("--active");
-		zooqueue.elements("customerCreateForm").classList.toggle("--active");
-		clearForm(zooqueue.elements("customerCreateForm").querySelector("form"));
-		// zooqueue.elements("customerCreateForm").querySelector("input").focus();
+		navBarCtrl__customerCreate__EVENT(this);
 	});
 
+  // ============================
 	// CTRL: NAV BAR CREATE QUEUE
+	// ============================
 	zooqueue.elements("navBarCtrl__queueCreate").addEventListener("click", function (e) {
-
-		navBarHide({exceptions:["queueCreateForm", "navBarCtrl__queueCreate"]});
-
-		this.classList.toggle("--active");
-		zooqueue.elements("queueCreateForm").classList.toggle("--active");
-		clearForm(zooqueue.elements("queueCreateForm").querySelector("form"));
-		// zooqueue.elements("queueCreateForm").querySelector("input").focus();
+		navBarCtrl__queueCreate__EVENT(this);
 	});
 
 	zooqueue.consoleLog("setEventListenersForStaticContent: completed");

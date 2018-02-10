@@ -173,7 +173,7 @@
 .nav-bar__ctrl.--active {
 	/*color: #273a5a;*/
 	font-weight: bold;
-	background: #222;
+	/* background: #222; */
 	transform: scale(1.1);
 }
 .nav-bar__info {
