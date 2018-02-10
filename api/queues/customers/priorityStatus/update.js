@@ -1,3 +1,5 @@
+// dependencies...
+const pusherService = require("../../../pusher/pusher.service.js");
 // methods...
 const queuesUpdateOne = (function queuesUpdateOne () {
 	const $run = (payload) => {
@@ -25,19 +27,14 @@ const queuesUpdateOne = (function queuesUpdateOne () {
 						console.log(err);
 						return reject(err);
 					}
-					const Pusher = require('pusher');
-					const pusher = new Pusher({
-						appId: "451830",
-						key: "991a027aa0c940510776",
-						secret: "e1e453012d89603adc67",
-						cluster: "eu",
-						encrypted: true
-					});
 					// push message to client...
-					pusher.trigger("queue-channel", "queue-event", {
-						"message": "q.db.json: changed",
-						"type": "q.db.json"
-					});
+					const data = {
+						queue: {
+							priorityCustomerSet: payloadQueue.priorityCustomer
+						}
+					}
+					const type = "QUEUE__PRIORITY_CUSTOMER_SET";
+					pusherService().trigger(data, type);
 					const queues = {}
 					queues[companyIdAsKey] = result;
 					return resolve(JSON.stringify(queues));
