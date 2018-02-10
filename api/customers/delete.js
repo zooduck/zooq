@@ -1,3 +1,5 @@
+// dependencies...
+const pusherService = require("../pusher/pusher.service.js");
 // methods...
 const customersDeleteOne = (function customersDeleteOne () {
 	const $run = (payload) => {
@@ -24,14 +26,6 @@ const customersDeleteOne = (function customersDeleteOne () {
 							console.log(err);
 							return reject(err);
 						}
-						const Pusher = require('pusher');
-						const pusher = new Pusher({
-							appId: "451830",
-							key: "991a027aa0c940510776",
-							secret: "e1e453012d89603adc67",
-							cluster: "eu",
-							encrypted: true
-						});
 						// push message to client...
 						const data = {
 							queue: {
@@ -40,15 +34,8 @@ const customersDeleteOne = (function customersDeleteOne () {
 								}
 							}
 						}
-						pusher.trigger("queue-channel", "queue-event", {
-							"data": data,
-							"type": "QUEUE__CUSTOMER_DELETE",
-						});
-						// // push message to client...
-						// pusher.trigger("queue-channel", "queue-event", {
-						// 	"message": "q.db.json: changed",
-						// 	"type": "q.db.json"
-						// });
+						const type = "QUEUE__CUSTOMER_DELETE";
+						pusherService().trigger(data, type);
 						const queues = {}
 						queues[companyIdAsKey] = result;
 						return resolve(JSON.stringify(queues));
