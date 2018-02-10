@@ -143,8 +143,8 @@ const addStaffCardToDOM = (staffMember) => {
 	// ========================
 	// UNIVERSAL CARD VALUES
 	// ========================
-	const avatarUrl = `https://api.adorable.io/avatars/44/${staffMember.id}.png`;
-	avatar__el.style.backgroundImage = `url(${avatarUrl})`;
+	const avatarUrl__default = `https://api.adorable.io/avatars/44/${staffMember.id}.png`;
+ 	avatar__el.style.backgroundImage = `url(${staffMember.avatarUrl? staffMember.avatarUrl : avatarUrl__default})`;
 	staffMemberName__el.innerHTML = staffMember.name;
 	const servicesWithQueuingEnabled = zooqueue.getServiceIds();
 	const validServiceIds = staffMember.service_ids.filter(function(item) {
