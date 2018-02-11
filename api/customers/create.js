@@ -31,9 +31,7 @@ const customersCreateOne = (function customersCreateOne () {
 						// push message to client...
 						const data = {
 							queue: {
-								customer: {
-									joined: payloadCustomer.id
-								}
+								customer: payloadCustomer.id								
 							}
 						}
 						const type = "QUEUE__CUSTOMER_ADD";

@@ -138,13 +138,14 @@ const zooqueueApi = (function zooqueueApi () {
 		return $http("POST", `api/customers/${JSON.parse(data).id}/?companyId=${zooqueue.companyId()}&queueId=${queueId}`, data, requestHeaders);
 	};
 	const $customerServe = (data) => {
+		// console.log("customer to serve data", JSON.parse(data));
 		const staffMember = JSON.parse(data).staffMember;
 		const queueId = encodeURIComponent(zooqueue.getCurrentQueue().id);
 		const requestHeaders = [["Content-Type", "application/json"]];
 		// -------------------------------------------------------------------------------------------------
 		// Serve next available customer in the queue that has a service supported by this staff member
 		// -------------------------------------------------------------------------------------------------
-		return $http("PUT", `api/customers/serve/${JSON.parse(data).customer.id}/?companyId=${zooqueue.companyId()}&queueId=${queueId}&staffMemberId=${staffMember.id}`, JSON.stringify(staffMember), requestHeaders);
+		return $http("PUT", `api/customers/serve/${JSON.parse(data).customer.id}/?companyId=${zooqueue.companyId()}&queueId=${queueId}&staffMemberId=${staffMember.id}`, data, requestHeaders);
 	};
 	const $customerServeComplete = (id) => {
 		const queueId = encodeURIComponent(zooqueue.getCurrentQueue().id);
@@ -326,8 +327,8 @@ const zooqueueApi = (function zooqueueApi () {
 							return reject(JSON.parse(data).error);
 						}
 
-						zooqueue.setQueues(JSON.parse(data).queues);
-						zooqueue.setStaff(JSON.parse(data).staff)
+						//zooqueue.setQueues(JSON.parse(data).queues);
+						//zooqueue.setStaff(JSON.parse(data).staff)
 						resolve("q.db.json: updated, staff.db.json: updated");
 
 					}, err => {
