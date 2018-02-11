@@ -10,7 +10,7 @@ channel.bind("queue-event", function(data) {
 
   if (zooqueue.isReady()) {
 
-    
+
     // ==================
     // UPDATE ALL STAFF
     // ==================
@@ -36,7 +36,7 @@ channel.bind("queue-event", function(data) {
     // ========================
     if (data.type == "QUEUE__CUSTOMER_ADD") {
       zooqueueApi().queuesGet().then( () => {
-        const customerId = data.data.queue.customer.joined;
+        const customerId = data.data.queue.customer;
         zooqueue.setEstimatedWaitTimes();
         zooqDOM().addCustomerToQueue(customerId);
       }, err => {
@@ -57,7 +57,7 @@ channel.bind("queue-event", function(data) {
     // DELETE CUSTOMER FROM QUEUE
     // =============================
     if (data.type == "QUEUE__CUSTOMER_DELETE") {
-      const customerId = data.data.queue.customer.left;
+      const customerId = data.data.queue.customer;
       zooqDOM().deleteCustomerFromQueue(customerId);
       zooqueueApi().queuesGet().then( () => {
         // do nothing...
@@ -67,12 +67,27 @@ channel.bind("queue-event", function(data) {
     }
     // =================================
     // SET PRIORITY CUSTOMER IN QUEUE
+    // -------------------------------------------------
+    // NOTE: This covers both set and unset methods
+    // -------------------------------------------------
     // =================================
     if (data.type == "QUEUE__PRIORITY_CUSTOMER_SET") {
+      const customerId = data.data.queue.priorityCustomer;    
       zooqueueApi().queuesGet().then( () => {
         buildDom();
       }, err => {
         zooqueue.consoleError(err);
+      });
+    }
+    // ============================
+    // CUSTOMER SERVED FROM QUEUE
+    // ============================
+    if (data.type == "QUEUE__CUSTOMER_SERVE") {
+      const promises = [zooqueueApi().queuesGet(), zooqueueApi().staffGet()];
+      Promise.all(promises).then( () => {
+        buildDom();
+      }, err => {
+        zooqueue.consolError(err);
       });
     }
 
