@@ -21,7 +21,6 @@ const queuesUpdateOne = (function queuesUpdateOne () {
 					console.log(err);
 					return reject(err);
 				}
-				console.log("QUEUE UPDATE modifiedCount =>", result.modifiedCount);
 				payload.dbo.collection("q").find({companyId: payloadCompanyId}).toArray( (err, result) => {
 					if (err) {
 						console.log(err);
@@ -30,7 +29,7 @@ const queuesUpdateOne = (function queuesUpdateOne () {
 					// push message to client...
 					const data = {
 						queue: {
-							priorityCustomerSet: payloadQueue.priorityCustomer
+							priorityCustomer: payloadQueue.priorityCustomer? payloadQueue.priorityCustomer.id : null
 						}
 					}
 					const type = "QUEUE__PRIORITY_CUSTOMER_SET";
