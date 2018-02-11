@@ -147,15 +147,17 @@ const zooqueueApi = (function zooqueueApi () {
 		// -------------------------------------------------------------------------------------------------
 		return $http("PUT", `api/customers/serve/${JSON.parse(data).customer.id}/?companyId=${zooqueue.companyId()}&queueId=${queueId}&staffMemberId=${staffMember.id}`, data, requestHeaders);
 	};
-	const $customerServeComplete = (id) => {
+	const $customerServeComplete = (staffMember) => {
+		const id = staffMember.id;
 		const queueId = encodeURIComponent(zooqueue.getCurrentQueue().id);
+		const customerId = staffMember.serving[0].id;
 		// --------------------------------------------------------------------------------------
 		// Finish serving customer:
 		// 1. delete customer from staff member
 		// 2. update staff member status
 		// 3. TODO!!! send info about completed booking to bookingbug
 		// --------------------------------------------------------------------------------------
-		return $http("DELETE", `api/customers/serve/${id}/?companyId=${zooqueue.companyId()}&queueId=${queueId}`);
+		return $http("DELETE", `api/customers/serve/${id}/?companyId=${zooqueue.companyId()}&queueId=${queueId}&customerId=${customerId}`);
 	};
 	const $customerDelete = (id) => {
 		const queueId = encodeURIComponent(zooqueue.getCurrentQueue().id);
@@ -342,8 +344,8 @@ const zooqueueApi = (function zooqueueApi () {
 						if (JSON.parse(data).error) {
 							return reject(JSON.parse(data).error);
 						}
-						zooqueue.setQueues(JSON.parse(data).queues);
-						zooqueue.setStaff(JSON.parse(data).staff);
+						// zooqueue.setQueues(JSON.parse(data).queues);
+						// zooqueue.setStaff(JSON.parse(data).staff);
 						resolve("q.db.json updated, staff.db.json updated");
 					});
 				});
@@ -495,8 +497,9 @@ const zooqueueApi = (function zooqueueApi () {
 			staffMemberSetFree(id) {
 				return new Promise( (resolve, reject) => {
 					$staffMemberSetFree(id).then( (result) => {
-						zooqueue.consoleLog("staff.db.json: updated");
-						resolve(JSON.parse(result));
+						// zooqueue.consoleLog("staff.db.json: updated");
+						const staffMember = JSON.parse(result);
+						resolve(staffMember);
 					}, err => {
 						zooqueue.consoleError(err);
 						reject(err);
@@ -506,10 +509,10 @@ const zooqueueApi = (function zooqueueApi () {
 			staffMemberEndShift(id) {
 				return new Promise( (resolve, reject) => {
 					$staffMemberEndShift(id).then( (result) => {
-						let staffMember = JSON.parse(result);
-						console.log("updated staff member like: ", staffMember);
+						const staffMember = JSON.parse(result);
+						// console.log("updated staff member like: ", staffMember);
 						zooqueue.setStaffMember(staffMember);
-						resolve(result);
+						resolve(staffMember);
 					}, err => {
 						zooqueue.consoleError(err);
 						reject(err);

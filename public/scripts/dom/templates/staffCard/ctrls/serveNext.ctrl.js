@@ -114,7 +114,7 @@ const serveNextCtrl__EVENT = (el, customer = null) => {
         zooqueueApi().customerServe(JSON.stringify(data)).then((result) => {
           zooqueue.consoleLog(result);
           zooqueue.removeFilters(["customer"]);
-          setLoaded();
+          // setLoaded();
           // buildDom(); // use pusher instead
         }, err => {
           zooqueue.removeFilters(["customer"]);

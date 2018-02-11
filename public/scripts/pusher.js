@@ -72,7 +72,7 @@ channel.bind("queue-event", function(data) {
     // -------------------------------------------------
     // =================================
     if (data.type == "QUEUE__PRIORITY_CUSTOMER_SET") {
-      const customerId = data.data.queue.priorityCustomer;    
+      const customerId = data.data.queue.priorityCustomer;
       zooqueueApi().queuesGet().then( () => {
         buildDom();
       }, err => {
@@ -82,62 +82,77 @@ channel.bind("queue-event", function(data) {
     // ============================
     // CUSTOMER SERVED FROM QUEUE
     // ============================
-    if (data.type == "QUEUE__CUSTOMER_SERVE") {
+    if (data.type == "CUSTOMER__SERVE" || data.type == "CUSTOMER__FINISH_SERVING") {
       const promises = [zooqueueApi().queuesGet(), zooqueueApi().staffGet()];
       Promise.all(promises).then( () => {
-        buildDom();
-      }, err => {
-        zooqueue.consolError(err);
-      });
-    }
-
-
-
-    // =================================
-    // get latest queues data...
-    // NOTE: queuesGet() gets and sets
-    // =================================
-    if (data.type == "q.db.json") {
-      zooqueueApi().queuesGet().then( () => {
         buildDom();
       }, err => {
         zooqueue.consoleError(err);
       });
     }
-    // ===============================
-    // get latest staff data...
-    // NOTE staffGet() gets and sets
-    // ===============================
-    if (data.type == "staff.db.json") {
+
+    // =====================================
+    // STAFF MEMBER SET ATTENDANCE_STATUS
+    // =====================================
+    if (data.type.match(/STAFF_MEMBER__ATTENDANCE/)) {
       zooqueueApi().staffGet().then( () => {
         buildDom();
       }, err => {
         zooqueue.consoleError(err);
       });
     }
-    // ==============================
-    // get latest services data...
-    // ==============================
-    if (data.type == "services.db.json") {
-      zooqueueApi().servicesGet().then( () => {
-        buildDom();
-      }, err => {
-        zooqueue.consoleError(err);
-      });
-    }
+
+
+
+    // // =================================
+    // // get latest queues data...
+    // // NOTE: queuesGet() gets and sets
+    // // =================================
+    // if (data.type == "q.db.json") {
+    //   zooqueueApi().queuesGet().then( () => {
+    //     buildDom();
+    //   }, err => {
+    //     zooqueue.consoleError(err);
+    //   });
+    // }
+    // // ===============================
+    // // get latest staff data...
+    // // NOTE staffGet() gets and sets
+    // // ===============================
+    // if (data.type == "staff.db.json") {
+    //   zooqueueApi().staffGet().then( () => {
+    //     buildDom();
+    //   }, err => {
+    //     zooqueue.consoleError(err);
+    //   });
+    // }
+    // // ==============================
+    // // get latest services data...
+    // // ==============================
+    // if (data.type == "services.db.json") {
+    //   zooqueueApi().servicesGet().then( () => {
+    //     buildDom();
+    //   }, err => {
+    //     zooqueue.consoleError(err);
+    //   });
+    // }
+
+
+
+
   }
 });
 // ===========
 // buildDom
 // ===========
-setInterval( () => {
-  if (zooqueue.isReady() && lastBuildDomRequestDate) {
-    const nowDate = luxon.DateTime.local();
-    const intervalSeconds = luxon.Interval.fromDateTimes(lastBuildDomRequestDate, nowDate).toDuration("seconds").toObject().seconds;
-    if (intervalSeconds >= 0.5) {
-      // console.log("INTERVAL GREATER THAN 0.5 SECONDs, BUILD DOM");
-      lastBuildDomRequestDate = null;
-      //buildDom();
-    }
-  }
-}, 200);
+// setInterval( () => {
+//   if (zooqueue.isReady() && lastBuildDomRequestDate) {
+//     const nowDate = luxon.DateTime.local();
+//     const intervalSeconds = luxon.Interval.fromDateTimes(lastBuildDomRequestDate, nowDate).toDuration("seconds").toObject().seconds;
+//     if (intervalSeconds >= 0.5) {
+//       // console.log("INTERVAL GREATER THAN 0.5 SECONDs, BUILD DOM");
+//       lastBuildDomRequestDate = null;
+//       //buildDom();
+//     }
+//   }
+// }, 200);

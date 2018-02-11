@@ -1,5 +1,6 @@
 // dependencies...
 const luxon = require("luxon");
+const pusherService = require("../../../pusher/pusher.service.js");
 // methods...
 const staffUpdateOne = (function staffUpdateOne() {
   const $run = (payload) => {
@@ -37,24 +38,17 @@ const staffUpdateOne = (function staffUpdateOne() {
           console.log(err);
           return reject(err);
         }
-        payload.dbo.collection("staff").find({id: payloadStaffMemberId}).toArray( (err, result) => {
+        payload.dbo.collection("staff").findOne({id: payloadStaffMemberId}, (err, result) => {
           if (err) {
             console.log(err);
             return reject(err);
           }
-          const Pusher = require('pusher');
-          const pusher = new Pusher({
-            appId: "451830",
-            key: "991a027aa0c940510776",
-            secret: "e1e453012d89603adc67",
-            cluster: "eu",
-            encrypted: true
-          });
           // push message to client...
-          pusher.trigger("queue-channel", "queue-event", {
-            "message": "staff.db.json: changed",
-            "type": "staff.db.json"
-          });
+          const data = {
+            staffMember: payloadStaffMemberId
+          }
+          const type = "STAFF_MEMBER__ATTENDANCE__1_AVAILABLE";
+          pusherService().trigger(data, type);
           return resolve(JSON.stringify(result));
         });
       });

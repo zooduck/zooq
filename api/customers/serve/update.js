@@ -52,7 +52,7 @@ const customersServeOne = (function customersServeOne () {
 						// =====================================================================
 						// this is mainly so we can get the ticketRef - as all other details
 						// are included in the booking (activeBooking)
-						//======================================================================					
+						//======================================================================
 						staffMember__updated.serving.push({
 							id: payloadCustomer.id,
 							firstName: payloadCustomer.firstName,
@@ -83,7 +83,7 @@ const customersServeOne = (function customersServeOne () {
 										update: staffMember__updated.id
 									}
 								}
-								const type = "QUEUE__CUSTOMER_SERVE";
+								const type = "CUSTOMER__SERVE";
 								pusherService().trigger(data, type);
 								resolve(JSON.stringify(result));
 							}

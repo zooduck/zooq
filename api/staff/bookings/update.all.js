@@ -1,5 +1,6 @@
 // dependencies...
 const _ = require("lodash");
+const pusherService = require("../../pusher/pusher.service.js");
 // methods...
 const staffUpdateAll = (function staffUpdateAll () {
 
@@ -34,19 +35,10 @@ const staffUpdateAll = (function staffUpdateAll () {
             const staff = {}
             staff[companyIdAsKey] = payloadStaff;
             if (!_.isEqual(staff, oldStaff)) {
-              const Pusher = require('pusher');
-              const pusher = new Pusher({
-                appId: "451830",
-                key: "991a027aa0c940510776",
-                secret: "e1e453012d89603adc67",
-                cluster: "eu",
-                encrypted: true
-              });
               // push message to client...
-              pusher.trigger("queue-channel", "queue-event", {
-                "message": "staff.db.json: changed",
-                "type": "staff.db.json"
-              });
+              const data = {}
+              const type = "STAFF__UPDATE_ALL";
+              pusherService().trigger(data, type);
             }
             resolve(JSON.stringify(staff));
           });

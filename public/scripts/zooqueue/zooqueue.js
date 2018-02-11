@@ -676,7 +676,7 @@ function ZooQueue() {
 		return []
 	}
 }
-ZooQueue.prototype.consoleLogC = function (msg, styles) {
+ZooQueue.prototype.consoleLogC = function (msg, styles = "background: lightgoldenrodyellow; color: #333;") {
 	return console.log(`%czooQ => logC: ${msg}`, styles);
 }
 ZooQueue.prototype.consoleLog = function (msg1 = "", msg2 = "") {
