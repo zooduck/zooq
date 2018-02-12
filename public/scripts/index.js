@@ -58,7 +58,7 @@ function zooqueueInit() {
 					zooqDOM().updateQueueCard(customer);
 				}
 				// update staff cards
-				const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()];
+				const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()].reverse();
 				for (const staffMember of staff) {
 					zooqDOM().updateStaffCard(staffMember);
 				}
