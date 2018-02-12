@@ -43,7 +43,7 @@ function ZooQueue() {
 	let priorityCustomers = {}
 	let alertKeys = {
 	  ERROR_GENERIC: "Unknown error occured. Please replace the handset and try again.",
-	  CUSTOMER_TO_SERVE_NOT_FOUND: "You are not qualified to serve any of the customers in the queue.",
+	  CUSTOMER_TO_SERVE_NOT_FOUND: "There are no customers to serve.",
 		SERVICE_NOT_SUPPORTED: "You are not qualified to serve the priority customer.",
 		CUSTOMER_FORM_FIRST_NAME_OR_SERVICE_INVALID: "Please enter a first name and select a service.",
 		QUEUE_FORM_QUEUE_NAME_OR_SERVICE_INVALID: "Please enter a name for the queue and assign at least one service.",
@@ -78,7 +78,7 @@ function ZooQueue() {
 		}
 	})();
 	const $generateUniqueIdService= () => {
-		return `${new Date().getTime()}.${Math.random().toString().replace(/\./g, "")}`;
+		return `${new Date().getTime()}${Math.random().toString().replace(/\./g, "")}`;
 	};
 	const $setCurrentQueue = () => {
 		if (this.hasQueues()) {
@@ -628,21 +628,6 @@ function ZooQueue() {
 	this.hasPriorityCustomer = function () {
 		return this.getCurrentQueue().priorityCustomer? true : false;
 	}
-	// this.setPriorityCustomer = function (id) {
-	// 	let queue = this.getCurrentQueue();
-	// 	queue.priorityCustomer = this.getCustomer(id);
-	// 	console.log("queue >>>>>>", queue);
-	// 	zooqueueApi().queueUpdate(queue).then( (result) => {
-	// 		zooqueue.consoleLog(result);
-	// 	}, err => {
-	// 		zooqueue.consoleError(err);
-	// 	});
-	// }
-	// this.clearPriorityCustomer = function (id) {
-	// 	let queue = this.getCurrentQueue();
-	// 	delete queue.priorityCustomer;
-	// 	console.log("now queue says after delete", queue);
-	// }
 	this.findNextCustomerToServe = function (staffMember) {
 		let nextCustomerToServe = null;
 		if (this.hasPriorityCustomer()) {
@@ -669,9 +654,6 @@ function ZooQueue() {
 	this.setEstimatedWaitTimes = () => {
 		return $setEstimatedWaitTimes();
 	}
-	// this.setCustomerWaitTimeEstimates = () => {
-	// 	return $setCustomerWaitTimeEstimates();
-	// }
 	this.log = function () {
 		return []
 	}
@@ -725,8 +707,6 @@ ZooQueue.prototype.elements = function (name) {
 		staffCards: doc("#staffCards"),
 		queueCards: doc("#queueCards"),
 		staffCustomerFilterInfo: doc("#staffCustomerFilterInfo")
-		// staffByStaffMemberFilterInfo: doc("#staffByStaffMemberFilterInfo"),
-		// staffByCustomerFilterInfo: doc("#staffByCustomerFilterInfo")
 	};
 	return els[name];
 };

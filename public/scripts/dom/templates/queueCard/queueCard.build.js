@@ -1,13 +1,24 @@
-// ===========================
-// METHOD: addQueueCardToDOM
-// ===========================
-const addQueueCardToDOM = (customer, options = {animate: false}) => {
+const queueCardBuild = (customer, options = {animate: false, buildType: "CREATE"}) => {
 
 	const queueCards = zooqueue.elements("queueCards");
 	const template = queueCards.querySelector("[template]");
-	const qCard = template.cloneNode(true);
-	qCard.removeAttribute("template");
-	qCard.setAttribute("id", customer.id);
+
+  let qCard;
+  if (options.buildType == "UPDATE") {
+    qCard = document.getElementById(customer.id);
+  } else {
+    qCard = template.cloneNode(true);
+    qCard.removeAttribute("template");
+  	qCard.setAttribute("id", customer.id);
+  }
+
+  if (!qCard) {
+    return zooqueue.consoleError(qCard);
+  }
+
+	// const qCard = template.cloneNode(true);
+	// qCard.removeAttribute("template");
+	// qCard.setAttribute("id", customer.id);
 
 	if (options.animate === true) {
 		qCard.classList.add("zooq__animation__SLIDE_IN_FROM_RIGHT");
@@ -55,44 +66,28 @@ const addQueueCardToDOM = (customer, options = {animate: false}) => {
 	// filter list by customer
 	ticketRef__el.parentNode.addEventListener("click", function (e) {
 		filterStaffByCustomerCtrl__EVENT(this);
-	 });
+	});
 
-	 // delete customer from queue
-	 	deleteCustomerCtrl__el.setAttribute("customer-id", customer.id);
-	 	deleteCustomerCtrl__el.addEventListener("click", function (e) {
-			deleteCustomerFromQueueCtrl__EVENT(this);
-	 	});
+	// delete customer from queue
+  deleteCustomerCtrl__el.setAttribute("customer-id", customer.id);
+  deleteCustomerCtrl__el.addEventListener("click", function (e) {
+    deleteCustomerFromQueueCtrl__EVENT(this);
+	});
 
-		// set priority customer
-		setPriorityCustomerCtrl__el.setAttribute("customer-id", customer.id);
-		setPriorityCustomerCtrl__el.addEventListener("click", function (e) {
-			setPriorityCustomerCtrl__EVENT(this);
-		});
+	// set priority customer
+	setPriorityCustomerCtrl__el.setAttribute("customer-id", customer.id);
+	setPriorityCustomerCtrl__el.addEventListener("click", function (e) {
+		setPriorityCustomerCtrl__EVENT(this);
+	});
 
-		// unset priority customer
-		unsetPriorityCustomerCtrl__el.addEventListener("click", function (e) {
-			unsetPriorityCustomerCtrl__EVENT();
-		});
+	// unset priority customer
+	unsetPriorityCustomerCtrl__el.addEventListener("click", function (e) {
+		unsetPriorityCustomerCtrl__EVENT();
+	});
 
-	queueCards.appendChild(qCard);
+  
+  if (options.buildType == "CREATE") {
+    queueCards.appendChild(qCard);
+  }
+
 };
-
-// ================================
-// METHOD: removeQueueCardFromDom
-// ================================
-const removeQueueCardFromDom = (id) => {
-	const qCard = document.getElementById(id);
-	const oh = qCard.offsetHeight;
-	qCard.style.height = `${oh}px`;
-	qCard.style.opacity = 0;
-	setTimeout( () => {
-		qCard.style.transition = "all .5s";
-		qCard.style.height = 0;
-		qCard.style.marginTop = 0;
-		qCard.style.borderWidth = 0;
-		qCard.style.padding = 0;
-	}, 50);
-	setTimeout( () => {
-		qCard.parentNode.removeChild(qCard);
-	}, 550);
-}

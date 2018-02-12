@@ -36,8 +36,6 @@ function zooqueueInit() {
 		// 3. SERVICE UPDATES (SERVICE NAME CHANGE, QUEUING DISABLED CHANGE, EXISTANCE)
 		// ==============================================================================
 		setInterval( () => {
-			// update time display
-			setQueueTitleInDOM();
 			Promise.all([bookingbugApis(), bookingbugBookingsApi()]).then( (results) => {
 				zooqueue.consolePoll(results);
 			}, err => {
@@ -47,16 +45,24 @@ function zooqueueInit() {
 
 		// =============================================
 		// REFRESH STAFF AND QUEUE CARDS EACH MINUTE
-		// TODO: instead of rebuilding the cards, just
-		// update the time data elements instead
 		// =============================================
 		setInterval( () => {
 			if (zooqueue.hasQueues()) {
 				const filters = zooqueue.getFilters();
 				zooqueue.setEstimatedWaitTimes();
-				resetCards();
-				buildStaffCards(filters);
-				buildQueueCards(filters);
+				// update time display
+				setQueueTitleInDOM();
+				// update queue cards
+				const customers = zooqueue.getCurrentQueue().customers;
+				for (const customer of customers) {
+					zooqDOM().updateQueueCard(customer);
+				}
+				// update staff cards
+				const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()];
+				for (const staffMember of staff) {
+					zooqDOM().updateStaffCard(staffMember);
+				}
+				zooqueue.consoleLogC("60 second refresh: Staff Cards, Queue Cards");
 			}
 		}, 60000); // each 60 seconds
 

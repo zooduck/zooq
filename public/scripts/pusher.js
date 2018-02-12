@@ -10,13 +10,15 @@ channel.bind("queue-event", function(data) {
 
   if (zooqueue.isReady()) {
 
-
     // ==================
     // UPDATE ALL STAFF
     // ==================
     if (data.type == "STAFF__UPDATE_ALL") {
       zooqueueApi().staffGet().then( () => {
-        buildDom();
+        const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()];
+        for (const staffMember of staff) {
+          updateStaffCardInDOM(staffMember);
+        }
       }, err => {
         zooqueue.consoleError(err);
       });

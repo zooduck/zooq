@@ -1,13 +1,15 @@
-// ============================
-// METHOD: addStaffCardToDOM
-// ============================
-const addStaffCardToDOM = (staffMember) => {
+const staffCardBuild = (staffMember, buildType = "CREATE") => {
 	const staffCards = zooqueue.elements("staffCards");
 	const template = staffCards.querySelector("[template]");
-	const sCard = template.cloneNode(true);
 
-	sCard.removeAttribute("template");
-	sCard.setAttribute("id", staffMember.id);
+  let sCard;
+	if (buildType == "UPDATE") {
+		sCard = document.getElementById(staffMember.id);
+	} else {
+		sCard = template.cloneNode(true);
+		sCard.removeAttribute("template");
+		sCard.setAttribute("id", staffMember.id);
+	}
 
 	const customLogStyles = "background: lightgoldenrodyellow; color: #333;";
 
@@ -109,7 +111,7 @@ const addStaffCardToDOM = (staffMember) => {
 		// EVENT: SERVE NEXT
 		// ====================
 		serveNextCtrl__button.addEventListener("click", function (e) {
-			setLoading();
+			// setLoading();
 			if (zooqueue.hasPriorityCustomer()) {
 				serveNextCtrl__EVENT(this, zooqueue.getCurrentQueue().priorityCustomer);
 			} else serveNextCtrl__EVENT(this);
@@ -296,6 +298,7 @@ const addStaffCardToDOM = (staffMember) => {
 		staffMemberStatus__el.classList.add("busy");
 		appointmentInfo__el.classList.add("--active");
 	}
-
-	staffCards.appendChild(sCard);
+	if (buildType == "CREATE") {
+		staffCards.appendChild(sCard);
+	}
 }
