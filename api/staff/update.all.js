@@ -137,10 +137,12 @@ const staffUpdateAll = (function staffUpdateAll () {
 							return reject(err);
 						}
 						const staff = {}
-						staff[companyIdAsKey] = result;
-						const data = {}
-						const type = "STAFF__UPDATE_ALL";
-						pusherService().trigger(data, type);
+						staff[companyIdAsKey] = result;						
+						if (!_.isEqual(oldStaff, staff)) {
+							const data = {}
+							const type = "STAFF__UPDATE_ALL";
+							pusherService().trigger(data, type);
+						}
 						resolve(JSON.stringify(staff));
 					});
 				});

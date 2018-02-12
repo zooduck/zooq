@@ -58,6 +58,7 @@ const customersServeOne = (function customersServeOne () {
 							firstName: payloadCustomer.firstName,
 							lastName: payloadCustomer.lastName,
 							ticketRef: payloadCustomer.ticketRef,
+							ticketRefDisplay: payloadCustomer.ticketRefDisplay,
 							service: payloadCustomer.services[0],
 							queue: payloadCustomer.queue
 						});

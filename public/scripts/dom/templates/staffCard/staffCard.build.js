@@ -1,4 +1,4 @@
-const staffCardBuild = (staffMember, buildType = "CREATE") => {
+const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttendanceStatus = true) => {
 	const staffCards = zooqueue.elements("staffCards");
 	const template = staffCards.querySelector("[template]");
 
@@ -150,9 +150,6 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
 	avatar__el.onclick = function (e) {
 		filterCustomersByStaffMemberServicesCtrl__EVENT(this);
 	}
-	// avatar__el.addEventListener("click", function (e) {
-	// 	filterCustomersByStaffMemberServicesCtrl__EVENT(this);
-	// }); // close addEventListener
 
 
 	// ========================
@@ -216,7 +213,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
 
 			appointmentInfoServing__el.innerHTML = `${staffMember.serving[0].firstName || ""} ${staffMember.serving[0].lastName || ""}`;
 			if (staffMember.serving[0].ticketRef) {
-				appointmentInfoServing__el.innerHTML += ` (TICKET: ${staffMember.serving[0].ticketRef})`;
+				appointmentInfoServing__el.innerHTML += ` (TICKET: ${staffMember.serving[0].ticketRefDisplay})`;
 			}
 			appointmentInfoService__el.innerHTML = staffMember.serving[0].service.name;
 			appointmentInfoTime__el.innerHTML = `${startDate__simple} - ${endDate__simple} (${appointmentInterval__minutes})`;
@@ -321,7 +318,21 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
 	if (buildType == "CREATE") {
 		staffCards.appendChild(sCard);
 	}
-  if (buildType == "UPDATE" && staffMember.attendance_status == 1 && !staffMember.activeBooking) {
-      staffCards.insertBefore(sCard, staffCards.childNodes[0]);
-  }
+	if (buildType == "UPDATE" && reorderItemsByAttendanceStatus == true) {
+		if (staffMember.attendance_status == 1) {
+			staffCards.insertBefore(sCard, Array.from(staffCards.children)[1]);
+		}
+		if (staffMember.attendance_status == 2 || staffMember.attendance_status == 3) {
+			const indexToInsertBefore = Array.from(staffCards.children).findIndex( (item) => item.classList.contains("awol"));
+			if (indexToInsertBefore == -1) {
+				staffCards.appendChild(sCard);
+			} else staffCards.insertBefore(sCard, Array.from(staffCards.children)[indexToInsertBefore]);
+		}
+		if (staffMember.attendance_status == 0) {
+			staffCards.appendChild(sCard);
+		}
+	}
+  // if (buildType == "UPDATE" && reorderItemsByAttendanceStatus == true && staffMember.attendance_status == 1 && !staffMember.activeBooking) {
+	// 		staffCards.insertBefore(sCard, Array.from(staffCards.children)[1]);
+  // }
 }

@@ -58,9 +58,9 @@ function zooqueueInit() {
 					zooqDOM().updateQueueCard(customer);
 				}
 				// update staff cards
-				const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()].reverse();
-				for (const staffMember of staff) {
-					zooqDOM().updateStaffCard(staffMember);
+				const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()];
+				for (const staffMember of Array.from(staff).reverse()) {
+					zooqDOM().updateStaffCard(staffMember, false);
 				}
 				zooqueue.consoleLogC("60 second refresh: Staff Cards, Queue Cards");
 			}

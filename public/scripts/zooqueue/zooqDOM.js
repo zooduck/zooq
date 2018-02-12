@@ -2,7 +2,7 @@ const zooqDOM = (function zooqDOM() {
   return function () {
     return {
       addCustomerToQueue(id) {
-        const customer = zooqueue.getCustomer(id);
+        const customer = zooqueue.getCustomer(id);        
         const options = { animate: true, buildType: "CREATE" }
         addQueueCardToDOM(customer, options);
       },
@@ -12,8 +12,8 @@ const zooqDOM = (function zooqDOM() {
       updateQueueCard(customer) {
         updateQueueCardInDOM(customer);
       },
-      updateStaffCard(staffMember) {
-        updateStaffCardInDOM(staffMember)
+      updateStaffCard(staffMember, reorderItemsByAttendanceStatus = true) {
+        updateStaffCardInDOM(staffMember, reorderItemsByAttendanceStatus)
       }
     }
   }

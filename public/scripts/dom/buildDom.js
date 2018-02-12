@@ -22,7 +22,11 @@ function buildDom (filters = {}) {
     // ===========================================================
     // CUSTOMER CREATE FORM: BUILD SERVICE OPTIONS FOR <select>
     // ===========================================================
-		for (let service of zooqueue.getCurrentQueue().services) {
+		const services = zooqueue.getCurrentQueue().serviceIds.map( (serviceId) => {
+			return zooqueue.getService(serviceId);
+		});
+		// for (let service of zooqueue.getCurrentQueue().services) {
+		for (let service of services) {
 			if (!service.queuing_disabled) {
 				buildServiceOption(service);
 			}

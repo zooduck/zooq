@@ -463,7 +463,7 @@ function ZooQueue() {
 		for (let key in data) {
 			let queueCollection = data[key];
 			let queueObjects = [];
-			for (let queue of queueCollection) {
+			for (let queue of queueCollection) {			
 				queueObjects.push(new Queue(queue));
 			}
 			data[key] = queueObjects;
@@ -542,34 +542,34 @@ function ZooQueue() {
 	this.hasStaff = function () {
 		return staff[this.companyIdAsKey()] && staff[this.companyIdAsKey()].length > 0 || false;
 	}
-	this.updateServicesInQueues = function () {
-		let allQueues = this.getQueues();
-		let services = this.getServices();
-
-		for (let key in allQueues) {
-			let queues = allQueues[key];
-			// =========================================================================================
-			// NOTE: because each queue has its own array of services
-			// (which will invariably be different to the array of ALL services WITH queuing enabled)
-			// we have to do some kind of mapping to any changed props on THAT service in THIS queue
-			// =========================================================================================
-			for (let queue of queues) {
-				queue.services.map( (item) => {
-					let service = this.getService(item.id);
-					if (!service) {
-						// service has been deleted or its queuing_disabled prop changed to true
-						delete item;
-					} else {
-						// -----------------------------------------------
-						// we only care about changes to name or colour
-						// -----------------------------------------------
-						item.name = service.name;
-						item.colour = service.colour;
-					}
-				});
-			}
-		}
-	}
+	// this.updateServicesInQueues = function () {
+	// 	let allQueues = this.getQueues();
+	// 	let services = this.getServices();
+	//
+	// 	for (let key in allQueues) {
+	// 		let queues = allQueues[key];
+	// 		// =========================================================================================
+	// 		// NOTE: because each queue has its own array of services
+	// 		// (which will invariably be different to the array of ALL services WITH queuing enabled)
+	// 		// we have to do some kind of mapping to any changed props on THAT service in THIS queue
+	// 		// =========================================================================================
+	// 		for (let queue of queues) {
+	// 			queue.services.map( (item) => {
+	// 				let service = this.getService(item.id);
+	// 				if (!service) {
+	// 					// service has been deleted or its queuing_disabled prop changed to true
+	// 					delete item;
+	// 				} else {
+	// 					// -----------------------------------------------
+	// 					// we only care about changes to name or colour
+	// 					// -----------------------------------------------
+	// 					item.name = service.name;
+	// 					item.colour = service.colour;
+	// 				}
+	// 			});
+	// 		}
+	// 	}
+	// }
 	this.setServices = function (data) {
 		for (let key in data) {
 			data[key] = data[key].filter(function(service) {
@@ -588,8 +588,11 @@ function ZooQueue() {
 			data[key] = serviceObjects;
 		}
 		services = data;
-		this.updateServicesInQueues();
+		// this.updateServicesInQueues();
 	}
+	// this.getService = function (id) {
+	// 	return services.find( (item) => item.id == id);
+	// }
 	this.getServices = function () {
 		return services || [];
 	}
