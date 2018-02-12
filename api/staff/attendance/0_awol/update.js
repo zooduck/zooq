@@ -40,7 +40,7 @@ const staffUpdateOne = (function staffUpdateOne() {
           const data = {
             staffMember: payloadStaffMemberId
           }
-          const type = "STAFF_MEMBER__ATTENDANCE__0_AWOL";
+          const type = "STAFF_MEMBER__ATTENDANCE__0_AWOL";        
           pusherService().trigger(data, type);
           return resolve(JSON.stringify(result));
         });

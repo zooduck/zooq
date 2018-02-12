@@ -78,7 +78,7 @@ function ZooQueue() {
 		}
 	})();
 	const $generateUniqueIdService= () => {
-		return `${new Date().getTime()}${Math.random().toString().replace(/\./g, "")}`;
+		return `${new Date().getTime()}.${Math.random().toString().replace(/\./g, "")}`;
 	};
 	const $setCurrentQueue = () => {
 		if (this.hasQueues()) {

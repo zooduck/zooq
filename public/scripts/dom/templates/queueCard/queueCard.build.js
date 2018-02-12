@@ -13,12 +13,8 @@ const queueCardBuild = (customer, options = {animate: false, buildType: "CREATE"
   }
 
   if (!qCard) {
-    return zooqueue.consoleError(qCard);
+    return;
   }
-
-	// const qCard = template.cloneNode(true);
-	// qCard.removeAttribute("template");
-	// qCard.setAttribute("id", customer.id);
 
 	if (options.animate === true) {
 		qCard.classList.add("zooq__animation__SLIDE_IN_FROM_RIGHT");
@@ -85,7 +81,7 @@ const queueCardBuild = (customer, options = {animate: false, buildType: "CREATE"
 		unsetPriorityCustomerCtrl__EVENT();
 	});
 
-  
+
   if (options.buildType == "CREATE") {
     queueCards.appendChild(qCard);
   }

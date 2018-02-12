@@ -4,7 +4,6 @@ const pusher = new Pusher("991a027aa0c940510776", {
   encrypted: true
 });
 const channel = pusher.subscribe("queue-channel");
-let lastBuildDomRequestDate = luxon.DateTime.local();
 channel.bind("queue-event", function(data) {
   zooqueue.pusherLog(data);
 
@@ -17,7 +16,7 @@ channel.bind("queue-event", function(data) {
       zooqueueApi().staffGet().then( () => {
         const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()];
         for (const staffMember of staff) {
-          updateStaffCardInDOM(staffMember);
+          zooqDOM().updateStaffCard(staffMember);
         }
       }, err => {
         zooqueue.consoleError(err);
@@ -33,6 +32,21 @@ channel.bind("queue-event", function(data) {
         zooqueue.consoleError(err);
       });
     }
+    // =======================================
+    // UPDATE STAFF MEMBER ATTENDANCE STATUS
+    // =======================================
+    if (data.type.match(/STAFF_MEMBER__ATTENDANCE/)) {
+      zooqueueApi().staffGet().then( () => {
+        const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()];
+        for (const staffMember of staff) {
+          zooqDOM().updateStaffCard(staffMember);
+        }
+        setLoaded();
+      }, err => {
+        zooqueue.consoleError(err);
+        setLoaded();
+      });
+    }
     // ========================
     // ADD CUSTOMER TO QUEUE
     // ========================
@@ -41,8 +55,11 @@ channel.bind("queue-event", function(data) {
         const customerId = data.data.queue.customer;
         zooqueue.setEstimatedWaitTimes();
         zooqDOM().addCustomerToQueue(customerId);
+        setQueueTitleInDOM();
+        setLoaded();
       }, err => {
         zooqueue.consoleError(err);
+        setLoaded();
       });
     }
     // ====================
@@ -53,6 +70,7 @@ channel.bind("queue-event", function(data) {
         buildDom();
       }, err => {
         zooqueue.consoleError(err);
+        setLoaded();
       });
     }
     // =============================
@@ -62,9 +80,11 @@ channel.bind("queue-event", function(data) {
       const customerId = data.data.queue.customer;
       zooqDOM().deleteCustomerFromQueue(customerId);
       zooqueueApi().queuesGet().then( () => {
-        // do nothing...
+        setQueueTitleInDOM();
+        setLoaded();
       }, err => {
         zooqueue.consoleError(err);
+        setLoaded();
       });
     }
     // =================================
@@ -79,6 +99,7 @@ channel.bind("queue-event", function(data) {
         buildDom();
       }, err => {
         zooqueue.consoleError(err);
+        setLoaded();
       });
     }
     // ============================
@@ -90,71 +111,8 @@ channel.bind("queue-event", function(data) {
         buildDom();
       }, err => {
         zooqueue.consoleError(err);
+        setLoaded();
       });
     }
-
-    // =====================================
-    // STAFF MEMBER SET ATTENDANCE_STATUS
-    // =====================================
-    if (data.type.match(/STAFF_MEMBER__ATTENDANCE/)) {
-      zooqueueApi().staffGet().then( () => {
-        buildDom();
-      }, err => {
-        zooqueue.consoleError(err);
-      });
-    }
-
-
-
-    // // =================================
-    // // get latest queues data...
-    // // NOTE: queuesGet() gets and sets
-    // // =================================
-    // if (data.type == "q.db.json") {
-    //   zooqueueApi().queuesGet().then( () => {
-    //     buildDom();
-    //   }, err => {
-    //     zooqueue.consoleError(err);
-    //   });
-    // }
-    // // ===============================
-    // // get latest staff data...
-    // // NOTE staffGet() gets and sets
-    // // ===============================
-    // if (data.type == "staff.db.json") {
-    //   zooqueueApi().staffGet().then( () => {
-    //     buildDom();
-    //   }, err => {
-    //     zooqueue.consoleError(err);
-    //   });
-    // }
-    // // ==============================
-    // // get latest services data...
-    // // ==============================
-    // if (data.type == "services.db.json") {
-    //   zooqueueApi().servicesGet().then( () => {
-    //     buildDom();
-    //   }, err => {
-    //     zooqueue.consoleError(err);
-    //   });
-    // }
-
-
-
-
   }
 });
-// ===========
-// buildDom
-// ===========
-// setInterval( () => {
-//   if (zooqueue.isReady() && lastBuildDomRequestDate) {
-//     const nowDate = luxon.DateTime.local();
-//     const intervalSeconds = luxon.Interval.fromDateTimes(lastBuildDomRequestDate, nowDate).toDuration("seconds").toObject().seconds;
-//     if (intervalSeconds >= 0.5) {
-//       // console.log("INTERVAL GREATER THAN 0.5 SECONDs, BUILD DOM");
-//       lastBuildDomRequestDate = null;
-//       //buildDom();
-//     }
-//   }
-// }, 200);

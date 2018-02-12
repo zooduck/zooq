@@ -9,11 +9,11 @@ const deleteCustomerFromQueueCtrl__EVENT = (el) => {
     return zooqueue.consoleError("PRIORITY_CUSTOMER_CANNOT_BE_DELETED");
   }
 
-  // setLoading();
+  setLoading();
 
   zooqueueApi().customerDelete(el.getAttribute("customer-id")).then( (result) => {
     zooqueue.consoleLog(result);
-    setLoaded();
+    // setLoaded();
     // buildDom();  // user pusher instead
   }, err => {
     zooqueue.consoleError(err);

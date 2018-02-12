@@ -5,8 +5,8 @@ const pusherService = require("../../pusher/pusher.service.js");
 const customersServeOne = (function customersServeOne () {
 	const $run = (payload) => {
 		const companyIdAsKey = `_${payload.params.companyId}`;
-    const payloadCustomerId = payload.id;
-    const payloadQueueId = payload.params.queueId;
+    const payloadCustomerId = parseInt(payload.id);
+    const payloadQueueId = parseInt(payload.params.queueId);
 		const payloadStaffMember = JSON.parse(payload.data).staffMember;
 		const payloadCustomer = JSON.parse(payload.data).customer;
 
