@@ -96,12 +96,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
       setLoading();
 			startShiftCtrl__EVENT(this);
     }
-    startShiftCtrl__button.removeEventListener("click", startShiftCtrlButtonCallback);
-    startShiftCtrl__button.addEventListener("click", startShiftCtrlButtonCallback);
-		// startShiftCtrl__button.addEventListener("click", function (e) {
-		// 	setLoading();
-		// 	startShiftCtrl__EVENT(this);
-		// });
+		startShiftCtrl__button.onclick = startShiftCtrlButtonCallback;
 	} else if (staffMember.attendance_status == 1) {
 		// ====================
 		// EVENT: SET BUSY
@@ -110,12 +105,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
       setLoading();
 			setBusyCtrl__EVENT(this);
     }
-    setBusyCtrl__button.removeEventListener("click", setBusyCtrlButtonCallback);
-    setBusyCtrl__button.addEventListener("click", setBusyCtrlButtonCallback);
-		// setBusyCtrl__button.addEventListener("click", function (e) {
-		// 	setLoading();
-		// 	setBusyCtrl__EVENT(this);
-		// });
+		setBusyCtrl__button.onclick = setBusyCtrlButtonCallback;
 		// ====================
 		// EVENT: SET ON BREAK
 		// ====================
@@ -123,12 +113,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
       setLoading();
       setOnBreakCtrl__EVENT(this);
     }
-    setOnBreakCtrl__button.removeEventListener("click", setOnBreakCtrlButtonCallback);
-    setOnBreakCtrl__button.addEventListener("click", setOnBreakCtrlButtonCallback);
-		// setOnBreakCtrl__button.addEventListener("click", function (e) {
-		// 	setLoading();
-		// 	setOnBreakCtrl__EVENT(this);
-		// });
+		setOnBreakCtrl__button.onclick = setOnBreakCtrlButtonCallback;
 		// ====================
 		// EVENT: SERVE NEXT
 		// ====================
@@ -137,14 +122,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
 				serveNextCtrl__EVENT(this, zooqueue.getCurrentQueue().priorityCustomer);
 			} else serveNextCtrl__EVENT(this);
     }
-    serveNextCtrl__button.removeEventListener("click", serveNextCtrlButtonCallback);
-    serveNextCtrl__button.addEventListener("click", serveNextCtrlButtonCallback);
-		// serveNextCtrl__button.addEventListener("click", function (e) {
-		// 	// setLoading();
-		// 	if (zooqueue.hasPriorityCustomer()) {
-		// 		serveNextCtrl__EVENT(this, zooqueue.getCurrentQueue().priorityCustomer);
-		// 	} else serveNextCtrl__EVENT(this);
-		// });
+		serveNextCtrl__button.onclick = serveNextCtrlButtonCallback;
 		// ====================
 		// EVENT: END SHIFT
 		// ====================
@@ -152,49 +130,35 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
       setLoading();
       endShiftCtrl__EVENT(this);
     }
-    endShiftCtrl__button.removeEventListener("click", endShiftCtrlButtonCallback);
-    endShiftCtrl__button.addEventListener("click", endShiftCtrlButtonCallback);
-		// endShiftCtrl__button.addEventListener("click", function (e) {
-		// 	setLoading();
-		// 	endShiftCtrl__EVENT(this);
-		// });
+		endShiftCtrl__button.onclick = endShiftCtrlButtonCallback;
 	} else if (staffMember.attendance_status == 2 || staffMember.attendance_status == 3) {
     const setFreeCtrlButtonCallback = function (e) {
       setLoading();
       setFreeCtrl__EVENT(this);
     }
-    setFreeCtrl__button.removeEventListener("click", setFreeCtrlButtonCallback);
-    setFreeCtrl__button.addEventListener("click", setFreeCtrlButtonCallback);
-		// setFreeCtrl__button.addEventListener("click", function (e) {
-		// 	setLoading();
-		// 	setFreeCtrl__EVENT(this);
-		// });
+		setFreeCtrl__button.onclick = setFreeCtrlButtonCallback;
 	} else if (staffMember.attendance_status == 4) {
     const finishServingCtrlButtonCallback = function (e) {
       setLoading();
 			finishServingCtrl__EVENT(this);
     }
-    finishServingCtrl__button.removeEventListener("click", finishServingCtrlButtonCallback);
-    finishServingCtrl__button.addEventListener("click", finishServingCtrlButtonCallback);
-		// finishServingCtrl__button.addEventListener("click", function (e) {
-		// 	setLoading();
-		// 	finishServingCtrl__EVENT(this);
-		// });
+		finishServingCtrl__button.onclick = finishServingCtrlButtonCallback;
 	}
 	// =======================================================================================================
 	// EVENT: FILTER LIST BY STAFF MEMBER (show only customers with services supported by this staff member)
 	// =======================================================================================================
-	avatar__el.addEventListener("click", function (e) {
+	avatar__el.onclick = function (e) {
 		filterCustomersByStaffMemberServicesCtrl__EVENT(this);
-	}); // close addEventListener
-
-
+	}
+	// avatar__el.addEventListener("click", function (e) {
+	// 	filterCustomersByStaffMemberServicesCtrl__EVENT(this);
+	// }); // close addEventListener
 
 
 	// ========================
 	// UNIVERSAL CARD VALUES
 	// ========================
-	const avatarUrl__default = `https://api.adorable.io/avatars/44/${staffMember.id}.png`;
+	const avatarUrl__default = `https://api.adorable.io/avatars/85/${staffMember.id}.png`;
  	avatar__el.style.backgroundImage = `url(${staffMember.avatarUrl? staffMember.avatarUrl : avatarUrl__default})`;
 	staffMemberName__el.innerHTML = staffMember.name;
 	const servicesWithQueuingEnabled = zooqueue.getServiceIds();

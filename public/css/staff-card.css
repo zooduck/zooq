@@ -1,0 +1,189 @@
+/* ========== */
+/* staff-card	*/
+/* ========== */
+
+.content__columns__staff-container {
+	flex-grow: 1;
+	flex-basis: 50%;
+	padding: 0 20px;
+}
+
+.staff-card {
+	display: flex;
+	flex-direction: column;
+	margin: 10px 0;
+	/* padding: 10px; */
+	background: #fff;
+	/* box-shadow: 2px 2px 25px #555; */
+	/* box-shadow: 2px 2px 10px #ccc; */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	user-select: none;
+	border: solid 0 #fff;
+	border-top-width: 5px;
+	padding-bottom: 10px;
+}
+.staff-card.available {
+	border-color: var(--available-color);
+}
+.staff-card.on-break {
+	border-color: var(--on-break-color);
+}
+.staff-card.awol {
+	border-color: var(--awol-color);
+}
+.staff-card.busy {
+	border-color: var(--busy-color);
+}
+
+.staff-card__row__header {
+	display: flex;
+	align-items: center;
+	/*background: #fff;*/
+	padding: 5px;
+	margin: 0 10px;
+}
+.staff-card__row__header__avatar {
+	width: 85px;
+	height: 85px;
+	align-self: baseline;
+	flex-shrink: 0;
+	border: solid 3px #333;
+	margin-right: 10px;
+	cursor: pointer;
+	box-shadow: 2px 6px 10px #555;
+	background-size: cover;
+	background-position: center;
+}
+.staff-card__row__header__avatar:active {
+	transform: scale(.95);
+	box-shadow: 1px 2px 5px #555;
+}
+
+.staff-card__row__header__appointment-info {
+	display: flex;
+	flex-direction: column;
+	/*flex-grow: 1;*/
+}
+.staff-card__row__header__appointment-info__item {
+	margin-top: 5px;
+	color: #333;
+}
+.staff-card__row__header__appointment-info__item[staff-member-name] {
+	/*flex-grow: 1;*/
+	font-size: 1.5em;
+	font-weight: bold;
+	color: #333;
+}
+.staff-card__row__header__appointment-info__item[staff-member-status] {
+	align-self: flex-start;
+	margin-top: 5px;
+	border: solid 1px #444;
+	padding: 5px;
+	font-weight: bold;
+}
+.staff-card__row__header__appointment-info__item[staff-member-status].awol {
+	color: var(--awol-color);
+	border-color: var(--awol-color);
+}
+.staff-card__row__header__appointment-info__item[staff-member-status].available {
+	color: var(--available-color);
+	border-color: var(--available-color);
+}
+.staff-card__row__header__appointment-info__item[staff-member-status].on-break {
+	color: var(--on-break-color);
+	border-color: var(--on-break-color);
+}
+.staff-card__row__header__appointment-info__item[staff-member-status].busy {
+	color: var(--busy-color);
+	border-color: var(--busy-color);
+}
+.staff-card__row__header__ctrls-wrapper {
+	display: flex;
+	justify-content: flex-end;
+	flex-grow: 1;
+	align-self: stretch;
+	padding: 5px;
+}
+.staff-card__row__header__ctrl {
+	margin-left: 10px;
+	/*align-self: flex-end;*/
+}
+.staff-card__row__header__ctrl button {
+	height: 100%;
+}
+.staff-card__row__header__ctrl button[start-shift-ctrl] {
+	background: var(--button-color-start-shift);
+}
+.staff-card__row__header__ctrl button[start-shift-ctrl]:hover {
+	background: var(--button-color-start-shift__HOVER);
+}
+.staff-card__row__header__ctrl button[end-shift-ctrl] {
+	background: var(--button-color-end-shift);
+}
+.staff-card__row__header__ctrl button[end-shift-ctrl]:hover {
+	background: var(--button-color-end-shift__HOVER);
+}
+.staff-card__row__header__ctrl button[serve-next-ctrl] {
+	background: var(--button-color-serve-next);
+}
+.staff-card__row__header__ctrl button[serve-next-ctrl]:hover {
+	background: var(--button-color-serve-next__HOVER);
+}
+.staff-card__row__services-info {
+	background: #eee;
+	margin: 0 10px;
+	height: 0;
+	overflow: hidden;
+	padding: 0 5px;
+	transition: all .25s;
+}
+.staff-card:active > .staff-card__row__services-info {
+	height: 50px;
+	padding: 5px;
+}
+.staff-card__row__services-info__item {
+
+}
+.staff-card__row__appointment-info {
+	background: #fff;
+	color: #333;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 5px;
+	margin: 0 10px;
+	display: none;
+}
+.staff-card__row__appointment-info.--active {
+	display: flex;
+}
+.staff-card__row__appointment-info.overdue {
+	color: crimson;
+	font-weight: bold;
+}
+.staff-card__row__appointment-info__item {
+	display: flex;
+	align-items: center;
+}
+.staff-card__row__appointment-info__item i {
+	margin-right: 5px;
+}
+.staff-card__row__next-appointment-info {
+	background: paleturquoise;
+	margin: 0 10px 10px 10px;
+	height: 0;
+	padding: 0 5px;
+	overflow: hidden;
+	transition: all .25s;
+}
+.staff-card:active > .staff-card__row__next-appointment-info {
+	height: auto;
+	padding: 5px;
+}
+.staff-card__row__next-appointment-info.updated {
+	animation-name: staff_card_updated;
+	animation-duration: 2s;
+}
+.staff-card__row__next-appointment-info__item {
+
+}
