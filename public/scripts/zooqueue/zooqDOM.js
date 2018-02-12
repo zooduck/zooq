@@ -7,7 +7,13 @@ const zooqDOM = (function zooqDOM() {
         addQueueCardToDOM(customer, options);
       },
       deleteCustomerFromQueue(id) {
-        removeQueueCardFromDom(id);
+        deleteQueueCardFromDOM(id);
+      },
+      updateQueueCard(customer) {
+        updateQueueCardInDOM(customer);
+      },
+      updateStaffCard(staffMember) {
+        updateStaffCardInDOM(staffMember)
       }
     }
   }

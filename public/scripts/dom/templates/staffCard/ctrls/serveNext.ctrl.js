@@ -1,12 +1,10 @@
 const serveNextCtrl__EVENT = (el, customer = null) => {
-  // return alert("serve next ctrl todo! ioh");
 
   let staffMemberServing = zooqueue.getStaffMember(el.getAttribute("staff-id"));
   let customerToServe = customer || zooqueue.findNextCustomerToServe(staffMemberServing);
 
   if (!customerToServe) {
-    zooqueue.alert("CUSTOMER_TO_SERVE_NOT_FOUND");
-    // return zooqueue.consoleError("CUSTOMER_TO_SERVE_NOT_FOUND");
+    return zooqueue.alert("CUSTOMER_TO_SERVE_NOT_FOUND");
   }
 
   const serviceSupported = staffMemberServing.service_ids.find( (item) => item == customerToServe.services[0].id);
@@ -16,6 +14,7 @@ const serveNextCtrl__EVENT = (el, customer = null) => {
   }
 
   zooqueueApi().connectionTest().then( () => {
+    setLoading();
     // ============================
     // CREATE BOOKINGBUG BASKET
     // ============================
