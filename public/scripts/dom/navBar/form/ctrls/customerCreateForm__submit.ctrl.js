@@ -1,7 +1,6 @@
 const customerCreateForm__submitCtrl__EVENT = () => {
   if (!zooqueue.hasQueues()) {
-    zooqueue.alert("QUEUE_NOT_FOUND");
-    return zooqueue.consoleError("QUEUE_NOT_FOUND");
+    return zooqueue.alert("QUEUE_NOT_FOUND");
   }
   const formData = new FormData(zooqueue.elements("customerCreateForm").querySelector("form"));
   const data = zooqueueApi().convertCustomerFormDataToJson(formData);
@@ -10,11 +9,12 @@ const customerCreateForm__submitCtrl__EVENT = () => {
     return zooqueue.consoleError(data.error);
   }
 
+  setLoading();
+
   zooqueueApi().customerCreate(data).then( (result) => {
     clearForm(zooqueue.elements("customerCreateForm").querySelector("form"));
-    zooqueue.consoleLog(result);
     zooqueue.removeFilters(["customer"]);
-    // buildDom(); // use pusher instead
+    navBarHide();  
   }, err => {
     zooqueue.consoleError(err);
   });

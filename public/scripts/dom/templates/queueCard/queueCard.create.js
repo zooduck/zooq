@@ -1,3 +1,3 @@
-const addQueueCardToDOM = (customer) => {
-	queueCardBuild(customer, {animate: false, buildType: "CREATE"});
+const addQueueCardToDOM = (customer, options) => {
+	queueCardBuild(customer, options);
 }

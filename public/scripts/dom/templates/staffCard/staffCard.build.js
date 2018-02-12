@@ -11,7 +11,11 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
 		sCard.setAttribute("id", staffMember.id);
 	}
 
-	const customLogStyles = "background: lightgoldenrodyellow; color: #333;";
+  if (!sCard) {
+    return;
+  }
+
+  const customLogStyles = "background: lightgoldenrodyellow; color: #333;";
 
 	const avatar__el = sCard.querySelector("[avatar]");
 	const staffMemberName__el = sCard.querySelector("[staff-member-name]");
@@ -76,63 +80,106 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
 	// "activeBooking" prop of the staffMember, and in that case we want to show the same styles and ctrl set as for attendance_status 4 (busy serving)
 	// ==================================================================================================================================================
 	// let statusKey = (staffMember.activeBookingType && staffMember.activeBookingType == "CALENDAR") || (staffMember.activeBooking && (staffMember.activeBookingType == "CALENDAR" || staffMember.attendance_status != 4))? 5 : staffMember.attendance_status;
-	let statusKey = staffMember.activeBookingType == "CALENDAR" && staffMember.attendance_status == 4? 5 : staffMember.attendance_status;
-	for (ctrl of ctrlAttrsByAttendanceStatus[statusKey]) {
+	let statusKey = staffMember.activeBookingType == "CALENDAR"? 5 : staffMember.attendance_status;
+  for (ctrl of ctrlAttrsByAttendanceStatus[statusKey]) {
 		ctrl.parentNode.removeAttribute("hidden");
 	}
 
 	// ======================
 	// CTRL BUTTON EVENTS
 	// =====================
-	if (staffMember.attendance_status == 0) {
+  if (staffMember.attendance_status == 0) {
 		// ====================
 		// EVENT: START SHIFT
 		// ====================
-		startShiftCtrl__button.addEventListener("click", function (e) {
-			setLoading();
+    const startShiftCtrlButtonCallback = function (e) {
+      setLoading();
 			startShiftCtrl__EVENT(this);
-		});
+    }
+    startShiftCtrl__button.removeEventListener("click", startShiftCtrlButtonCallback);
+    startShiftCtrl__button.addEventListener("click", startShiftCtrlButtonCallback);
+		// startShiftCtrl__button.addEventListener("click", function (e) {
+		// 	setLoading();
+		// 	startShiftCtrl__EVENT(this);
+		// });
 	} else if (staffMember.attendance_status == 1) {
 		// ====================
 		// EVENT: SET BUSY
 		// ====================
-		setBusyCtrl__button.addEventListener("click", function (e) {
-			setLoading();
+    const setBusyCtrlButtonCallback = function (e) {
+      setLoading();
 			setBusyCtrl__EVENT(this);
-		});
+    }
+    setBusyCtrl__button.removeEventListener("click", setBusyCtrlButtonCallback);
+    setBusyCtrl__button.addEventListener("click", setBusyCtrlButtonCallback);
+		// setBusyCtrl__button.addEventListener("click", function (e) {
+		// 	setLoading();
+		// 	setBusyCtrl__EVENT(this);
+		// });
 		// ====================
 		// EVENT: SET ON BREAK
 		// ====================
-		setOnBreakCtrl__button.addEventListener("click", function (e) {
-			setLoading();
-			setOnBreakCtrl__EVENT(this);
-		});
+    const setOnBreakCtrlButtonCallback = function (e) {
+      setLoading();
+      setOnBreakCtrl__EVENT(this);
+    }
+    setOnBreakCtrl__button.removeEventListener("click", setOnBreakCtrlButtonCallback);
+    setOnBreakCtrl__button.addEventListener("click", setOnBreakCtrlButtonCallback);
+		// setOnBreakCtrl__button.addEventListener("click", function (e) {
+		// 	setLoading();
+		// 	setOnBreakCtrl__EVENT(this);
+		// });
 		// ====================
 		// EVENT: SERVE NEXT
 		// ====================
-		serveNextCtrl__button.addEventListener("click", function (e) {
-			// setLoading();
-			if (zooqueue.hasPriorityCustomer()) {
+    const serveNextCtrlButtonCallback = function (e) {
+      if (zooqueue.hasPriorityCustomer()) {
 				serveNextCtrl__EVENT(this, zooqueue.getCurrentQueue().priorityCustomer);
 			} else serveNextCtrl__EVENT(this);
-		});
+    }
+    serveNextCtrl__button.removeEventListener("click", serveNextCtrlButtonCallback);
+    serveNextCtrl__button.addEventListener("click", serveNextCtrlButtonCallback);
+		// serveNextCtrl__button.addEventListener("click", function (e) {
+		// 	// setLoading();
+		// 	if (zooqueue.hasPriorityCustomer()) {
+		// 		serveNextCtrl__EVENT(this, zooqueue.getCurrentQueue().priorityCustomer);
+		// 	} else serveNextCtrl__EVENT(this);
+		// });
 		// ====================
 		// EVENT: END SHIFT
 		// ====================
-		endShiftCtrl__button.addEventListener("click", function (e) {
-			setLoading();
-			endShiftCtrl__EVENT(this);
-		});
+    const endShiftCtrlButtonCallback = function (e) {
+      setLoading();
+      endShiftCtrl__EVENT(this);
+    }
+    endShiftCtrl__button.removeEventListener("click", endShiftCtrlButtonCallback);
+    endShiftCtrl__button.addEventListener("click", endShiftCtrlButtonCallback);
+		// endShiftCtrl__button.addEventListener("click", function (e) {
+		// 	setLoading();
+		// 	endShiftCtrl__EVENT(this);
+		// });
 	} else if (staffMember.attendance_status == 2 || staffMember.attendance_status == 3) {
-		setFreeCtrl__button.addEventListener("click", function (e) {
-			setLoading();
-			setFreeCtrl__EVENT(this);
-		});
+    const setFreeCtrlButtonCallback = function (e) {
+      setLoading();
+      setFreeCtrl__EVENT(this);
+    }
+    setFreeCtrl__button.removeEventListener("click", setFreeCtrlButtonCallback);
+    setFreeCtrl__button.addEventListener("click", setFreeCtrlButtonCallback);
+		// setFreeCtrl__button.addEventListener("click", function (e) {
+		// 	setLoading();
+		// 	setFreeCtrl__EVENT(this);
+		// });
 	} else if (staffMember.attendance_status == 4) {
-		finishServingCtrl__button.addEventListener("click", function (e) {
-			setLoading();
+    const finishServingCtrlButtonCallback = function (e) {
+      setLoading();
 			finishServingCtrl__EVENT(this);
-		});
+    }
+    finishServingCtrl__button.removeEventListener("click", finishServingCtrlButtonCallback);
+    finishServingCtrl__button.addEventListener("click", finishServingCtrlButtonCallback);
+		// finishServingCtrl__button.addEventListener("click", function (e) {
+		// 	setLoading();
+		// 	finishServingCtrl__EVENT(this);
+		// });
 	}
 	// =======================================================================================================
 	// EVENT: FILTER LIST BY STAFF MEMBER (show only customers with services supported by this staff member)
@@ -140,6 +187,8 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
 	avatar__el.addEventListener("click", function (e) {
 		filterCustomersByStaffMemberServicesCtrl__EVENT(this);
 	}); // close addEventListener
+
+
 
 
 	// ========================
@@ -251,7 +300,12 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
 		const timePassedString = interval.length("minutes").toTimeString();
 		appointmentInfoTime__el.innerHTML = `${startDate__simple} - ${endDate__simple} (${duration.toTimeString()})`;
 		appointmentInfoDuration__el.innerHTML = timePassedString;
-	}
+	} else if (staffMember.attendance_status == 1) {
+    appointmentInfoService__el.innerHTML = "";
+    appointmentInfoTime__el.innerHTML = "";
+    appointmentInfoDuration__el.innerHTML = "";
+    appointmentInfo__el.classList.remove("--active");
+  }
 
 	if (staffMember.nextBooking) {
 		console.log(`${staffMember.name} has an upcoming booking`);
@@ -267,6 +321,8 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
 	// ==============
 	// CARD STYLES
 	// ==============
+  sCard.classList.remove("awol", "available", "on-break", "busy");
+  staffMemberStatus__el.classList.remove("awol", "available", "on-break", "busy");
 	if (staffMember.attendance_status == 0) {
 		// AWOL
 		sCard.classList.add("awol");
@@ -301,4 +357,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE") => {
 	if (buildType == "CREATE") {
 		staffCards.appendChild(sCard);
 	}
+  if (buildType == "UPDATE" && staffMember.attendance_status == 1 && !staffMember.activeBooking) {
+      staffCards.insertBefore(sCard, staffCards.childNodes[0]);
+  }
 }

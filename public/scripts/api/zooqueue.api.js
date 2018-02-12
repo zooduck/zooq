@@ -138,7 +138,7 @@ const zooqueueApi = (function zooqueueApi () {
 		return $http("POST", `api/customers/${JSON.parse(data).id}/?companyId=${zooqueue.companyId()}&queueId=${queueId}`, data, requestHeaders);
 	};
 	const $customerServe = (data) => {
-		// console.log("customer to serve data", JSON.parse(data));
+		console.log("customer to serve data", JSON.parse(data));
 		const staffMember = JSON.parse(data).staffMember;
 		const queueId = encodeURIComponent(zooqueue.getCurrentQueue().id);
 		const requestHeaders = [["Content-Type", "application/json"]];
@@ -279,7 +279,7 @@ const zooqueueApi = (function zooqueueApi () {
 						let queueIndex = zooqueue.getQueues()[zooqueue.companyIdAsKey()].length -1;
 						zooqueue.setCurrentQueueIndex(queueIndex);
 
-						resolve("q.db.json: updated");
+						resolve("DATABASE_UPDATE: q");
 
 					}, err => {
 						reject(err);
@@ -295,7 +295,7 @@ const zooqueueApi = (function zooqueueApi () {
 					} else delete queue.priorityCustomer;
 
 					$queueSetPriorityCustomer(JSON.stringify(queue)).then( (queues) => {
-						resolve("q.db.json: updated");
+						resolve("DATABASE_UPDATE: q");
 					}, err => {
 						zooqueue.consoleError(err);
 						reject(err);
@@ -311,7 +311,7 @@ const zooqueueApi = (function zooqueueApi () {
 						}
 
 						zooqueue.setQueues(JSON.parse(queues));
-						resolve("q.db.json: updated");
+						resolve("DATABASE_UPDATE: q");
 
 					}, err => {
 						reject(err);
@@ -329,9 +329,9 @@ const zooqueueApi = (function zooqueueApi () {
 							return reject(JSON.parse(data).error);
 						}
 
-						//zooqueue.setQueues(JSON.parse(data).queues);
-						//zooqueue.setStaff(JSON.parse(data).staff)
-						resolve("q.db.json: updated, staff.db.json: updated");
+						// zooqueue.setQueues(JSON.parse(data).queues);
+						// zooqueue.setStaff(JSON.parse(data).staff);
+						resolve("DATABASE_UPDATE: [q, staff]");
 
 					}, err => {
 						reject(err);
@@ -346,7 +346,7 @@ const zooqueueApi = (function zooqueueApi () {
 						}
 						// zooqueue.setQueues(JSON.parse(data).queues);
 						// zooqueue.setStaff(JSON.parse(data).staff);
-						resolve("q.db.json updated, staff.db.json updated");
+						resolve("DATABASE_UPDATE: [q, staff]");
 					});
 				});
 			},
@@ -357,7 +357,7 @@ const zooqueueApi = (function zooqueueApi () {
 							return reject(JSON.parse(data).error);
 						}
 						zooqueue.setQueues(JSON.parse(data));
-						resolve("q.db.json updated");
+						resolve("DATABASE_UPDATE: q");
 					}, err => {
 						reject(err);
 					});
@@ -401,7 +401,7 @@ const zooqueueApi = (function zooqueueApi () {
 							return reject(JSON.parse(staff).error);
 						}
 						zooqueue.setStaff(JSON.parse(staff));
-						resolve("staff.db.json: updated");
+						resolve("DATABASE_UPDATE: staff");
 					}, err => {
 						reject(err);
 					});
@@ -428,7 +428,7 @@ const zooqueueApi = (function zooqueueApi () {
 							return reject(JSON.parse(staff).error);
 						}
 						zooqueue.setStaff(JSON.parse(staff));
-						resolve("staff.db.json: updated");
+						resolve("DATABASE_UPDATE: staff");
 					}, err => {
 						reject(err);
 					});
@@ -451,7 +451,7 @@ const zooqueueApi = (function zooqueueApi () {
 			staffMemberSetOnBreak(id) {
 				return new Promise( (resolve, reject) => {
 					$staffMemberSetOnBreak(id).then( (result) => {
-						zooqueue.consoleLog("staff.db.json: updated");
+						zooqueue.consoleLog("DATABASE_UPDATE: staff");
 						resolve(JSON.parse(result));
 					}, err => {
 						zooqueue.consoleError(err);
@@ -462,7 +462,7 @@ const zooqueueApi = (function zooqueueApi () {
 			staffMemberSetBusy(id) {
 				return new Promise( (resolve, reject) => {
 					$staffMemberSetBusy(id).then( (result) => {
-						zooqueue.consoleLog("staff.db.json: updated");
+						zooqueue.consoleLog("DATABASE_UPDATE: staff");
 						resolve(JSON.parse(result));
 					}, err => {
 						zooqueue.consoleError(err);
@@ -473,7 +473,7 @@ const zooqueueApi = (function zooqueueApi () {
 			// staffMemberSetBusy__4(data) {
 			// 	return new Promise( (resolve, reject) => {
 			// 		$staffMemberSetBusy__4(data).then( (result) => {
-			// 			zooqueue.consoleLog("staff.db.json: updated");
+			// 			zooqueue.consoleLog("DATABASE_UPDATE: staff");
 			// 			resolve(JSON.parse(result));
 			// 		}, err => {
 			// 			zooqueue.consoleError(err);
@@ -486,7 +486,7 @@ const zooqueueApi = (function zooqueueApi () {
 			staffMemberStartShift(id) {
 				return new Promise( (resolve, reject) => {
 					$staffMemberStartShift(id).then( (result) => {
-						zooqueue.consoleLog("staff.db.json: updated");
+						zooqueue.consoleLog("DATABASE_UPDATE: staff");
 						resolve(JSON.parse(result));
 					}, err => {
 						zooqueue.consoleError(err);
@@ -497,7 +497,7 @@ const zooqueueApi = (function zooqueueApi () {
 			staffMemberSetFree(id) {
 				return new Promise( (resolve, reject) => {
 					$staffMemberSetFree(id).then( (result) => {
-						// zooqueue.consoleLog("staff.db.json: updated");
+						// zooqueue.consoleLog("DATABASE_UPDATE: staff");
 						const staffMember = JSON.parse(result);
 						resolve(staffMember);
 					}, err => {
