@@ -41,6 +41,7 @@ channel.bind("queue-event", function(data) {
         for (const staffMember of staff) {
           zooqDOM().updateStaffCard(staffMember);
         }
+        zooqueue.elements("superContainer").scrollTo(0, 0);
         setLoaded();
       }, err => {
         zooqueue.consoleError(err);
