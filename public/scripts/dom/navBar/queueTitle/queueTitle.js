@@ -6,7 +6,10 @@ const setQueueTitleInDOM = () => {
 		// zooqueue.elements("navBarInfoQueueName").querySelector("span").innerHTML = `${zooqueue.getCurrentQueue().name} (${zooqueue.getCurrentQueue().customers.length})`;
 		zooqueue.elements("navBarInfoQueueName").innerHTML = `${zooqueue.getCurrentQueue().name} (${zooqueue.getCurrentQueue().code})`;
 		zooqueue.elements("navBarInfoQueueCount").innerHTML = `${zooqueue.getCurrentQueue().customers.length}`;
-		zooqueue.elements("navBarInfoServices").innerHTML = zooqueue.getCurrentQueue().services.map( (item) => {
+		const services = zooqueue.getCurrentQueue().serviceIds.map( (serviceId) => {
+			return zooqueue.getService(serviceId);
+		});		
+		zooqueue.elements("navBarInfoServices").innerHTML = services.map( (item) => {
 			return `${item.name} (${item.code})`;
 		}).join(" | ");
 	} else {

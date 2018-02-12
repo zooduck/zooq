@@ -17,9 +17,10 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 			payloadServices = payloadServices.filter( (service) => !service.queuing_disabled);
 			const serviceCodes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 			payloadServices.forEach( (item, index, arr) => {
-				let code = serviceCodes.slice(index, index + 1) + serviceCodes.slice((index? index + 1 : 2) * -1, (index? index : 1) * -1);
+				// let code = serviceCodes.slice(index, index + 1) + serviceCodes.slice((index? index + 1 : 2) * -1, (index? index : 1) * -1);
+				const code = serviceCodes[index];
 				item.code = code;
-			});
+			});			
 			// ===========================================================
 			// INSERT services that are not there (but exist in payload)
 			// DELETE services which are there (but not in payload)

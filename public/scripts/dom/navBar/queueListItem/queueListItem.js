@@ -1,6 +1,3 @@
-// ===============================
-// METHOD: addQueueListItemToDOM
-// ===============================
 const addQueueListItemToDOM = (queue) => {
 	const form = zooqueue.elements("queueSwitchForm");
 	const template = form.querySelector("[template]").cloneNode(true);

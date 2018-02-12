@@ -60,26 +60,26 @@ const queueCardBuild = (customer, options = {animate: false, buildType: "CREATE"
 	// ====================
 
 	// filter list by customer
-	ticketRef__el.parentNode.addEventListener("click", function (e) {
+	ticketRef__el.parentNode.onclick = function (e) {
 		filterStaffByCustomerCtrl__EVENT(this);
-	});
+	};
 
 	// delete customer from queue
   deleteCustomerCtrl__el.setAttribute("customer-id", customer.id);
-  deleteCustomerCtrl__el.addEventListener("click", function (e) {
+  deleteCustomerCtrl__el.onclick = function (e) {
     deleteCustomerFromQueueCtrl__EVENT(this);
-	});
+	};
 
 	// set priority customer
 	setPriorityCustomerCtrl__el.setAttribute("customer-id", customer.id);
-	setPriorityCustomerCtrl__el.addEventListener("click", function (e) {
+	setPriorityCustomerCtrl__el.onclick = function (e) {
 		setPriorityCustomerCtrl__EVENT(this);
-	});
+	};
 
 	// unset priority customer
-	unsetPriorityCustomerCtrl__el.addEventListener("click", function (e) {
+	unsetPriorityCustomerCtrl__el.onclick = function (e) {
 		unsetPriorityCustomerCtrl__EVENT();
-	});
+	};
 
 
   if (options.buildType == "CREATE") {

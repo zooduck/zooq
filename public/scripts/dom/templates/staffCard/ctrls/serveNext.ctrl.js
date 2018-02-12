@@ -89,7 +89,7 @@ const serveNextCtrl__EVENT = (el, customer = null) => {
             zooqueue.consoleError(basket.error);
             return reject(basket);
           }
-          zooqueue.consoleLog(`POST to https://starfox.bookingbug.com/api/v1/${default_company_id}/basket/checkout:`, basket);
+          zooqueue.consoleLog(`POST to ${zooqueue.bookingbugApiUrl__PUBLIC()}${default_company_id}/basket/checkout:`, basket);
           resolve(basket);
         }, err => {
           zooqueue.consoleError("error", err);

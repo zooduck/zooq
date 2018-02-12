@@ -29,8 +29,8 @@ const zooqueueApi = (function zooqueueApi () {
 			companyId: zooqueue.companyId(),
 			customers: [],
 			customersBeingServed: [],
-			serviceIds: [],
-			services: []
+			serviceIds: []
+			// services: []
 		};
 		for (let pair of formData) {
 			let key = pair[0];
@@ -39,8 +39,8 @@ const zooqueueApi = (function zooqueueApi () {
 				let serviceId = parseInt(val);
 				data.serviceIds.push(serviceId);
 
-				let service = zooqueue.getService(serviceId);
-				data.services.push(service);
+				// let service = zooqueue.getService(serviceId);
+				// data.services.push(service);
 
 			} else data[key] = val;
 		}
@@ -92,12 +92,15 @@ const zooqueueApi = (function zooqueueApi () {
 		const service = zooqueue.getService(data.services[0].id);
 		const lastTicketRef = $getLastTicketRef(service.code);
 		data.ticketRef = $generateTicketRef(lastTicketRef, service.id);
+
 		const serviceCode = data.ticketRef.split("").pop();
 		const ticketRefCode = data.ticketRef.match(/\D+/);
 		const ticketRefNumber = data.ticketRef.match(/\d+/);
 		data.ticketRefDisplay = `${ticketRefCode[0]}${ticketRefNumber[0]}`;
 		// console.log("ticketRefCode", ticketRefCode);
 		// data.ticketRefDisplay = `${serviceCode}${data.ticketRef.substr(0, data.ticketRef.length - 1)}`;
+
+		console.log("customerAdd data:", data);
 
 		return JSON.stringify(data);
 	};
@@ -130,7 +133,8 @@ const zooqueueApi = (function zooqueueApi () {
 		return $http("PUT", `api/queues/customers/priorityStatus/${id}/?companyId=${zooqueue.companyId()}`, data, requestHeaders);
 	}
 	const $customerCreate = (data) => {
-		const queueId = encodeURIComponent(zooqueue.getCurrentQueue().id);
+		// const queueId = encodeURIComponent(zooqueue.getCurrentQueue().id);
+		const queueId = encodeURIComponent(JSON.parse(data).queue.id);
 		const requestHeaders = [["Content-Type", "application/json"]];
 		// ------------------------------------------
 		// Create a customer for the current queue

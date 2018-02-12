@@ -23,7 +23,7 @@ const customersCreateOne = (function customersCreateOne () {
 						console.log(err);
 						return reject(err);
 					}
-					payload.dbo.collection("q").find({companyId: payloadCompanyId}).toArray( (err, result) => {
+					payload.dbo.collection("q").find({companyId: payloadCompanyId}).sort({createdAt: 1}).toArray( (err, result) => {
 						if (err) {
 							console.log(err);
 							return reject(err);
@@ -31,6 +31,7 @@ const customersCreateOne = (function customersCreateOne () {
 						// push message to client...
 						const data = {
 							queue: {
+								id: payloadQueueId,
 								customer: payloadCustomer.id
 							}
 						}
