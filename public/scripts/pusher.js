@@ -57,7 +57,8 @@ channel.bind("queue-event", function(data) {
           const customerId = data.data.queue.customer;
           zooqueue.setEstimatedWaitTimes();
           zooqDOM().addCustomerToQueue(customerId);
-          setQueueTitleInDOM();
+          zooqDOM().buildQueueList();
+          zooqDOM().setQueueTitle();
           setLoaded();
         }, err => {
           zooqueue.consoleError(err);
@@ -86,7 +87,8 @@ channel.bind("queue-event", function(data) {
       const customerId = data.data.queue.customer;
       zooqDOM().deleteCustomerFromQueue(customerId);
       zooqueueApi().queuesGet().then( () => {
-        setQueueTitleInDOM();
+        zooqDOM().buildQueueList();
+        zooqDOM().setQueueTitle();      
         setLoaded();
       }, err => {
         zooqueue.consoleError(err);
