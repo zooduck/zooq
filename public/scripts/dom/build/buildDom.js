@@ -31,13 +31,17 @@ function buildDom (filters = {}) {
 				buildServiceOption(service);
 			}
 		}
-    // ======================================
-    // QUEUE LIST: BUILD QUEUE LIST LINKS
-    // ======================================
-		let queues = zooqueue.getQueues()[zooqueue.companyIdAsKey()];
-		for (let queue of queues) {
-			addQueueListItemToDOM(queue);
-		}
+    // // ======================================
+    // // QUEUE LIST: BUILD QUEUE LIST LINKS
+    // // ======================================
+		// let queues = zooqueue.getQueues()[zooqueue.companyIdAsKey()];
+		// for (let queue of queues) {
+		// 	addQueueListItemToDOM(queue);
+		// }
+
+
+
+		buildQueueList();
 
 		buildStaffCards(filters);
 		buildQueueCards(filters);
