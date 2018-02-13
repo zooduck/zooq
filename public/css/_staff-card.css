@@ -133,7 +133,7 @@
 	height: 0;
 	overflow: hidden;
 	padding: 0 5px;
-	transition: all .25s;
+	transition: all .20s;
 }
 .staff-card:active > .staff-card__row__services-info {
 	height: 50px;
@@ -172,7 +172,7 @@
 	height: 0;
 	padding: 0 5px;
 	overflow: hidden;
-	transition: all .25s;
+	transition: all .20s;
 }
 .staff-card:active > .staff-card__row__next-appointment-info {
 	height: auto;

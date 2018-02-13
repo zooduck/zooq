@@ -123,7 +123,7 @@ const staffUpdateAll = (function staffUpdateAll () {
 							// ===========
 							// DELETE...
 							// ===========
-							payload.dbo.collection("staff").deleteOne({id: staffMember.id}, (err, result) => {
+							payload.dbo.collection("staff").deleteOne({id: dbStaffMember.id}, (err, result) => {
 								if (err) {
 									console.log(err);
 									return reject(err);

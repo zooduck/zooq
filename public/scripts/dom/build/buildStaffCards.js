@@ -1,4 +1,5 @@
 function buildStaffCards(filters) {
+  resetStaffCards();
   // ===========================
   // STAFF CARDS: BUILD ITEMS
   // ===========================

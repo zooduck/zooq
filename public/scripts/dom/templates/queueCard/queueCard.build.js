@@ -31,6 +31,8 @@ const queueCardBuild = (customer, options = {animate: false, buildType: "CREATE"
 	const setPriorityCustomerCtrl__el = qCard.querySelector("[set-priority-customer]");
 	const unsetPriorityCustomerCtrl__el = qCard.querySelector("[unset-priority-customer]");
 
+	console.log("CUSTOMER =>", customer);
+
 	const customerWaitTime = zooqueue.getWaitTimeMinutes(luxon.DateTime.fromISO(customer.queueStarted));
 	const customerWaitTimeEstimate = customer.estimatedWaitTime.toTimeString();
 

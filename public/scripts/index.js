@@ -157,23 +157,24 @@ function navBarHide (rules = { exceptions:[] }) {
 // ===================================
 // EVENT LISTENERS: DYNAMIC CONTENT
 // ===================================
-function setEventListenersForDynamicContent () {
-
-	// CTRLS: SWITCH QUEUE
-	const form = zooqueue.elements("queueSwitchForm");
-	for (const ctrl of Array.from(form.children)) {
-		ctrl.addEventListener("click", function() {
-			const index = Array.from(form.children).indexOf(ctrl) - 1;
-			if (zooqueue.getCurrentQueueIndex() != index) {
-				zooqueue.setCurrentQueueIndex(index);
-				navBarHide();
-				buildDom();
-			}
-		});
-	}
-
-	zooqueue.consoleLog("setEventListenersForDynamicContent: completed");
-}
+// function setEventListenersForDynamicContent () {
+//
+//
+// 	// CTRLS: SWITCH QUEUE
+// 	const form = zooqueue.elements("queueSwitchForm");
+// 	for (const ctrl of Array.from(form.children)) {
+// 		ctrl.addEventListener("click", function() {
+// 			const index = Array.from(form.children).indexOf(ctrl) - 1;
+// 			if (zooqueue.getCurrentQueueIndex() != index) {
+// 				zooqueue.setCurrentQueueIndex(index);
+// 				navBarHide();
+// 				buildDom();
+// 			}
+// 		});
+// 	}
+//
+// 	zooqueue.consoleLog("setEventListenersForDynamicContent: completed");
+// }
 
 // =========================================
 // METHOD: setSuperContainerSize
