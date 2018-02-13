@@ -13,6 +13,8 @@ const finishServingCtrl__EVENT = (el) => {
     Promise.all(apiPromises)
     .then ( (results) => {
       zooqueue.consoleLog(results);
+      // zooqDOM().updateStaffCard(staffMember);
+      // zooqueue.elements("superContainer").scrollTo(0, 0);
     }, err => {
       zooqueue.consoleError(err);
     });

@@ -322,7 +322,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttenda
 		if (staffMember.attendance_status == 1) {
 			staffCards.insertBefore(sCard, Array.from(staffCards.children)[1]);
 		}
-		if (staffMember.attendance_status == 2 || staffMember.attendance_status == 3) {
+		if (staffMember.attendance_status == 2 || staffMember.attendance_status == 3 || staffMember.attendance_status == 4) {
 			const indexToInsertBefore = Array.from(staffCards.children).findIndex( (item) => item.classList.contains("awol"));
 			if (indexToInsertBefore == -1) {
 				staffCards.appendChild(sCard);

@@ -5,7 +5,7 @@ const staffGetAll = (function staffGetAll () {
 	const $run = (payload) => {
 		return new Promise( (resolve, reject) => {
 			const companyIdAsKey = `_${payload.params.companyId}`;
-			payload.dbo.collection("staff").find({}).toArray( (err, dbStaff)  => {
+			payload.dbo.collection("staff").find({}).sort({id: 1}).toArray( (err, dbStaff)  => {
 				if (err) {
 					console.log(err);
 					return reject(err);

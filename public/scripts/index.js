@@ -35,13 +35,13 @@ function zooqueueInit() {
 		// 2. STAFF MEMBER UPDATES (SUPPORTED SERVICES CHANGE, NAME CHANGE, EXISTANCE)
 		// 3. SERVICE UPDATES (SERVICE NAME CHANGE, QUEUING DISABLED CHANGE, EXISTANCE)
 		// ==============================================================================
-		setInterval( () => {
-			Promise.all([bookingbugApis(), bookingbugBookingsApi()]).then( (results) => {
-				zooqueue.consolePoll(results);
-			}, err => {
-				zooqueue.consoleError(err);
-			});
-		}, zooqueue.bookingbugApi__POLL_DELAY());
+		// setInterval( () => {
+		// 	Promise.all([bookingbugApis(), bookingbugBookingsApi()]).then( (results) => {
+		// 		zooqueue.consolePoll(results);
+		// 	}, err => {
+		// 		zooqueue.consoleError(err);
+		// 	});
+		// }, zooqueue.bookingbugApi__POLL_DELAY());
 
 		// =============================================
 		// REFRESH STAFF AND QUEUE CARDS EACH MINUTE

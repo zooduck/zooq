@@ -131,13 +131,13 @@ const staffUpdateAll = (function staffUpdateAll () {
 							});
 						}
 					}
-					payload.dbo.collection("staff").find({}).toArray( (err, result) => {
+					payload.dbo.collection("staff").find({}).sort({id: 1}).toArray( (err, result) => {
 						if (err) {
 							console.log(err);
 							return reject(err);
 						}
 						const staff = {}
-						staff[companyIdAsKey] = result;						
+						staff[companyIdAsKey] = result;
 						if (!_.isEqual(oldStaff, staff)) {
 							const data = {}
 							const type = "STAFF__UPDATE_ALL";
