@@ -12,5 +12,12 @@ const addQueueListItemToDOM = (queue) => {
 	queueName__el.innerHTML = `${queue.name} (${queue.customers.length})`;
 	queueCreatedAt__el.innerHTML = `created: ${createdAt}`;
 
+	// ==================
+	// EVENT LISTENER
+	// ==================
+	template.onclick = function (e) {
+		queueListItemCtrl__EVENT(this, form);
+	};
+
 	form.appendChild(template);
 };

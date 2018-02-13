@@ -16,29 +16,23 @@ function buildDom (filters = {}) {
 		// ======================================
 		// CUSTOMER WAIT TIME ESTIMATES: RECALC
 		// ======================================
-		// zooqueue.setCustomerWaitTimeEstimates();
 		zooqueue.setEstimatedWaitTimes();
 
     // ===========================================================
     // CUSTOMER CREATE FORM: BUILD SERVICE OPTIONS FOR <select>
     // ===========================================================
-		const services = zooqueue.getCurrentQueue().serviceIds.map( (serviceId) => {
-			return zooqueue.getService(serviceId);
-		});
-		// for (let service of zooqueue.getCurrentQueue().services) {
-		for (let service of services) {
-			if (!service.queuing_disabled) {
-				buildServiceOption(service);
-			}
-		}
-    // // ======================================
-    // // QUEUE LIST: BUILD QUEUE LIST LINKS
-    // // ======================================
-		// let queues = zooqueue.getQueues()[zooqueue.companyIdAsKey()];
-		// for (let queue of queues) {
-		// 	addQueueListItemToDOM(queue);
+		// const services = zooqueue.getCurrentQueue().serviceIds.map( (serviceId) => {
+		// 	return zooqueue.getService(serviceId);
+		// });
+		//
+		// for (let service of services) {
+		// 	console.log("service", service);
+		// 	if (!service.queuing_disabled) {
+		// 		buildServiceOption(service);
+		// 	}
 		// }
 
+		buildCustomerCreateFormServiceSelectOptions();
 
 
 		buildQueueList();
@@ -49,7 +43,7 @@ function buildDom (filters = {}) {
 	}
 
 	setQueueTitleInDOM();
-	setEventListenersForDynamicContent();
+	//setEventListenersForDynamicContent();
 	setSuperContainerPositionAndSize();
 	setLoaded();
 

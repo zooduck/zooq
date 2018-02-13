@@ -6,5 +6,5 @@ function buildQueueList() {
   let queues = zooqueue.getQueues()[zooqueue.companyIdAsKey()];
   for (let queue of queues) {
     addQueueListItemToDOM(queue);
-  }
+  }  
 }
