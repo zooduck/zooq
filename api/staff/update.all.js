@@ -131,7 +131,7 @@ const staffUpdateAll = (function staffUpdateAll () {
 							});
 						}
 					}
-					payload.dbo.collection("staff").find({}).sort({id: 1}).toArray( (err, result) => {
+					payload.dbo.collection("staff").find({}).toArray( (err, result) => {
 						if (err) {
 							console.log(err);
 							return reject(err);
@@ -143,6 +143,7 @@ const staffUpdateAll = (function staffUpdateAll () {
 							const type = "STAFF__UPDATE_ALL";
 							pusherService().trigger(data, type);
 						}
+						staff[companyIdAsKey].sort( (a, b) => a.id - b.id);
 						resolve(JSON.stringify(staff));
 					});
 				});

@@ -108,6 +108,7 @@ function ZooQueue() {
 		return customers__COPY;
 	};
 	const $sortStaffByAttendanceStatus = (staff__COPY) => {
+		staff__COPY.sort( (a, b) => a.id - b.id); // sort by staffMember.id
 		const staffAwol = staff__COPY.filter( (item) => item.attendance_status == 0); // always last
 		const staffFree = staff__COPY.filter( (item) => item.attendance_status == 1); // always first
 		const staffBusy = staff__COPY.filter( (item) => item.attendance_status == 2 || item.attendance_status == 3 || item.attendance_status == 4); // always complicated
@@ -463,7 +464,7 @@ function ZooQueue() {
 		for (let key in data) {
 			let queueCollection = data[key];
 			let queueObjects = [];
-			for (let queue of queueCollection) {			
+			for (let queue of queueCollection) {
 				queueObjects.push(new Queue(queue));
 			}
 			data[key] = queueObjects;
