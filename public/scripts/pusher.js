@@ -114,7 +114,16 @@ channel.bind("queue-event", function(data) {
     if (data.type == "CUSTOMER__SERVE" || data.type == "CUSTOMER__FINISH_SERVING") {
       const promises = [zooqueueApi().queuesGet(), zooqueueApi().staffGet()];
       Promise.all(promises).then( () => {
-        buildDom();
+        const staffMember = zooqueue.getStaffMember(data.data.staffMember);
+        const customerId = data.data.customer;
+        console.log(`THE STAFF MEMBER WHOSE STATUS WAS CHANGED TO ${staffMember.attendance_status} IS`, staffMember.name);
+        zooqDOM().updateStaffCard(staffMember);
+        if (data.type == "CUSTOMER__SERVE") {
+          zooqDOM().deleteCustomerFromQueue(customerId);
+        }
+        zooqueue.elements("superContainer").scrollTo(0, 0);
+        setLoaded();
+        // buildDom();
       }, err => {
         zooqueue.consoleError(err);
         setLoaded();

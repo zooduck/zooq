@@ -5,10 +5,12 @@ const pusherService = require("../../pusher/pusher.service.js");
 const customersServeOne = (function customersServeOne () {
 	const $run = (payload) => {
 		const companyIdAsKey = `_${payload.params.companyId}`;
-    const payloadCustomerId = parseInt(payload.id);
-    const payloadQueueId = parseInt(payload.params.queueId);
+    const payloadCustomerId = payload.id;
+    const payloadQueueId = payload.params.queueId;
 		const payloadStaffMember = JSON.parse(payload.data).staffMember;
 		const payloadCustomer = JSON.parse(payload.data).customer;
+
+		console.log(payloadCustomerId, payloadQueueId, payloadStaffMember.id, payloadCustomer.id);
 
     return new Promise( (resolve, reject) => {
 
@@ -70,19 +72,23 @@ const customersServeOne = (function customersServeOne () {
 									console.log(err);
 									return reject(err);
 								}
+								// const data = {
+								// 	queue: {
+								// 		id: payloadQueueId,
+								// 		customers: {
+								// 			delete: payloadCustomer.id
+								// 		},
+								// 		customersBeingServed: {
+								// 			update: payloadCustomer.id
+								// 		},
+								// 	},
+								// 	staff: {
+								// 		update: staffMember__updated.id
+								// 	}
+								// }
 								const data = {
-									queue: {
-										id: payloadQueueId,
-										customers: {
-											delete: payloadCustomer.id
-										},
-										customersBeingServed: {
-											update: payloadCustomer.id
-										},
-									},
-									staff: {
-										update: staffMember__updated.id
-									}
+									staffMember: staffMember__updated.id,
+									customer: payloadCustomer.id
 								}
 								const type = "CUSTOMER__SERVE";
 								pusherService().trigger(data, type);

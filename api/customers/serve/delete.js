@@ -5,8 +5,8 @@ const customersDeleteOne = (function customersDeleteOne () {
 	const $run = (payload) => {
 		const companyIdAsKey = `_${payload.params.companyId}`;
 		const payloadStaffMemberId = parseInt(payload.id);
-		const payloadQueueId = parseInt(payload.params.queueId);
-		const payloadCustomerId = parseInt(payload.params.customerId);
+		const payloadQueueId = payload.params.queueId;
+		const payloadCustomerId = payload.params.customerId;
 
 		return new Promise( (resolve, reject) => {
 			payload.dbo.collection("staff").updateOne(
@@ -32,7 +32,10 @@ const customersDeleteOne = (function customersDeleteOne () {
 								console.log(err);
 								return reject(err);
 							}
-							const data = {}
+							const data = {
+								staffMember: payloadStaffMemberId,
+								customer: payloadCustomerId
+							}
 							const type = "CUSTOMER__FINISH_SERVING";
 							pusherService().trigger(data, type);
 							resolve(JSON.stringify({}));
