@@ -1,6 +1,3 @@
-// ==============================
-// METHOD: buildServiceCheckbox
-// ==============================
 const buildServiceCheckbox = (service) => {
 	const template__el = zooqueue.elements("queueCreateForm__serviceCheckboxItems").querySelector("[template]").cloneNode(true);
 	template__el.removeAttribute("template");
