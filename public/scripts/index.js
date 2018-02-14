@@ -191,4 +191,11 @@ function setSuperContainerPositionAndSize() {
 	zooqueue.elements("superContainer").style.height = `${(window.innerHeight - superContainerMarginTop - 5)}px`;
 }
 
+window.addEventListener("keyup", (e) => {
+	const key = e.which || e.keyCode;
+	if (key == 27) {
+		navBarHide();
+	}
+});
+
 // window.addEventListener("resize", setSuperContainerPositionAndSize);
