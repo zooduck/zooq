@@ -1,4 +1,4 @@
-function ZooQueue() {
+function ZooQ() {
 	// ========================
 	// object definitions...
 	// ========================
@@ -543,34 +543,6 @@ function ZooQueue() {
 	this.hasStaff = function () {
 		return staff[this.companyIdAsKey()] && staff[this.companyIdAsKey()].length > 0 || false;
 	}
-	// this.updateServicesInQueues = function () {
-	// 	let allQueues = this.getQueues();
-	// 	let services = this.getServices();
-	//
-	// 	for (let key in allQueues) {
-	// 		let queues = allQueues[key];
-	// 		// =========================================================================================
-	// 		// NOTE: because each queue has its own array of services
-	// 		// (which will invariably be different to the array of ALL services WITH queuing enabled)
-	// 		// we have to do some kind of mapping to any changed props on THAT service in THIS queue
-	// 		// =========================================================================================
-	// 		for (let queue of queues) {
-	// 			queue.services.map( (item) => {
-	// 				let service = this.getService(item.id);
-	// 				if (!service) {
-	// 					// service has been deleted or its queuing_disabled prop changed to true
-	// 					delete item;
-	// 				} else {
-	// 					// -----------------------------------------------
-	// 					// we only care about changes to name or colour
-	// 					// -----------------------------------------------
-	// 					item.name = service.name;
-	// 					item.colour = service.colour;
-	// 				}
-	// 			});
-	// 		}
-	// 	}
-	// }
 	this.setServices = function (data) {
 		for (let key in data) {
 			data[key] = data[key].filter(function(service) {
@@ -589,11 +561,7 @@ function ZooQueue() {
 			data[key] = serviceObjects;
 		}
 		services = data;
-		// this.updateServicesInQueues();
 	}
-	// this.getService = function (id) {
-	// 	return services.find( (item) => item.id == id);
-	// }
 	this.getServices = function () {
 		return services || [];
 	}
@@ -662,26 +630,26 @@ function ZooQueue() {
 		return []
 	}
 }
-ZooQueue.prototype.consoleLogC = function (msg, styles = "background: lightgoldenrodyellow; color: #333;") {
+ZooQ.prototype.consoleLogC = function (msg, styles = "background: lightgoldenrodyellow; color: #333;") {
 	return console.log(`%czooQ => logC: ${msg}`, styles);
 }
-ZooQueue.prototype.consoleLog = function (msg1 = "", msg2 = "") {
+ZooQ.prototype.consoleLog = function (msg1 = "", msg2 = "") {
 	return console.log("%czooQ => log:", "color: cornflowerblue", msg1, msg2);
 };
-ZooQueue.prototype.consoleWarn = function (msg1 = "", msg2 = "") {
+ZooQ.prototype.consoleWarn = function (msg1 = "", msg2 = "") {
 	return console.warn("%czooQ => warn:", "color: #333", msg1, msg2);
 };
-ZooQueue.prototype.consolePoll = function (msg1 = "", msg2 = "") {
+ZooQ.prototype.consolePoll = function (msg1 = "", msg2 = "") {
 	return console.log(`%czooQ => poll (${zooqueue.bookingbugApi__POLL_DELAY()/1000}s):`, "color: hotpink", msg1, msg2);
 };
-ZooQueue.prototype.consoleError = function (msg1 = "", msg2 = "") {
+ZooQ.prototype.consoleError = function (msg1 = "", msg2 = "") {
 	setLoaded();
 	return console.log("%czooQ => error:", "color: tomato", msg1, msg2);
 };
-ZooQueue.prototype.pusherLog = function (msg1 = "", msg2 = "") {
+ZooQ.prototype.pusherLog = function (msg1 = "", msg2 = "") {
 	return console.log("%cPusher => log:", "color: limegreen", msg1, msg2);
 }
-ZooQueue.prototype.elements = function (name) {
+ZooQ.prototype.elements = function (name) {
 	const doc = (selectors) => {
 		return document.querySelector(selectors);
 	};
@@ -714,11 +682,11 @@ ZooQueue.prototype.elements = function (name) {
 	};
 	return els[name];
 };
-ZooQueue.prototype.getWaitTimeMinutes = function (startDate, nowDate = luxon.DateTime.local()) {
+ZooQ.prototype.getWaitTimeMinutes = function (startDate, nowDate = luxon.DateTime.local()) {
 	const interval = luxon.Interval.fromDateTimes(startDate, nowDate);
 	return interval.length("minutes");
 };
 
 // init...
-const zooqueue = new ZooQueue();
-window.zooqueue = zooqueue;
+const zooq = new ZooQ();
+window.zooq = zooq;
