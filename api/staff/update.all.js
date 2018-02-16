@@ -76,16 +76,6 @@ const staffUpdateAll = (function staffUpdateAll () {
 							// ==========
 							// INSERT...
 							// ==========
-
-							// ===========================
-							// ATTENDANCE_STATUS LEGEND
-							// ===========================
-							// 0: AWOL (AWAY)
-							// 1: AVAILABLE
-							// 2: ON BREAK
-							// 3: BUSY (OTHER)
-							// 4: BUSY (IN APPOINTMENT)
-							// ===========================
 							staffMember.activeBookingType = null;
 							if (staffMember.attendance_status == 4) {
 								staffMember.activeBookingType = "CALENDAR";
@@ -97,10 +87,10 @@ const staffUpdateAll = (function staffUpdateAll () {
 							const attendanceStarted = luxon.DateTime.fromISO(staffMember.attendance_started);
 							const interval = luxon.Interval.fromDateTimes(attendanceStarted, nowDate);
 							const hoursDiff = interval.toDuration("hours").toObject().hours;
-							// ==================================================================================================
-							// IF THE STAFF ATTENDANCE_STARTED IS MORE THAN 24 HOURS AGO, WE CAN ASSUME THAT SOMEBODY FORGOT
+							// =====================================================================================================
+							// NOTE: IF THE STAFF attendance_started IS MORE THAN 24 HOURS AGO, WE CAN ASSUME THAT SOMEBODY FORGOT
 							// TO HIT THE FINISH SERVING BUTTON OR SOMETHING AND WE CAN RESET THEIR STATUS TO 0 (AWOL)
-							// ==================================================================================================
+							// =====================================================================================================
 							if (hoursDiff > 24) {
 								staffMember.attendance_status = 0;
 							}

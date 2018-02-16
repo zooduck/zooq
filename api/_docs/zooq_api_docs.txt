@@ -1,0 +1,9 @@
+// ===========================
+// ATTENDANCE_STATUS LEGEND
+// ===========================
+// 0: AWOL (AWAY)
+// 1: AVAILABLE
+// 2: ON BREAK
+// 3: BUSY (OTHER)
+// 4: BUSY (IN APPOINTMENT)
+// ===========================

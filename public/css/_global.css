@@ -54,8 +54,7 @@ button {
 	transition: background .2s;
 }
 button:hover {
-	background: var(--button-color-default__HOVER);
-	/* transform: scale(1.1); */
+	background: var(--button-color-default__HOVER);	
 }
 button:active {
 	background: #29baf1;

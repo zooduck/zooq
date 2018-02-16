@@ -3,8 +3,7 @@ const pusherService = require("../../../pusher/pusher.service.js");
 // methods...
 const queuesUpdateOne = (function queuesUpdateOne () {
 	const $run = (payload) => {
-		const companyIdAsKey = `_${payload.params.companyId}`;
-		// const priorityCustomerId = payload.data.id;
+		const companyIdAsKey = `_${payload.params.companyId}`;		
 		const payloadCompanyId = parseInt(payload.params.companyId);
 		const payloadQueueId = payload.id;
     const payloadQueue = JSON.parse(payload.data);
