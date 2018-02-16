@@ -1,6 +1,6 @@
 const queueCardBuild = (customer, options = {animate: false, buildType: "CREATE"}) => {
 
-	const queueCards = zooqueue.elements("queueCards");
+	const queueCards = zooq.elements("queueCards");
 	const template = queueCards.querySelector("[template]");
 
   let qCard;
@@ -20,7 +20,7 @@ const queueCardBuild = (customer, options = {animate: false, buildType: "CREATE"
 		qCard.classList.add("zooq__animation__SLIDE_IN_FROM_RIGHT");
 	}
 
-	const priorityCustomer = zooqueue.hasPriorityCustomer() && zooqueue.getCurrentQueue().priorityCustomer.id == customer.id;
+	const priorityCustomer = zooq.hasPriorityCustomer() && zooq.getCurrentQueue().priorityCustomer.id == customer.id;
 
 	const ticketRef__el = qCard.querySelector("[ticket-ref]");
 	const customerName__el = qCard.querySelector("[customer-name]");
@@ -33,7 +33,7 @@ const queueCardBuild = (customer, options = {animate: false, buildType: "CREATE"
 
 	console.log("CUSTOMER =>", customer);
 
-	const customerWaitTime = zooqueue.getWaitTimeMinutes(luxon.DateTime.fromISO(customer.queueStarted));
+	const customerWaitTime = zooq.getWaitTimeMinutes(luxon.DateTime.fromISO(customer.queueStarted));
 	const customerWaitTimeEstimate = customer.estimatedWaitTime.toTimeString();
 
 	if (priorityCustomer) {

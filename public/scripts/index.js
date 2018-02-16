@@ -1,6 +1,6 @@
 setLoading();
 loginComplete().then((result) => {
-	zooqueue.consoleLog(`auth-token: ${result}`);
+	zooq.consoleLog(`auth-token: ${result}`);
 	zooqueueInit();
 });
 
@@ -10,23 +10,23 @@ function zooqueueInit() {
 	// ==============================
 	Promise.all([bookingbugApis(), zooqueueApi().queuesGet()]).then( (results) => {
 
-		zooqueue.consoleLog("Services from bookingbug api:", JSON.parse(results[0].services));
-		zooqueue.consoleLog("People from bookingbug api:", JSON.parse(results[0].people));
-		zooqueue.consoleLog("Queues from zooqueue api:", results[1]);
+		zooq.consoleLog("Services from bookingbug api:", JSON.parse(results[0].services));
+		zooq.consoleLog("People from bookingbug api:", JSON.parse(results[0].people));
+		zooq.consoleLog("Queues from zooqueue api:", results[1]);
 
-		if (zooqueue.hasQueues()) {
-			zooqueue.setCurrentQueueIndex(0);
+		if (zooq.hasQueues()) {
+			zooq.setCurrentQueueIndex(0);
 		}
 
 		bookingbugBookingsApi().then( (result) => {
 			setEventListenersForStaticContent(); // once only
-			zooqueue.setReady();
+			zooq.setReady();
 			setLoaded();
-			zooqueue.consoleLog(zooqueue);
-			zooqueue.consoleLog("ALL SYSTEMS ARE GO!");
+			zooq.consoleLog(zooq);
+			zooq.consoleLog("ALL SYSTEMS ARE GO!");
 			buildDom();
 		}, err => {
-			zooqueue.consoleError(err);
+			zooq.consoleError(err);
 		});
 
 		// ==============================================================================
@@ -37,37 +37,37 @@ function zooqueueInit() {
 		// ==============================================================================
 		setInterval( () => {
 			Promise.all([bookingbugApis(), bookingbugBookingsApi()]).then( (results) => {
-				zooqueue.consolePoll(results);
+				zooq.consolePoll(results);
 			}, err => {
-				zooqueue.consoleError(err);
+				zooq.consoleError(err);
 			});
-		}, zooqueue.bookingbugApi__POLL_DELAY());
+		}, zooq.bookingbugApi__POLL_DELAY());
 
 		// =============================================
 		// REFRESH STAFF AND QUEUE CARDS EACH MINUTE
 		// =============================================
 		setInterval( () => {
-			if (zooqueue.hasQueues()) {
-				const filters = zooqueue.getFilters();
-				zooqueue.setEstimatedWaitTimes();
+			if (zooq.hasQueues()) {
+				const filters = zooq.getFilters();
+				zooq.setEstimatedWaitTimes();
 				// update time display
 				setQueueTitleInDOM();
 				// update queue cards
-				const customers = zooqueue.getCurrentQueue().customers;
+				const customers = zooq.getCurrentQueue().customers;
 				for (const customer of customers) {
 					zooqDOM().updateQueueCard(customer);
 				}
 				// update staff cards
-				const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()];
+				const staff = zooq.getStaff()[zooq.companyIdAsKey()];
 				for (const staffMember of Array.from(staff).reverse()) {
 					zooqDOM().updateStaffCard(staffMember, false);
 				}
-				zooqueue.consoleLogC("60 second refresh: Staff Cards, Queue Cards");
+				zooq.consoleLogC("60 second refresh: Staff Cards, Queue Cards");
 			}
 		}, 60000); // each 60 seconds
 
 	}, err => {
-		zooqueue.errorLog(err);
+		zooq.errorLog(err);
 	});
 }
 
@@ -92,50 +92,50 @@ function setEventListenersForStaticContent () {
 	window.addEventListener("resize", setSuperContainerPositionAndSize);
 
 	// CTRL: SUPER CONTAINER HIDE NAV BAR
-	zooqueue.elements("superContainer").addEventListener("click", function (e) {
+	zooq.elements("superContainer").addEventListener("click", function (e) {
 		navBarHide();
 	});
 
 	// CTRLS: SWITCH COLUMNS
-	zooqueue.elements("switchColumnsCtrl").addEventListener("click", function (e) {
+	zooq.elements("switchColumnsCtrl").addEventListener("click", function (e) {
 		switchColumnsCtrl__EVENT();
 	});
 	// ====================
 	// CTRL: CREATE QUEUE
 	// ====================
-	zooqueue.elements("queueCreateForm__submitCtrl").addEventListener("click", function (e) {
+	zooq.elements("queueCreateForm__submitCtrl").addEventListener("click", function (e) {
 		queueCreateForm__submitCtrl__EVENT();
 	});
 
 	// ========================
 	// CTRL: CREATE CUSTOMER
 	// ========================
-	zooqueue.elements("customerCreateForm__submitCtrl").addEventListener("click", function (e) {
+	zooq.elements("customerCreateForm__submitCtrl").addEventListener("click", function (e) {
 		customerCreateForm__submitCtrl__EVENT();
 	});
 
 	// ============================
 	// CTRL: NAV BAR SWITCH QUEUE
 	// ============================
-	zooqueue.elements("navBarCtrl__queueSwitch").addEventListener("click", function (e) {
+	zooq.elements("navBarCtrl__queueSwitch").addEventListener("click", function (e) {
 		navBarCtrl__queueSwitch__EVENT(this);
 	});
 
   // ===============================
 	// CTRL: NAV BAR CREATE CUSTOMER
 	// ===============================
-	zooqueue.elements("navBarCtrl__customerCreate").addEventListener("click", function (e) {
+	zooq.elements("navBarCtrl__customerCreate").addEventListener("click", function (e) {
 		navBarCtrl__customerCreate__EVENT(this);
 	});
 
   // ============================
 	// CTRL: NAV BAR CREATE QUEUE
 	// ============================
-	zooqueue.elements("navBarCtrl__queueCreate").addEventListener("click", function (e) {
+	zooq.elements("navBarCtrl__queueCreate").addEventListener("click", function (e) {
 		navBarCtrl__queueCreate__EVENT(this);
 	});
 
-	zooqueue.consoleLog("setEventListenersForStaticContent: completed");
+	zooq.consoleLog("setEventListenersForStaticContent: completed");
 }
 
 function navBarHide (rules = { exceptions:[] }) {
@@ -149,7 +149,7 @@ function navBarHide (rules = { exceptions:[] }) {
 	];
 	for (let el of els) {
 		if (rules.exceptions.indexOf(el) == -1) {
-			zooqueue.elements(el).classList.remove("--active");
+			zooq.elements(el).classList.remove("--active");
 		}
 	}
 }
@@ -162,11 +162,11 @@ function setSuperContainerPositionAndSize() {
 	let superContainerMarginTop = 0;
 	navBarParentEls.forEach( (item, index, arr) => {
 		if (index == 0) {
-			superContainerMarginTop += zooqueue.elements(item).offsetHeight;
-		} else superContainerMarginTop -= zooqueue.elements(item).offsetHeight;
+			superContainerMarginTop += zooq.elements(item).offsetHeight;
+		} else superContainerMarginTop -= zooq.elements(item).offsetHeight;
 	});
-	zooqueue.elements("superContainer").style.marginTop = `${superContainerMarginTop}px`;
-	zooqueue.elements("superContainer").style.height = `${(window.innerHeight - superContainerMarginTop - 5)}px`;
+	zooq.elements("superContainer").style.marginTop = `${superContainerMarginTop}px`;
+	zooq.elements("superContainer").style.height = `${(window.innerHeight - superContainerMarginTop - 5)}px`;
 }
 // ==========================================
 // HIDE NAV BAR FORMS WHEN ESC KEY PRESSED

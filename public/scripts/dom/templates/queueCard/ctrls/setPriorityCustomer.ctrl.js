@@ -2,11 +2,11 @@ const setPriorityCustomerCtrl__EVENT = (el) => {
   setLoading();
   const customerId = el.getAttribute("customer-id");
   zooqueueApi().queueSetPriorityCustomer(customerId).then( (result) => {
-    zooqueue.consoleLog(result);
+    zooq.consoleLog(result);
     // setLoaded();
     // buildDom();  // user pusher instead
   }, err => {
-    zooqueue.consoleError(err);
+    zooq.consoleError(err);
     setLoaded();
   });
 };

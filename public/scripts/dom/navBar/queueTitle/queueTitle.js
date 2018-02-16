@@ -1,18 +1,18 @@
 const setQueueTitleInDOM = () => {
-	if (zooqueue.hasQueues()) {
-		// zooqueue.elements("navBarInfoQueueName").querySelector("span").innerHTML = `${zooqueue.getCurrentQueue().name} (${zooqueue.getCurrentQueue().customers.length})`;
-		zooqueue.elements("navBarInfoQueueName").innerHTML = `${zooqueue.getCurrentQueue().name} (${zooqueue.getCurrentQueue().code})`;
-		zooqueue.elements("navBarInfoQueueCount").innerHTML = `${zooqueue.getCurrentQueue().customers.length}`;
-		const services = zooqueue.getCurrentQueue().serviceIds.map( (serviceId) => {
-			return zooqueue.getService(serviceId);
+	if (zooq.hasQueues()) {
+		// zooq.elements("navBarInfoQueueName").querySelector("span").innerHTML = `${zooq.getCurrentQueue().name} (${zooq.getCurrentQueue().customers.length})`;
+		zooq.elements("navBarInfoQueueName").innerHTML = `${zooq.getCurrentQueue().name} (${zooq.getCurrentQueue().code})`;
+		zooq.elements("navBarInfoQueueCount").innerHTML = `${zooq.getCurrentQueue().customers.length}`;
+		const services = zooq.getCurrentQueue().serviceIds.map( (serviceId) => {
+			return zooq.getService(serviceId);
 		});
-		zooqueue.elements("navBarInfoServices").innerHTML = services.map( (item) => {
+		zooq.elements("navBarInfoServices").innerHTML = services.map( (item) => {
 			return `${item.name} (${item.code})`;
 		}).join(" | ");
 	} else {
-		zooqueue.elements("navBarInfoQueueName").innerHTML = "NO_QUEUES_ERR";
-		zooqueue.elements("navBarInfoQueueCount").innerHTML = "";
-		zooqueue.elements("navBarInfoServices").innerHTML = "";
+		zooq.elements("navBarInfoQueueName").innerHTML = "NO_QUEUES_ERR";
+		zooq.elements("navBarInfoQueueCount").innerHTML = "";
+		zooq.elements("navBarInfoServices").innerHTML = "";
 	}
-	zooqueue.elements("navBarInfoDatetime").innerHTML = luxon.DateTime.local().toLocaleString(luxon.DateTime.DATETIME_MED);
+	zooq.elements("navBarInfoDatetime").innerHTML = luxon.DateTime.local().toLocaleString(luxon.DateTime.DATETIME_MED);
 };

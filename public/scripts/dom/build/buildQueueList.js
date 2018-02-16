@@ -3,7 +3,7 @@ function buildQueueList() {
   // QUEUE LIST: BUILD QUEUE LIST LINKS
   // ======================================
   resetQueueList();
-  let queues = zooqueue.getQueues()[zooqueue.companyIdAsKey()];
+  let queues = zooq.getQueues()[zooq.companyIdAsKey()];
   for (let queue of queues) {
     addQueueListItemToDOM(queue);
   }  

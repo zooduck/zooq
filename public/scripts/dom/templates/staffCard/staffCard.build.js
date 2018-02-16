@@ -1,5 +1,5 @@
 const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttendanceStatus = true) => {
-	const staffCards = zooqueue.elements("staffCards");
+	const staffCards = zooq.elements("staffCards");
 	const template = staffCards.querySelector("[template]");
 
   let sCard;
@@ -46,8 +46,8 @@ const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttenda
 	const serveNextCtrl__button = sCard.querySelector("[serve-next-ctrl]");
 	serveNextCtrl__button.setAttribute("staff-id", staffMember.id);
 	serveNextCtrl__button.parentNode.setAttribute("hidden", "hidden");
-	if (zooqueue.hasPriorityCustomer()) {
-		const priorityCustomer = zooqueue.getCurrentQueue().priorityCustomer;
+	if (zooq.hasPriorityCustomer()) {
+		const priorityCustomer = zooq.getCurrentQueue().priorityCustomer;
 		serveNextCtrl__button.innerHTML = `Serve ${priorityCustomer.firstName} ${priorityCustomer.lastName}`;
 	}
 
@@ -118,8 +118,8 @@ const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttenda
 		// EVENT: SERVE NEXT
 		// ====================
     const serveNextCtrlButtonCallback = function (e) {
-      if (zooqueue.hasPriorityCustomer()) {
-				serveNextCtrl__EVENT(this, zooqueue.getCurrentQueue().priorityCustomer);
+      if (zooq.hasPriorityCustomer()) {
+				serveNextCtrl__EVENT(this, zooq.getCurrentQueue().priorityCustomer);
 			} else serveNextCtrl__EVENT(this);
     }
 		serveNextCtrl__button.onclick = serveNextCtrlButtonCallback;
@@ -158,13 +158,13 @@ const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttenda
 	const avatarUrl__default = `https://api.adorable.io/avatars/85/${staffMember.id}.png`;
  	avatar__el.style.backgroundImage = `url(${staffMember.avatarUrl? staffMember.avatarUrl : avatarUrl__default})`;
 	staffMemberName__el.innerHTML = staffMember.name;
-	const servicesWithQueuingEnabled = zooqueue.getServiceIds();
+	const servicesWithQueuingEnabled = zooq.getServiceIds();
 	const validServiceIds = staffMember.service_ids.filter(function(item) {
 		return servicesWithQueuingEnabled.indexOf(item) !== -1;
 	});
 	const validServiceNames = [];
 	for (serviceId of validServiceIds) {
-		validServiceNames.push(`${zooqueue.getService(serviceId).name} (${zooqueue.getService(serviceId).durations[0]}m)`);
+		validServiceNames.push(`${zooq.getService(serviceId).name} (${zooq.getService(serviceId).durations[0]}m)`);
 	}
 	serviceNames__el.innerHTML = validServiceNames.join(" | ");
 
@@ -199,7 +199,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttenda
 			// NOTE: ALTHOUGH WE HAVE BOOKING DETAILS IN "activeBooking" WE STILL USE OUR OWN "serving" PROP
 			// TO GET INFO ABOUT THE CURRENT QUEUE APPOINTMENT AS IT CONTAINS ADDITIONAL INFO SUCH AS ticketRef
 			// ===========================================================================================================
-			zooqueue.consoleLogC(`${staffMember.name} is BUSY because they have an activeBooking with an activeBookingType of "${staffMember.activeBookingType}"`, customLogStyles);
+			zooq.consoleLogC(`${staffMember.name} is BUSY because they have an activeBooking with an activeBookingType of "${staffMember.activeBookingType}"`, customLogStyles);
 			appointmentInfo__el.classList.add("--active");
 			// ========================================
 			// BOOKING WAS MADE BY THIS APPLICATION
@@ -220,7 +220,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttenda
 			appointmentInfoDuration__el.innerHTML = durationString;
 
 		} else if (staffMember.activeBookingType == "CALENDAR") {
-			zooqueue.consoleLogC(`${staffMember.name} is BUSY because they have an activeBooking with an activeBookingType of "${staffMember.activeBookingType}"`, customLogStyles);
+			zooq.consoleLogC(`${staffMember.name} is BUSY because they have an activeBooking with an activeBookingType of "${staffMember.activeBookingType}"`, customLogStyles);
 			appointmentInfo__el.classList.add("--active");
 			// ====================================================
 			// CURRENT BOOKING WAS MADE USING BOOKINGBUG CALENDAR
@@ -239,7 +239,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttenda
 
 		}
 	} else if (staffMember.attendance_status == 2 && staffMember.activeBreak) {
-		zooqueue.consoleLogC(`${staffMember.name} is BUSY because they have an activeBreak`, customLogStyles);
+		zooq.consoleLogC(`${staffMember.name} is BUSY because they have an activeBreak`, customLogStyles);
 		appointmentInfo__el.classList.add("--active");
 		const startDate = luxon.DateTime.fromISO(staffMember.activeBreak.datetime);
 		const startDate__simple = startDate.toLocaleString(luxon.DateTime.TIME_24_SIMPLE);
@@ -251,7 +251,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttenda
 		appointmentInfoDuration__el.innerHTML = timePassedString;
 
 	} else if (staffMember.attendance_status == 3 && staffMember.activeBusy) {
-		zooqueue.consoleLogC(`${staffMember.name} is BUSY because they have an activeBusy`, customLogStyles);
+		zooq.consoleLogC(`${staffMember.name} is BUSY because they have an activeBusy`, customLogStyles);
 		appointmentInfo__el.classList.add("--active");
 		const startDate = luxon.DateTime.fromISO(staffMember.activeBusy.datetime);
 		const startDate__simple = startDate.toLocaleString(luxon.DateTime.TIME_24_SIMPLE);

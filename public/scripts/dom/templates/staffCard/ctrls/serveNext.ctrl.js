@@ -1,16 +1,16 @@
 const serveNextCtrl__EVENT = (el, customer = null) => {
 
-  let staffMemberServing = zooqueue.getStaffMember(el.getAttribute("staff-id"));
-  let customerToServe = customer || zooqueue.findNextCustomerToServe(staffMemberServing);
+  let staffMemberServing = zooq.getStaffMember(el.getAttribute("staff-id"));
+  let customerToServe = customer || zooq.findNextCustomerToServe(staffMemberServing);
 
   if (!customerToServe) {
-    return zooqueue.alert("CUSTOMER_TO_SERVE_NOT_FOUND");
+    return zooq.alert("CUSTOMER_TO_SERVE_NOT_FOUND");
   }
 
   const serviceSupported = staffMemberServing.service_ids.find( (item) => item == customerToServe.services[0].id);
   if (!serviceSupported) {
-    zooqueue.alert(null, `${staffMemberServing.name} is not qualified to serve ${customerToServe.firstName} ${customerToServe.lastName}.`);
-    return zooqueue.consoleError("SERVICE_NOT_SUPPORTED");
+    zooq.alert(null, `${staffMemberServing.name} is not qualified to serve ${customerToServe.firstName} ${customerToServe.lastName}.`);
+    return zooq.consoleError("SERVICE_NOT_SUPPORTED");
   }
 
   zooqueueApi().connectionTest().then( () => {
@@ -18,7 +18,7 @@ const serveNextCtrl__EVENT = (el, customer = null) => {
     // ============================
     // CREATE BOOKINGBUG BASKET
     // ============================
-    const currentQueueId = zooqueue.getCurrentQueue().id;
+    const currentQueueId = zooq.getCurrentQueue().id;
     const service = customerToServe.services[0];
     const service_id = service.id;
     const company_id = service.company_id;
@@ -62,14 +62,14 @@ const serveNextCtrl__EVENT = (el, customer = null) => {
       bookingbugAddClient_POST(client).then((result) => {
         const clientData = JSON.parse(result);
         if (clientData.error) {
-          zooqueue.consoleError(clientData.error);
+          zooq.consoleError(clientData.error);
           reject(clientData.error);
         }
-        zooqueue.consoleLog(`POST to https://starfox.bookingbug.com/api/v1/admin/${default_company_id}/client:`, client);
+        zooq.consoleLog(`POST to https://starfox.bookingbug.com/api/v1/admin/${default_company_id}/client:`, client);
         client.id = clientData.id;
         resolve(client);
       }, err => {
-        zooqueue.consoleError(err);
+        zooq.consoleError(err);
         reject(err);
       })
     });
@@ -78,7 +78,7 @@ const serveNextCtrl__EVENT = (el, customer = null) => {
     // BOOKINGBUG CLIENT CREATE (OR UPDATE IF ALREADY EXISTS)
     // ==========================================================
     bookingbugApi__addClient__Promise.then( (result) => {
-      const bbBasket = zooqueue.buildBookingbugBasket(bbBasketData);
+      const bbBasket = zooq.buildBookingbugBasket(bbBasketData);
       // ==========================================
       // BOOKINGBUG ADD ITEM (CHECKOUT BASKET)
       // ==========================================
@@ -86,13 +86,13 @@ const serveNextCtrl__EVENT = (el, customer = null) => {
         bookingbugAddItem_POST(bbBasket).then( (result) => {
           let basket = JSON.parse(result);
           if (basket.error) {
-            zooqueue.consoleError(basket.error);
+            zooq.consoleError(basket.error);
             return reject(basket);
           }
-          zooqueue.consoleLog(`POST to ${zooqueue.bookingbugApiUrl__PUBLIC()}${default_company_id}/basket/checkout:`, basket);
+          zooq.consoleLog(`POST to ${zooq.bookingbugApiUrl__PUBLIC()}${default_company_id}/basket/checkout:`, basket);
           resolve(basket);
         }, err => {
-          zooqueue.consoleError("error", err);
+          zooq.consoleError("error", err);
           reject(err);
         });
       });
@@ -111,19 +111,19 @@ const serveNextCtrl__EVENT = (el, customer = null) => {
         // serve customer and update staff member
         // ==========================================
         zooqueueApi().customerServe(JSON.stringify(data)).then((result) => {
-          zooqueue.consoleLog(result);
-          zooqueue.removeFilters(["customer"]);
+          zooq.consoleLog(result);
+          zooq.removeFilters(["customer"]);
           // setLoaded();
           // buildDom(); // use pusher instead
         }, err => {
-          zooqueue.removeFilters(["customer"]);
-          zooqueue.consoleError(err);
+          zooq.removeFilters(["customer"]);
+          zooq.consoleError(err);
         });
       }, err => {
-        zooqueue.consoleError(err);
+        zooq.consoleError(err);
       });
     });
   }, err => {
-    return zooqueue.consoleError(err);
+    return zooq.consoleError(err);
   });
 };

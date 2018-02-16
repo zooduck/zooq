@@ -4,9 +4,9 @@ const setBusyCtrl__EVENT = (el) => {
   // ============================================
   const staffMemberId = el.getAttribute("staff-id");
   zooqueueApi().staffMemberSetBusy(staffMemberId).then( (staffMember) => {
-    zooqueue.consoleLog("setBusy:", staffMember.name);
+    zooq.consoleLog("setBusy:", staffMember.name);
     // setLoaded();
   }, err => {
-    zooqueue.consoleError(err);
+    zooq.consoleError(err);
   });
 };

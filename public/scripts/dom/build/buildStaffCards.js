@@ -3,7 +3,7 @@ function buildStaffCards(filters) {
   // ===========================
   // STAFF CARDS: BUILD ITEMS
   // ===========================
-  const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()];
+  const staff = zooq.getStaff()[zooq.companyIdAsKey()];
   const filteredStaff = staff.filter( (item) => item.service_ids)
   const staffBusy = [];
   const staffFree = [];
@@ -12,7 +12,7 @@ function buildStaffCards(filters) {
     // =============================================================================
     // NOTE: STAFF MEMBER MUST SUPPORT AT LEAST ONE SERVICE IN THE CURRENT QUEUE
     // =============================================================================
-    if (zooqueue.staffMemberHasServices(staffMember) && !staffMember.queuing_disabled) {
+    if (zooq.staffMemberHasServices(staffMember) && !staffMember.queuing_disabled) {
       staffMember.attendance_status == 0? staffAway.push(staffMember) : staffMember.attendance_status == 1? staffFree.push(staffMember) : staffBusy.push(staffMember);
       // staffMember.attendance_started && staffMember.attendance_status != 1? staffBusy.push(staffMember) : staffFree.push(staffMember);
     }
@@ -28,5 +28,5 @@ function buildStaffCards(filters) {
       addStaffCardToDOM(staffMember);
     }
   }
-  zooqueue.consoleLog("buildStaffCards: completed");
+  zooq.consoleLog("buildStaffCards: completed");
 }
