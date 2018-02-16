@@ -3,10 +3,9 @@ const pusherService = require("../pusher/pusher.service.js");
 // methods...
 const customersDeleteOne = (function customersDeleteOne () {
 	const $run = (payload) => {
-    // ====================================================================================
-    // DELETE customer
-    // OBJECTIVE: find the customer in the specified queue and delete them from the queue
-    // ====================================================================================
+    // ============================
+    // DELETE customer from queue
+    // ============================
     const companyIdAsKey = `_${payload.params.companyId}`;
     const payloadQueueId = payload.params.queueId;
     const payloadCustomerId = payload.id;
@@ -29,7 +28,7 @@ const customersDeleteOne = (function customersDeleteOne () {
 						// push message to client...
 						const data = {
 							queue: {
-								customer: payloadCustomerId								
+								customer: payloadCustomerId
 							}
 						}
 						const type = "QUEUE__CUSTOMER_DELETE";

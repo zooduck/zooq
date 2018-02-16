@@ -36,15 +36,6 @@ const customersServeOne = (function customersServeOne () {
 							return reject(err);
 						}
 						const staffMember__updated = result;
-						// ===========================
-						// ATTENDANCE_STATUS LEGEND
-						// ===========================
-						// 0: AWOL (AWAY)
-						// 1: AVAILABLE
-						// 2: ON BREAK
-						// 3: BUSY (OTHER)
-						// 4: BUSY (IN APPOINTMENT)
-						// ===========================
 						staffMember__updated.attendance_status = 4;
 						staffMember__updated.activeBookingType = "QUEUE";
 						staffMember__updated.activeQueue = payloadCustomer.queue;
@@ -72,20 +63,6 @@ const customersServeOne = (function customersServeOne () {
 									console.log(err);
 									return reject(err);
 								}
-								// const data = {
-								// 	queue: {
-								// 		id: payloadQueueId,
-								// 		customers: {
-								// 			delete: payloadCustomer.id
-								// 		},
-								// 		customersBeingServed: {
-								// 			update: payloadCustomer.id
-								// 		},
-								// 	},
-								// 	staff: {
-								// 		update: staffMember__updated.id
-								// 	}
-								// }
 								const data = {
 									staffMember: staffMember__updated.id,
 									customer: payloadCustomer.id

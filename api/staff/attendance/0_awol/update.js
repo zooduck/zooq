@@ -9,15 +9,6 @@ const staffUpdateOne = (function staffUpdateOne() {
     const payloadStaffMemberId = parseInt(payload.id);
 
     return new Promise( (resolve, reject) => {
-      // ===========================
-      // ATTENDANCE_STATUS LEGEND
-      // ===========================
-      // 0: AWOL (AWAY)
-      // 1: AVAILABLE
-      // 2: ON BREAK
-      // 3: BUSY (OTHER)
-      // 4: BUSY (IN APPOINTMENT)
-      // ===========================
       const data = {
         attendance_status: 0,
         attendance_ended: luxon.DateTime.local().toISO(),
@@ -40,7 +31,7 @@ const staffUpdateOne = (function staffUpdateOne() {
           const data = {
             staffMember: payloadStaffMemberId
           }
-          const type = "STAFF_MEMBER__ATTENDANCE__0_AWOL";        
+          const type = "STAFF_MEMBER__ATTENDANCE__0_AWOL";
           pusherService().trigger(data, type);
           return resolve(JSON.stringify(result));
         });

@@ -9,15 +9,6 @@ const staffUpdateOne = (function staffUpdateOne() {
     const payloadStaffMemberId = parseInt(payload.id);
 
     return new Promise( (resolve, reject) => {
-      // ===========================
-      // ATTENDANCE_STATUS LEGEND
-      // ===========================
-      // 0: AWOL (AWAY)
-      // 1: AVAILABLE
-      // 2: ON BREAK
-      // 3: BUSY (OTHER)
-      // 4: BUSY (IN APPOINTMENT)
-      // ===========================
       const data = {
         attendance_status: 2,
         activeBooking: null,
