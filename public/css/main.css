@@ -42,14 +42,18 @@
 	}
 }
 .switch-column-order-ctrls__ctrl {
+	display: flex;
+	align-items: center;
 	color: #333;
 	cursor: pointer;
 }
 .switch-column-order-ctrls__ctrl:hover {
-	color: #666;
+	/* color: #666; */
+	transform: scale(1.1);
 }
 .switch-column-order-ctrls__ctrl i.material-icons {
 	font-size: 36px;
+	margin-right: 5px;
 }
 
 /* ========================== */
