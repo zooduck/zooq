@@ -11,20 +11,15 @@ alert.alert {
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	/* padding: 10px; */
-	/* background: firebrick; */
 	background: #ccc;
 	color: #444;
-	/* opacity: .8; */
 	box-shadow: 0 -5px 25px 0 #555;
 	transition: all .25s;
 }
 alert.alert.--active {
 	bottom: 0;
 }
-alert .alert__notify-row {
-	/* width: 100%;
-	text-align: center; */
+alert .alert__notify-row {	
 	display: flex;
 	justify-content: center;
 	align-self: stretch;
