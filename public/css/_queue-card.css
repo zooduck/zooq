@@ -2,16 +2,6 @@
 /* queue-card	*/
 /* ========== */
 
-/* .zooq__animation__SLIDE_IN_FROM_RIGHT {
-	animation-name: slideInFromRight;
-	animation-duration: .5s;
-} */
-/* .zooq__animation__CUSTOMER__DELETE {
-	animation-name: slideOutToRight;
-	animation-duration: .5s;
-	animation-fill-mode: both;
-} */
-
 .content__columns__queue-container {
 	max-width: 650px;
 	flex-basis: 50%;
@@ -34,11 +24,9 @@
 	overflow: hidden;
 }
 .queue-card:active {
-	/* transform: scale(.95);
-	box-shadow: 1px 1px 5px #aaa; */
+
 }
 .queue-card.priority-customer {
-	/* border: dashed 5px hotpink; */
 	border: dashed 10px;
 }
 .queue-card__ticket-ref {
@@ -53,11 +41,9 @@
 	font-weight: bold;
 	cursor: pointer;
 	padding: 0 10px;
-	/* box-shadow: 0px 2px 15px #555; */
 }
 .queue-card__ticket-ref:active {
 	transform: scale(.95);
-	/* box-shadow: 0px 2px 5px #555; */
 }
 .queue-card__row-container {
 	display: flex;
@@ -65,29 +51,14 @@
 	flex-grow: 1;
 	margin-left: 20px;
 }
-
-/* .queue-card__row-container__toggle-hidden {
-	transition: all .25s;
-	height: 0;
-	transform: scale(1, 0);
-	transform-origin: top;
-} */
-/* .queue-card:hover .queue-card__row-container__toggle-hidden {
-	height: 110px;
-	transform: scale(1, 1);
-} */
-
 .queue-card__row-container__delete-customer-ctrl {
 	flex-grow: 0;
-	/* align-self: baseline; */
 	cursor: pointer;
-	/* color: #ccc; */
 	background: crimson;
 	color: #fff;
 	margin-left: 10px;
 }
-.queue-card__row-container__delete-customer-ctrl:hover {
-	/* color: #aaa; */
+.queue-card__row-container__delete-customer-ctrl:hover {	
 	opacity: 0.7;
 }
 .queue-card__row-container__row, .queue-card__row-container__row__set-priority-customer {

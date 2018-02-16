@@ -1,0 +1,99 @@
+/* ------ */
+/* global */
+/* ------ */
+
+* {
+	box-sizing: border-box;
+}
+
+[hidden], [template] {
+	display: none !important;
+}
+
+body {
+	margin: 0 auto;
+	font: normal 16px calibri, sans-serif;
+	color: #111;
+}
+
+input, textarea, select, button {
+	font-family: calibri, sans-serif;
+}
+
+input[type=text], input[type=email] {
+	padding: 10px;
+	font-size: 1em;
+	border: none;
+}
+
+input[type=checkbox] {
+	transform: scale(1.5);
+	cursor: pointer;
+}
+
+select {
+	font-size: 1em;
+	border: none;
+	padding: 10px;
+	cursor: pointer;
+	background: #fff;
+}
+
+button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: none;
+	padding: 8px;
+	font-size: 1em;
+	background: #16a1d8;
+	color: #fff;
+	cursor: pointer;
+	user-select: none;
+	box-shadow: 2px 2px 15px #bbb;
+	transition: background .2s;
+}
+button:hover {
+	background: var(--button-color-default__HOVER);
+	/* transform: scale(1.1); */
+}
+button:active {
+	background: #29baf1;
+	transform: scale(.95);
+	box-shadow: 2px 2px 5px #bbb;
+}
+button i.material-icons {
+	margin-right: 5px;
+}
+button.cancel {
+	background: var(--button-color-finish-serving);
+}
+button.cancel:hover, button.cancel:active {
+	background: var(--button-color-finish-serving__HOVER);
+}
+
+.font-size-s {
+	font-size: 0.5em;
+}
+.font-size-m {
+	font-size: 1.5em;
+}
+.font-size-l {
+	font-size: 2em;
+}
+.font-size-xl {
+	font-size: 3em;
+}
+.font-size-xxl {
+	font-size: 6em;
+}
+
+.justify-content-center {
+	justify-content: center;
+}
+.min-width-auto {
+	min-width: auto;
+}
+.flex-grow-0 {
+	flex-grow: 0;
+}
