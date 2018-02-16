@@ -35,8 +35,8 @@ const loginComplete = () => {
 // BOOKINGBUG SERVICES GET ALL
 // =================================
 const bookingbugServices_GET = (authToken) => {
-	// const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${zooqueue.companyId()}/services`;
-	const endpoint = `${zooqueue.bookingbugApiUrl__ADMIN()}${zooqueue.companyId()}/services`;
+	// const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${zooq.companyId()}/services`;
+	const endpoint = `${zooq.bookingbugApiUrl__ADMIN()}${zooq.companyId()}/services`;
 	requestHeaders[3] = ["auth-token", authToken];
 	return $http("GET", endpoint, null, requestHeaders);
 };
@@ -44,8 +44,8 @@ const bookingbugServices_GET = (authToken) => {
 // BOOKINGBUG PEOPLE GET ALL
 // =================================
 const bookingbugPeople_GET = (authToken) => {
-	// const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${zooqueue.companyId()}/people?embed=immediate_schedule`;
-	const endpoint = `${zooqueue.bookingbugApiUrl__ADMIN()}${zooqueue.companyId()}/people`;
+	// const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${zooq.companyId()}/people?embed=immediate_schedule`;
+	const endpoint = `${zooq.bookingbugApiUrl__ADMIN()}${zooq.companyId()}/people`;
 	requestHeaders[3] = ["auth-token", authToken];
 	return $http("GET", endpoint, null, requestHeaders);
 };
@@ -57,8 +57,8 @@ const bookingbugBookings_GET = () => {
 	const authToken = localStorage.getItem("auth-token");
 	const start_date = luxon.DateTime.local().toSQLDate();
 	const end_date = start_date;
-	const company_id = zooqueue.companyId();
-	const endpoint = `${zooqueue.bookingbugApiUrl__ADMIN()}${company_id}/bookings?start_date=${start_date}&end_date=${end_date}&per_page=1024&include_cancelled=false`;
+	const company_id = zooq.companyId();
+	const endpoint = `${zooq.bookingbugApiUrl__ADMIN()}${company_id}/bookings?start_date=${start_date}&end_date=${end_date}&per_page=1024&include_cancelled=false`;
 
 	requestHeaders[3] = ["auth-token", authToken];
 
@@ -71,7 +71,7 @@ const bookingbugAddClient_POST = (data) => {
 	const authToken = localStorage.getItem("auth-token");
 	const company_id = data.default_company_id;
  	// const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${company_id}/client`;
-	const endpoint = `${zooqueue.bookingbugApiUrl__ADMIN()}${company_id}/client`;
+	const endpoint = `${zooq.bookingbugApiUrl__ADMIN()}${company_id}/client`;
 
 	requestHeaders[3] = ["auth-token", authToken];
 
@@ -85,10 +85,10 @@ const bookingbugAddItem_POST = (data) => {
 	// NOTE: I have to get the auth-token by logging into starfox.studio and creating a booking
 	// (the auth-token that I get when logging in via this application is no good)
 	// ==========================================================================================
-	const authToken = zooqueue.queryStringService().get("auth-token");
+	const authToken = zooq.queryStringService().get("auth-token");
 	const company_id = data.items[0].company_id;
 	// const endpoint = `https://starfox.bookingbug.com/api/v1/${company_id}/basket/checkout`;
-	const endpoint = `${zooqueue.bookingbugApiUrl__PUBLIC()}${company_id}/basket/checkout`;
+	const endpoint = `${zooq.bookingbugApiUrl__PUBLIC()}${company_id}/basket/checkout`;
 
 	requestHeaders[3] = ["auth-token", authToken];
 
@@ -102,9 +102,9 @@ const bookingbugCancelBooking_POST = (booking) => {
 	// NOTE: I have to get this by logging into starfox.studio and creating a booking
 	// (the auth-token that I get when logging in via this application is no good)
 	// =================================================================================
-	const authToken = zooqueue.queryStringService().get("auth-token");
+	const authToken = zooq.queryStringService().get("auth-token");
 	// const endpoint = `https://starfox.bookingbug.com/api/v1/admin/${booking.company_id}/bookings/${booking.id}/cancel?notify=false`;
-	const endpoint = `${zooqueue.bookingbugApiUrl__ADMIN()}${booking.company_id}/bookings/${booking.id}/cancel?notify=false`;
+	const endpoint = `${zooq.bookingbugApiUrl__ADMIN()}${booking.company_id}/bookings/${booking.id}/cancel?notify=false`;
 
 	requestHeaders[3] = ["auth-token", authToken];
 
@@ -122,31 +122,31 @@ const bookingbugBookingsApi = () => {
 			}
 			const data = JSON.parse(result);
 			if (data.error) {
-				zooqueue.consoleError(data.error);
+				zooq.consoleError(data.error);
 				return reject(data.error);
 			}
 			const bookings = data._embedded.bookings;
-			const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()];
+			const staff = zooq.getStaff()[zooq.companyIdAsKey()];
 
-			zooqueue.consoleLog("bookings from bookingbug api:", bookings);
+			zooq.consoleLog("bookings from bookingbug api:", bookings);
 
-			const staffBookingsUnchanged = zooqueue.setBookingsOnStaff(bookings, staff);
+			const staffBookingsUnchanged = zooq.setBookingsOnStaff(bookings, staff);
 
 			if (!staffBookingsUnchanged) {
 				// ======================================================
 				// AT LEAST ONE BOOKING CHANGED, UPDATE STAFF DATABASE
 				// ======================================================
 				console.warn("NEW BOOKINGS FOUND FOR ONE OR MORE STAFF MEMBERS!");
-				const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()];
+				const staff = zooq.getStaff()[zooq.companyIdAsKey()];
 				zooqueueApi().staffSetBookings(JSON.stringify(staff)).then( (result) => {
 					return resolve(result);
 				}, err => {
-					zooqueue.consoleError(err);
+					zooq.consoleError(err);
 					return reject(err);
 				});
 			} else return resolve({info: "New or expired bookings found for one or more staff members: false"});
 		}, err => {
-			zooqueue.consoleError(err);
+			zooq.consoleError(err);
 			reject(err);
 		});
 	});
@@ -181,7 +181,7 @@ const bookingbugApis = () => {
 					}
 
 					if (servicesChanged) {
-						zooqueue.consoleLogC(`services CHANGED`, customLogStyles);
+						zooq.consoleLogC(`services CHANGED`, customLogStyles);
 						// ==============================
 						// UPDATE SERVICES DATABASE
 						// ==============================
@@ -193,11 +193,11 @@ const bookingbugApis = () => {
 								resolve(resolveData);
 							}
 						}, err => {
-							zooqueue.consoleError(err);
+							zooq.consoleError(err);
 						});
 					}
 					if (peopleChanged) {
-						zooqueue.consoleLogC(`people CHANGED`, customLogStyles);
+						zooq.consoleLogC(`people CHANGED`, customLogStyles);
 						// ============================
 						// UPDATE STAFF DATABASE
 						// ============================
@@ -211,11 +211,11 @@ const bookingbugApis = () => {
 						});
 					}
 				}, err => {
-					zooqueue.consoleError(err);
+					zooq.consoleError(err);
 					reject(err);
 				});
 			}, err => {
-				zooqueue.consoleError(err.error.info);
+				zooq.consoleError(err.error.info);
 				reject(err);
 			});
 	});

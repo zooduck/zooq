@@ -56,10 +56,10 @@ function ZooQ() {
 	// =====================
 	const $alertService = (key = "", msg = "BANANAS") => {
 		const message = alertKeys[key]? alertKeys[key] : msg;
-		zooqueue.elements("alertMessage").innerHTML = message;
-		zooqueue.elements("alert").classList.add("--active");
+		zooq.elements("alertMessage").innerHTML = message;
+		zooq.elements("alert").classList.add("--active");
 		if (alertTimeout) clearTimeout(alertTimeout);
-		alertTimeout = setTimeout( () => zooqueue.elements("alert").classList.remove("--active"), 5000);
+		alertTimeout = setTimeout( () => zooq.elements("alert").classList.remove("--active"), 5000);
 	};
 	const $queryStringService = (function() {
 		let qStrings = location.search.replace("?", "").split("&");
@@ -98,8 +98,8 @@ function ZooQ() {
 	// SET ESTIMATED WAIT TIMES
 	// ===========================
 	const $unshiftPriorityCustomer = (customers__COPY) => {
-		if (zooqueue.hasPriorityCustomer()) {
-			const priorityCustomerIndex = customers__COPY.findIndex( (item) => item.id == zooqueue.getCurrentQueue().priorityCustomer.id);
+		if (zooq.hasPriorityCustomer()) {
+			const priorityCustomerIndex = customers__COPY.findIndex( (item) => item.id == zooq.getCurrentQueue().priorityCustomer.id);
 			if (priorityCustomerIndex != -1) {
 				const priorityCustomer = customers__COPY.splice(priorityCustomerIndex, 1);
 				customers__COPY.unshift(priorityCustomer[0]); // NOTE: Array.splice returns an Array!
@@ -165,11 +165,11 @@ function ZooQ() {
 		// 1. create copies of staff and customers (anything we do here STAYS here)
 		// ==========================================================================
 		let staff__COPY = [];
-		for (let staffMember of zooqueue.getStaff()[zooqueue.companyIdAsKey()]) {
+		for (let staffMember of zooq.getStaff()[zooq.companyIdAsKey()]) {
 			staff__COPY.push(Object.assign({}, staffMember));
 		}
 		let customers__COPY = [];
-		for (let customer of zooqueue.getCurrentQueue().customers) {
+		for (let customer of zooq.getCurrentQueue().customers) {
 			customers__COPY.push(Object.assign({}, customer));
 		}
 		// ===========================================================
@@ -211,7 +211,7 @@ function ZooQ() {
 		// ==========================================================================================================
 		// 6. set "estimatedWaitTime" and "nextAvailableStaffMember" for each customer in the REAL customers array
 		// ==========================================================================================================
-		for (const customer of zooqueue.getCurrentQueue().customers) {
+		for (const customer of zooq.getCurrentQueue().customers) {
 			customer.estimatedWaitTime = customers__COPY.find( (item) => item.id == customer.id).estimatedWaitTime;
 			customer.nextAvailableStaffMember = customers__COPY.find( (item) => item.id == customer.id).nextAvailableStaffMember;
 		}
@@ -640,7 +640,7 @@ ZooQ.prototype.consoleWarn = function (msg1 = "", msg2 = "") {
 	return console.warn("%czooQ => warn:", "color: #333", msg1, msg2);
 };
 ZooQ.prototype.consolePoll = function (msg1 = "", msg2 = "") {
-	return console.log(`%czooQ => poll (${zooqueue.bookingbugApi__POLL_DELAY()/1000}s):`, "color: hotpink", msg1, msg2);
+	return console.log(`%czooQ => poll (${zooq.bookingbugApi__POLL_DELAY()/1000}s):`, "color: hotpink", msg1, msg2);
 };
 ZooQ.prototype.consoleError = function (msg1 = "", msg2 = "") {
 	setLoaded();

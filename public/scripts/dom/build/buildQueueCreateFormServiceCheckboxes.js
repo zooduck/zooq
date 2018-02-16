@@ -2,7 +2,7 @@ function buildQueueCreateFormServiceCheckboxes() {
   // =============================================
   // QUEUE CREATE FORM: BUILD SERVICE CHECKBOXES
   // =============================================
-  for (let service of zooqueue.getServices()[zooqueue.companyIdAsKey()]) {
+  for (let service of zooq.getServices()[zooq.companyIdAsKey()]) {
     buildServiceCheckbox(service);
   }
 }

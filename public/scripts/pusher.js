@@ -5,21 +5,21 @@ const pusher = new Pusher("991a027aa0c940510776", {
 });
 const channel = pusher.subscribe("queue-channel");
 channel.bind("queue-event", function(data) {
-  zooqueue.pusherLog(data);
+  zooq.pusherLog(data);
 
-  if (zooqueue.isReady()) {
+  if (zooq.isReady()) {
 
     // ==================
     // UPDATE ALL STAFF
     // ==================
     if (data.type == "STAFF__UPDATE_ALL") {
       zooqueueApi().staffGet().then( () => { // gets (from database) and sets (locally)
-        const staff = zooqueue.getStaff()[zooqueue.companyIdAsKey()];
+        const staff = zooq.getStaff()[zooq.companyIdAsKey()];
         for (const staffMember of staff) {
           zooqDOM().updateStaffCard(staffMember);
         }
       }, err => {
-        zooqueue.consoleError(err);
+        zooq.consoleError(err);
       });
     }
     // =======================
@@ -29,7 +29,7 @@ channel.bind("queue-event", function(data) {
       zooqueueApi().servicesGet().then( () => {
         buildDom();
       }, err => {
-        zooqueue.consoleError(err);
+        zooq.consoleError(err);
       });
     }
     // =======================================
@@ -37,13 +37,13 @@ channel.bind("queue-event", function(data) {
     // =======================================
     if (data.type.match(/STAFF_MEMBER__ATTENDANCE/)) {
       zooqueueApi().staffGet().then( () => { // gets (from database) and sets (locally)
-        const staffMember = zooqueue.getStaffMember(data.data.staffMember);
+        const staffMember = zooq.getStaffMember(data.data.staffMember);
         console.log("THE STAFF MEMBER WHOSE STATUS WAS CHANGED IS", staffMember.name);
         zooqDOM().updateStaffCard(staffMember);
-        zooqueue.elements("superContainer").scrollTo(0, 0);
+        zooq.elements("superContainer").scrollTo(0, 0);
         setLoaded();
       }, err => {
-        zooqueue.consoleError(err);
+        zooq.consoleError(err);
         setLoaded();
       });
     }
@@ -52,16 +52,16 @@ channel.bind("queue-event", function(data) {
     // ADD CUSTOMER TO QUEUE
     // ========================
     if (data.type == "QUEUE__CUSTOMER_ADD") {
-      if (zooqueue.getCurrentQueue().id == data.data.queue.id) {
+      if (zooq.getCurrentQueue().id == data.data.queue.id) {
         zooqueueApi().queuesGet().then( () => {
           const customerId = data.data.queue.customer;
-          zooqueue.setEstimatedWaitTimes();
+          zooq.setEstimatedWaitTimes();
           zooqDOM().addCustomerToQueue(customerId);
           zooqDOM().buildQueueList();
           zooqDOM().setQueueTitle();
           setLoaded();
         }, err => {
-          zooqueue.consoleError(err);
+          zooq.consoleError(err);
           setLoaded();
         });
       } else {
@@ -76,7 +76,7 @@ channel.bind("queue-event", function(data) {
       zooqueueApi().queuesGet().then( () => {
         buildDom();
       }, err => {
-        zooqueue.consoleError(err);
+        zooq.consoleError(err);
         setLoaded();
       });
     }
@@ -91,7 +91,7 @@ channel.bind("queue-event", function(data) {
         zooqDOM().setQueueTitle();      
         setLoaded();
       }, err => {
-        zooqueue.consoleError(err);
+        zooq.consoleError(err);
         setLoaded();
       });
     }
@@ -106,7 +106,7 @@ channel.bind("queue-event", function(data) {
       zooqueueApi().queuesGet().then( () => {
         buildDom();
       }, err => {
-        zooqueue.consoleError(err);
+        zooq.consoleError(err);
         setLoaded();
       });
     }
@@ -116,18 +116,18 @@ channel.bind("queue-event", function(data) {
     if (data.type == "CUSTOMER__SERVE" || data.type == "CUSTOMER__FINISH_SERVING") {
       const promises = [zooqueueApi().queuesGet(), zooqueueApi().staffGet()];
       Promise.all(promises).then( () => {
-        const staffMember = zooqueue.getStaffMember(data.data.staffMember);
+        const staffMember = zooq.getStaffMember(data.data.staffMember);
         const customerId = data.data.customer;
         console.log(`THE STAFF MEMBER WHOSE STATUS WAS CHANGED TO ${staffMember.attendance_status} IS`, staffMember.name);
         zooqDOM().updateStaffCard(staffMember);
         if (data.type == "CUSTOMER__SERVE") {
           zooqDOM().deleteCustomerFromQueue(customerId);
         }
-        zooqueue.elements("superContainer").scrollTo(0, 0);
+        zooq.elements("superContainer").scrollTo(0, 0);
         setLoaded();
         // buildDom();
       }, err => {
-        zooqueue.consoleError(err);
+        zooq.consoleError(err);
         setLoaded();
       });
     }

@@ -3,8 +3,8 @@ function buildCustomerCreateFormServiceSelectOptions() {
   // ===========================================================
   // CUSTOMER CREATE FORM: BUILD SERVICE OPTIONS FOR <select>
   // ===========================================================
-  const services = zooqueue.getCurrentQueue().serviceIds.map( (serviceId) => {
-    return zooqueue.getService(serviceId);
+  const services = zooq.getCurrentQueue().serviceIds.map( (serviceId) => {
+    return zooq.getService(serviceId);
   });
 
   for (let service of services) {

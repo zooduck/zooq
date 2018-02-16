@@ -1,8 +1,8 @@
 const addQueueListItemToDOM = (queue) => {
-	const form = zooqueue.elements("queueSwitchForm");
+	const form = zooq.elements("queueSwitchForm");
 	const template = form.querySelector("[template]").cloneNode(true);
 	template.removeAttribute("template");
-	if (zooqueue.getCurrentQueue().id == queue.id) {
+	if (zooq.getCurrentQueue().id == queue.id) {
 		template.classList.add("--active");
 	}
 	const queueName__el = template.querySelector(".switch-queue__item__name");

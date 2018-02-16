@@ -1,18 +1,18 @@
 function buildDom (filters = {}) {
 
-	filters = zooqueue.getFilters();
+	filters = zooq.getFilters();
 
 	resetDom();
 
-	if (zooqueue.hasServices()) {
+	if (zooq.hasServices()) {
 		buildQueueCreateFormServiceCheckboxes();
 	}
 
-	if (zooqueue.hasQueues()) {
+	if (zooq.hasQueues()) {
 		// ======================================
 		// CUSTOMER WAIT TIME ESTIMATES: RECALC
 		// ======================================
-		zooqueue.setEstimatedWaitTimes();
+		zooq.setEstimatedWaitTimes();
 
 		buildCustomerCreateFormServiceSelectOptions();
 
@@ -27,5 +27,5 @@ function buildDom (filters = {}) {
 	setSuperContainerPositionAndSize();
 	setLoaded();
 
-	zooqueue.consoleLog("buildDom: completed");
+	zooq.consoleLog("buildDom: completed");
 }

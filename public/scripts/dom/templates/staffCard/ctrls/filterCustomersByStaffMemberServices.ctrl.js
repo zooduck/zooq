@@ -1,14 +1,14 @@
 const filterCustomersByStaffMemberServicesCtrl__EVENT = (el) => {
-  const filters = zooqueue.getFilters();
-  const staffMember = zooqueue.getStaffMember(el.parentNode.parentNode.id);
+  const filters = zooq.getFilters();
+  const staffMember = zooq.getStaffMember(el.parentNode.parentNode.id);
   if (!filters.staffMember) {
-    zooqueue.setFilter({staffMember: staffMember});
-    zooqueue.elements("staffCustomerFilterInfo").parentNode.classList.add("--active");
-    zooqueue.elements("staffCustomerFilterInfo").innerHTML = `CUSTOMER FILTER ACTIVE: ONLY DISPLAY CUSTOMERS THAT CAN BE SERVED BY ${staffMember.name}`;
+    zooq.setFilter({staffMember: staffMember});
+    zooq.elements("staffCustomerFilterInfo").parentNode.classList.add("--active");
+    zooq.elements("staffCustomerFilterInfo").innerHTML = `CUSTOMER FILTER ACTIVE: ONLY DISPLAY CUSTOMERS THAT CAN BE SERVED BY ${staffMember.name}`;
   } else {
-    zooqueue.removeFilters(["staffMember"]);
-    zooqueue.elements("staffCustomerFilterInfo").parentNode.classList.remove("--active");
+    zooq.removeFilters(["staffMember"]);
+    zooq.elements("staffCustomerFilterInfo").parentNode.classList.remove("--active");
   }
   buildDom();
-  zooqueue.elements("superContainer").scrollTo(0, 0);
+  zooq.elements("superContainer").scrollTo(0, 0);
 };

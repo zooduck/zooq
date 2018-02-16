@@ -2,7 +2,7 @@ const zooqDOM = (function zooqDOM() {
   return function () {
     return {
       addCustomerToQueue(id) {
-        const customer = zooqueue.getCustomer(id);
+        const customer = zooq.getCustomer(id);
         const options = { animate: true, buildType: "CREATE" }
         addQueueCardToDOM(customer, options);
       },

@@ -1,7 +1,7 @@
 const finishServingCtrl__EVENT = (el) => {
 
   let staffMemberId = el.getAttribute("staff-id");
-  let staffMember = zooqueue.getStaffMember(staffMemberId);
+  let staffMember = zooq.getStaffMember(staffMemberId);
   let booking = staffMember.activeBooking;
   let apiPromises = [zooqueueApi().customerServeComplete(staffMember)];
 
@@ -12,11 +12,11 @@ const finishServingCtrl__EVENT = (el) => {
     // =============================================================================
     Promise.all(apiPromises)
     .then ( (results) => {
-      zooqueue.consoleLog(results);
+      zooq.consoleLog(results);
       // zooqDOM().updateStaffCard(staffMember);
-      // zooqueue.elements("superContainer").scrollTo(0, 0);
+      // zooq.elements("superContainer").scrollTo(0, 0);
     }, err => {
-      zooqueue.consoleError(err);
+      zooq.consoleError(err);
     });
   }
 };

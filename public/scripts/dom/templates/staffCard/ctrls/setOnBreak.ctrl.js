@@ -6,9 +6,9 @@ const setOnBreakCtrl__EVENT = (el) => {
   const staffMemberId = el.getAttribute("staff-id");
   setLoading();
   zooqueueApi().staffMemberSetOnBreak(staffMemberId).then( (staffMember) => {
-    zooqueue.consoleLog("setOnBreak:", staffMember.name);
+    zooq.consoleLog("setOnBreak:", staffMember.name);
     // setLoaded();
   }, err => {
-    zooqueue.consoleError(err);
+    zooq.consoleError(err);
   });
 };

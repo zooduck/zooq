@@ -1,22 +1,22 @@
 const deleteCustomerFromQueueCtrl__EVENT = (el) => {
   const id = el.getAttribute("customer-id");
   let customerIsPriorityCustomer = false;
-  if (zooqueue.hasPriorityCustomer()) {
-    customerIsPriorityCustomer = (zooqueue.getCustomer(id).id == zooqueue.getCurrentQueue().priorityCustomer.id);
+  if (zooq.hasPriorityCustomer()) {
+    customerIsPriorityCustomer = (zooq.getCustomer(id).id == zooq.getCurrentQueue().priorityCustomer.id);
   }
   if (customerIsPriorityCustomer) {
-    zooqueue.alert("PRIORITY_CUSTOMER_CANNOT_BE_DELETED");
-    return zooqueue.consoleError("PRIORITY_CUSTOMER_CANNOT_BE_DELETED");
+    zooq.alert("PRIORITY_CUSTOMER_CANNOT_BE_DELETED");
+    return zooq.consoleError("PRIORITY_CUSTOMER_CANNOT_BE_DELETED");
   }
 
   setLoading();
 
   zooqueueApi().customerDelete(el.getAttribute("customer-id")).then( (result) => {
-    zooqueue.consoleLog(result);
+    zooq.consoleLog(result);
     // setLoaded();
     // buildDom();  // user pusher instead
   }, err => {
-    zooqueue.consoleError(err);
+    zooq.consoleError(err);
     setLoaded();
   });
 };

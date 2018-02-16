@@ -5,10 +5,10 @@ const queueListItemCtrl__EVENT = (el, form) => {
     ctrl.classList.remove("--active");
   }
   el.classList.add("--active");
-  zooqueue.setCurrentQueueIndex(index);
+  zooq.setCurrentQueueIndex(index);
   zooqDOM().setQueueTitle();
 
-  zooqueue.setEstimatedWaitTimes();
+  zooq.setEstimatedWaitTimes();
 
   buildStaffCards({});
   buildQueueCards({});

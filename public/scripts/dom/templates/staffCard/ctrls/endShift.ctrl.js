@@ -5,8 +5,8 @@ const endShiftCtrl__EVENT = (el) => {
     const shiftStartDate = luxon.DateTime.fromISO(staffMember.attendance_started);
     const shiftEndDate = luxon.DateTime.fromISO(staffMember.attendance_ended);
     const shiftDuration = luxon.Interval.fromDateTimes(shiftStartDate, shiftEndDate).length("minutes").toTimeString();
-    zooqueue.consoleLogC(`${staffMember.name}'s shift ended with a total duration of: ${shiftDuration}`);
+    zooq.consoleLogC(`${staffMember.name}'s shift ended with a total duration of: ${shiftDuration}`);
   }, err => {
-    zooqueue.consoleError(err);
+    zooq.consoleError(err);
   });
 }

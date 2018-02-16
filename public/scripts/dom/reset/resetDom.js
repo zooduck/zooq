@@ -4,5 +4,5 @@ function resetDom () {
 	resetQueueList();
 	resetStaffCards();
 	resetQueueCards();
-	zooqueue.consoleLog("resetDom: completed");
+	zooq.consoleLog("resetDom: completed");
 }

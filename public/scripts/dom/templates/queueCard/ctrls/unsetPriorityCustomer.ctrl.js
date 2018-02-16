@@ -1,11 +1,11 @@
 const unsetPriorityCustomerCtrl__EVENT = () => {
   setLoading();
   zooqueueApi().queueSetPriorityCustomer().then( (result) => {
-    zooqueue.consoleLog(result);
+    zooq.consoleLog(result);
     // setLoaded();
     // buildDom();  // user pusher instead
   }, err => {
-    zooqueue.consoleError(err);
+    zooq.consoleError(err);
     setLoaded();
   });
 };
