@@ -3,7 +3,7 @@ const finishServingCtrl__EVENT = (el) => {
   let staffMemberId = el.getAttribute("staff-id");
   let staffMember = zooq.getStaffMember(staffMemberId);
   let booking = staffMember.activeBooking;
-  let apiPromises = [zooqueueApi().customerServeComplete(staffMember)];
+  let apiPromises = [zooqApi().customerServeComplete(staffMember)];
 
   if (booking) {
     apiPromises.unshift(bookingbugCancelBooking_POST(booking));

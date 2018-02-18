@@ -1,4 +1,4 @@
-const zooqueueApi = (function zooqueueApi () {
+const zooqApi = (function zooqApi () {
 	const $getLastTicketRef = (serviceCode = null) => {
 		const customersInQueue = zooq.getCurrentQueue().customers;
 		customersInQueue.reverse();

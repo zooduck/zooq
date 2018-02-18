@@ -138,7 +138,7 @@ const bookingbugBookingsApi = () => {
 				// ======================================================
 				console.warn("NEW BOOKINGS FOUND FOR ONE OR MORE STAFF MEMBERS!");
 				const staff = zooq.getStaff()[zooq.companyIdAsKey()];
-				zooqueueApi().staffSetBookings(JSON.stringify(staff)).then( (result) => {
+				zooqApi().staffSetBookings(JSON.stringify(staff)).then( (result) => {
 					return resolve(result);
 				}, err => {
 					zooq.consoleError(err);
@@ -159,7 +159,7 @@ let lastBookingbugPeople = null;
 let customLogStyles = "background: lightgoldenrodyellow; color: #333;";
 const bookingbugApis = () => {
 	return new Promise( (resolve, reject) => {
-			zooqueueApi().connectionTest().then( () => {
+			zooqApi().connectionTest().then( () => {
 				let authToken = localStorage.getItem("auth-token");
 				const promises = [bookingbugServices_GET(authToken), bookingbugPeople_GET(authToken)];
 				let promisesToResolve = new Array(2);
@@ -186,7 +186,7 @@ const bookingbugApis = () => {
 						// UPDATE SERVICES DATABASE
 						// ==============================
 						const data = JSON.parse(services)._embedded.services;
-						zooqueueApi().servicesSet(JSON.stringify(data)).then( (result) => {
+						zooqApi().servicesSet(JSON.stringify(data)).then( (result) => {
 							lastBookingbugServices = services;
 							promisesToResolve.pop();
 							if (promisesToResolve.length == 0) {
@@ -202,7 +202,7 @@ const bookingbugApis = () => {
 						// UPDATE STAFF DATABASE
 						// ============================
 						const data = JSON.parse(people)._embedded.people;
-						zooqueueApi().staffSet(JSON.stringify(data)).then( (result) => {
+						zooqApi().staffSet(JSON.stringify(data)).then( (result) => {
 							lastBookingbugPeople = people;
 							promisesToResolve.pop();
 							if (promisesToResolve.length == 0) {

@@ -3,7 +3,7 @@ const customerCreateForm__submitCtrl__EVENT = () => {
     return zooq.alert("QUEUE_NOT_FOUND");
   }
   const formData = new FormData(zooq.elements("customerCreateForm").querySelector("form"));
-  const data = zooqueueApi().convertCustomerFormDataToJson(formData);
+  const data = zooqApi().convertCustomerFormDataToJson(formData);
 
   if (data.error) {
     return zooq.consoleError(data.error);
@@ -11,7 +11,7 @@ const customerCreateForm__submitCtrl__EVENT = () => {
 
   setLoading();
 
-  zooqueueApi().customerCreate(data).then( (result) => {
+  zooqApi().customerCreate(data).then( (result) => {
     clearForm(zooq.elements("customerCreateForm").querySelector("form"));
     zooq.removeFilters(["customer"]);
     navBarHide();  
