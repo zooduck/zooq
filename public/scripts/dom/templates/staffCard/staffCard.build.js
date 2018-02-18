@@ -277,7 +277,7 @@ const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttenda
 		const time = luxon.DateTime.fromISO(staffMember.nextBooking.datetime).toLocaleString(luxon.DateTime.TIME_SIMPLE);
 		const serviceName = staffMember.nextBooking.service_name;
 		nextAppointmentInfo__el.innerHTML =  `${serviceName} with ${clientName} at ${time}`;
-	}
+	} else nextAppointmentInfo__el.innerHTML = "";
 
 	// ==============
 	// CARD STYLES
