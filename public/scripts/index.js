@@ -8,7 +8,7 @@ function zooqueueInit() {
 	// ==============================
 	// initialisation code here...
 	// ==============================
-	Promise.all([bookingbugApis(), zooqueueApi().queuesGet()]).then( (results) => {
+	Promise.all([bookingbugApis(), zooqApi().queuesGet()]).then( (results) => {
 
 		zooq.consoleLog("Services from bookingbug api:", JSON.parse(results[0].services));
 		zooq.consoleLog("People from bookingbug api:", JSON.parse(results[0].people));

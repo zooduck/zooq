@@ -13,7 +13,7 @@ channel.bind("queue-event", function(data) {
     // UPDATE ALL STAFF
     // ==================
     if (data.type == "STAFF__UPDATE_ALL") {
-      zooqueueApi().staffGet().then( () => { // gets (from database) and sets (locally)
+      zooqApi().staffGet().then( () => { // gets (from database) and sets (locally)
         const staff = zooq.getStaff()[zooq.companyIdAsKey()];
         for (const staffMember of staff) {
           zooqDOM().updateStaffCard(staffMember);
@@ -26,7 +26,7 @@ channel.bind("queue-event", function(data) {
     // UPDATE ALL SERVICES
     // =======================
     if (data.type == "SERVICES__UPDATE_ALL") {
-      zooqueueApi().servicesGet().then( () => {
+      zooqApi().servicesGet().then( () => {
         buildDom();
       }, err => {
         zooq.consoleError(err);
@@ -36,7 +36,7 @@ channel.bind("queue-event", function(data) {
     // UPDATE STAFF MEMBER ATTENDANCE STATUS
     // =======================================
     if (data.type.match(/STAFF_MEMBER__ATTENDANCE/)) {
-      zooqueueApi().staffGet().then( () => { // gets (from database) and sets (locally)
+      zooqApi().staffGet().then( () => { // gets (from database) and sets (locally)
         const staffMember = zooq.getStaffMember(data.data.staffMember);
         console.log("THE STAFF MEMBER WHOSE STATUS WAS CHANGED IS", staffMember.name);
         zooqDOM().updateStaffCard(staffMember);
@@ -53,7 +53,7 @@ channel.bind("queue-event", function(data) {
     // ========================
     if (data.type == "QUEUE__CUSTOMER_ADD") {
       if (zooq.getCurrentQueue().id == data.data.queue.id) {
-        zooqueueApi().queuesGet().then( () => {
+        zooqApi().queuesGet().then( () => {
           const customerId = data.data.queue.customer;
           zooq.setEstimatedWaitTimes();
           zooqDOM().addCustomerToQueue(customerId);
@@ -73,7 +73,7 @@ channel.bind("queue-event", function(data) {
     // CREATE NEW QUEUE
     // ====================
     if (data.type == "QUEUE__CREATE") {
-      zooqueueApi().queuesGet().then( () => {
+      zooqApi().queuesGet().then( () => {
         buildDom();
       }, err => {
         zooq.consoleError(err);
@@ -86,7 +86,7 @@ channel.bind("queue-event", function(data) {
     if (data.type == "QUEUE__CUSTOMER_DELETE") {
       const customerId = data.data.queue.customer;
       zooqDOM().deleteCustomerFromQueue(customerId);
-      zooqueueApi().queuesGet().then( () => {
+      zooqApi().queuesGet().then( () => {
         zooqDOM().buildQueueList();
         zooqDOM().setQueueTitle();      
         setLoaded();
@@ -103,7 +103,7 @@ channel.bind("queue-event", function(data) {
     // =================================
     if (data.type == "QUEUE__PRIORITY_CUSTOMER_SET") {
       const customerId = data.data.queue.priorityCustomer;
-      zooqueueApi().queuesGet().then( () => {
+      zooqApi().queuesGet().then( () => {
         buildDom();
       }, err => {
         zooq.consoleError(err);
@@ -114,7 +114,7 @@ channel.bind("queue-event", function(data) {
     // CUSTOMER SERVED FROM QUEUE
     // ============================
     if (data.type == "CUSTOMER__SERVE" || data.type == "CUSTOMER__FINISH_SERVING") {
-      const promises = [zooqueueApi().queuesGet(), zooqueueApi().staffGet()];
+      const promises = [zooqApi().queuesGet(), zooqApi().staffGet()];
       Promise.all(promises).then( () => {
         const staffMember = zooq.getStaffMember(data.data.staffMember);
         const customerId = data.data.customer;

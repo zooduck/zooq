@@ -1,6 +1,6 @@
 const endShiftCtrl__EVENT = (el) => {
   const staffMemberId = el.getAttribute("staff-id");
-  zooqueueApi().staffMemberEndShift(staffMemberId).then( (result) => {
+  zooqApi().staffMemberEndShift(staffMemberId).then( (result) => {
     const staffMember = result;
     const shiftStartDate = luxon.DateTime.fromISO(staffMember.attendance_started);
     const shiftEndDate = luxon.DateTime.fromISO(staffMember.attendance_ended);

@@ -13,7 +13,7 @@ const serveNextCtrl__EVENT = (el, customer = null) => {
     return zooq.consoleError("SERVICE_NOT_SUPPORTED");
   }
 
-  zooqueueApi().connectionTest().then( () => {
+  zooqApi().connectionTest().then( () => {
     setLoading();
     // ============================
     // CREATE BOOKINGBUG BASKET
@@ -110,7 +110,7 @@ const serveNextCtrl__EVENT = (el, customer = null) => {
         // NOTE: DUAL RESPONSIBILITY ENDPOINT
         // serve customer and update staff member
         // ==========================================
-        zooqueueApi().customerServe(JSON.stringify(data)).then((result) => {
+        zooqApi().customerServe(JSON.stringify(data)).then((result) => {
           zooq.consoleLog(result);
           zooq.removeFilters(["customer"]);
           // setLoaded();

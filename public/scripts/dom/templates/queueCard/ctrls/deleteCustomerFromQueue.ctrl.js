@@ -11,7 +11,7 @@ const deleteCustomerFromQueueCtrl__EVENT = (el) => {
 
   setLoading();
 
-  zooqueueApi().customerDelete(el.getAttribute("customer-id")).then( (result) => {
+  zooqApi().customerDelete(el.getAttribute("customer-id")).then( (result) => {
     zooq.consoleLog(result);
     // setLoaded();
     // buildDom();  // user pusher instead
