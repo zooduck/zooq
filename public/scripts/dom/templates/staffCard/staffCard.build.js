@@ -319,8 +319,11 @@ const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttenda
 		staffCards.appendChild(sCard);
 	}
 	if (buildType == "UPDATE" && reorderItemsByAttendanceStatus == true) {
+		const staff = zooq.getStaff()[zooq.companyIdAsKey()];
+		const domIndex = staff.findIndex( (item) => item.id == staffMember.id);
 		if (staffMember.attendance_status == 1) {
-			staffCards.insertBefore(sCard, Array.from(staffCards.children)[1]);
+			// staffCards.insertBefore(sCard, Array.from(staffCards.children)[1]);
+			staffCards.insertBefore(sCard, Array.from(staffCards.children)[domIndex]);
 		}
 		if (staffMember.attendance_status == 2 || staffMember.attendance_status == 3 || staffMember.attendance_status == 4) {
 			const indexToInsertBefore = Array.from(staffCards.children).findIndex( (item) => item.classList.contains("awol"));
