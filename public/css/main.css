@@ -1,0 +1,89 @@
+/* =============== * /
+/* super-container */
+/* =============== */
+
+.super-container {
+	display: flex;
+	justify-content: center;
+	user-select: none;
+	background-color: #eee;
+	background-position: center;
+	background-size: cover;
+	background-repeat: repeat-y;
+	overflow-y: auto;
+	min-height: calc(100vh - 250px);
+}
+
+/* ================= * /
+/* content-container */
+/* ================= */
+
+.content-container {
+	flex-grow: 1;
+	padding: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 20px;
+}
+
+/* =================== */
+/* switch column ctrls */
+/* =================== */
+
+.switch-column-order-ctrls {
+	display: flex;
+	justify-content: center;
+	width: 50%;
+	margin-top: 10px;
+}
+@media screen and (max-width: 920px) {
+	.switch-column-order-ctrls {
+		width: 100%;
+	}
+}
+.switch-column-order-ctrls__ctrl {
+	display: flex;
+	align-items: center;
+	color: #333;
+	cursor: pointer;
+}
+.switch-column-order-ctrls__ctrl:hover {
+	/* color: #666; */
+	transform: scale(1.1);
+}
+.switch-column-order-ctrls__ctrl i.material-icons {
+	font-size: 36px;
+	margin-right: 5px;
+}
+
+/* ========================== */
+/* staff customer filter info */
+/* ========================== */
+
+.staff-customer-filter-info {
+	display: none;
+	align-items: center;
+	justify-content: center;
+	padding: 10px 0;
+	background: lightgoldenrodyellow;
+	color: darkgoldenrod;
+}
+
+.staff-customer-filter-info.--active {
+	display: flex;
+}
+/* =============== */
+/* content columns */
+/* =============== */
+
+.content__columns {
+	display: flex;
+	overflow: hidden;
+	justify-content: space-between;
+	margin-bottom: 100px;
+}
+@media screen and (max-width: 920px) {
+	.content__columns {
+		flex-direction: column;
+	}
+}

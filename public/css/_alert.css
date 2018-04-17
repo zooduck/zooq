@@ -1,0 +1,35 @@
+/* ===== */
+/* alert */
+/* ===== */
+
+alert.alert {
+	position: fixed;
+	bottom: -100px;
+	left: 0;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	background: #ccc;
+	color: #444;
+	box-shadow: 0 -5px 25px 0 #555;
+	transition: all .25s;
+}
+alert.alert.--active {
+	bottom: 0;
+}
+alert .alert__notify-row {	
+	display: flex;
+	justify-content: center;
+	align-self: stretch;
+	background: #fff;
+	color: #222;
+	padding: 10px;
+}
+alert .alert__message-row {
+	padding: 10px;
+}
+alert .alert__message {
+	font-size: 1.5em;
+}

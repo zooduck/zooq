@@ -1,26 +1,37 @@
 {
   "name": "zooq",
   "version": "1.0.0",
-  "description": "",
+  "description": "queue module prototype",
   "main": "index.html",
   "dependencies": {
     "lodash": "^4.17.4",
     "luxon": "^0.2.12",
+    "mongodb": "^3.0.2",
     "pusher": "^1.5.1",
-    "pusher-js": "^4.2.2"
+    "pusher-js": "^4.2.2",
+    "request": "^2.83.0"
   },
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "open": "opn http://localhost:8080",
+    "start": "node server.js",
+    "serve": "npm run open && npm run start"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zooduck/queue-moo-be-do.git"
+    "url": "git+https://github.com/zooduck/zooq.git"
   },
-  "author": "",
+  "author": {
+    "name": "zooduck",
+    "email": "zooduck@beniceoreatsomerice.com",
+    "url": "http://zooduck.com/"
+  },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zooduck/queue-moo-be-do/issues"
+    "url": "https://github.com/zooduck/zooq/issues"
   },
-  "homepage": "https://github.com/zooduck/queue-moo-be-do#readme"
+  "homepage": "https://github.com/zooduck/zooq#readme",
+  "devDependencies": {
+    "opn-cli": "^3.1.0"
+  }
 }

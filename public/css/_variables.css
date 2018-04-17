@@ -1,0 +1,27 @@
+/* --------- */
+/* variables */
+/* --------- */
+
+:root {
+	--on-break-color: hotpink;
+	--available-color: #5ab35a;
+	--busy-color: #ff475c;
+	--awol-color: cornflowerblue;
+
+	--button-color-default: #16a1d8;
+	--button-color-default__HOVER:  #29baf1;
+	--button-color-serve-next: #5ab35a;
+	--button-color-serve-next__HOVER: #7aca7a;
+	--button-color-finish-serving: crimson;
+	--button-color-finish-serving__HOVER: #ff475c;
+	--button-color-set-busy: crimson;
+	--button-color-set-busy__HOVER: #ff475c;
+	--button-color-set-free: #5ab35a;
+	--button-color-set-free__HOVER: #7aca7a;
+	--button-color-start-shift: #5ab35a;
+	--button-color-start-shift__HOVER: #7aca7a;
+	--button-color-end-shift: crimson;
+	--button-color-end-shift__HOVER: #ff475c;
+
+	--loader-image-url: url("https://www.bookingbug.co.uk/assets/logo-6f5ee3edf858378308b883742635e51245afbdd9953403dc16d48e15d86b60f7.png");
+}
