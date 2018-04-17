@@ -1,4 +1,32 @@
 const mongoDB = require("./mongodb.js");
+const Request = require("request");
+
+// ===================================
+// GET AUTH TOKEN FROM BOOKINGBUG
+// ===================================
+let BB_AUTH_TOKEN = "";
+const APP_ID = process.env.APP_ID;
+const APP_KEY = process.env.APP_KEY;
+const RequestOptions = {
+  headers: {
+    "Content-Type": "application/json",
+    "App-Id": APP_ID,
+    "App-Key": APP_KEY
+  },
+  url: process.env.BB_URL,
+  body: JSON.stringify({
+    email: process.env.BB_EMAIL,
+    password: process.env.BB_PASSWORD
+  })
+};
+Request.post(RequestOptions, (error, response, body) => {
+  if (error) return console.log(error);
+  BB_AUTH_TOKEN = JSON.parse(body).auth_token;
+});
+// ====================================
+// \\ GET AUTH TOKEN FROM BOOKINGBUG
+// ====================================
+
 mongoDB().run().then( (result) => {
   const dbo = result.dbo;
   const http = require("http");
@@ -129,7 +157,16 @@ mongoDB().run().then( (result) => {
                           body.push(chunk);
                       }).on("end", () => {
                           body = Buffer.concat(body).toString();
-                          endpoint().run({ data: body, params: queryStringParams, id: id, dbo: dbo }).then( (endpointResponse) => {
+                          endpoint().run({
+                              data: body,
+                              params: queryStringParams,
+                              id: id,
+                              dbo: dbo,
+                              authToken: BB_AUTH_TOKEN,
+                              appId: APP_ID,
+                              appKey: APP_KEY
+                          }).then( (endpointResponse) => {
+                          // endpoint().run({ data: body, params: queryStringParams, id: id, dbo: dbo, authToken: BB_AUTH_TOKEN, appId: APP_ID, appKey: APP_KEY }).then( (endpointResponse) => {
                               resolve(endpointResponse);
                           }, err => {
                               console.log(err);
@@ -138,7 +175,16 @@ mongoDB().run().then( (result) => {
                       });
                   }
                   if (request.method == "GET" || request.method == "DELETE") {
-                       endpoint().run({ data: null, params: queryStringParams, id: id, dbo: dbo }).then( (endpointResponse) => {
+                       endpoint().run({
+                         data: null,
+                         params: queryStringParams,
+                         id: id,
+                         dbo: dbo,
+                         authToken: BB_AUTH_TOKEN,
+                         appId: APP_ID,
+                         appKey: APP_KEY
+                       }).then( (endpointResponse) => {
+                       // endpoint().run({ data: null, params: queryStringParams, id: id, dbo: dbo, authToken: BB_AUTH_TOKEN }).then( (endpointResponse) => {
                           resolve(endpointResponse);
                        }, err => {
                           console.log(err);
