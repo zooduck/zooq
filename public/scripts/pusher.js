@@ -38,8 +38,16 @@ channel.bind("queue-event", function(data) {
     if (data.type.match(/STAFF_MEMBER__ATTENDANCE/)) {
       zooqApi().staffGet().then( () => { // gets (from database) and sets (locally)
         const staffMember = zooq.getStaffMember(data.data.staffMember);
-        console.log("THE STAFF MEMBER WHOSE STATUS WAS CHANGED IS", staffMember.name);
+        console.log("THE STAFF MEMBER WHOSE STATUS HAS CHANGED IS", staffMember.name);
         zooqDOM().updateStaffCard(staffMember);
+        // ---------------------------------------------------------------------
+        // staff attendance_status has changed, so we need to re-calculate
+        // estimated wait times and update customer cards in the current queue
+        // ---------------------------------------------------------------------
+        zooq.setEstimatedWaitTimes();
+        for (const customer of zooq.getCurrentQueue().customers) {
+          zooqDOM().updateQueueCard(customer);
+        }
         zooq.elements("superContainer").scrollTo(0, 0);
         setLoaded();
       }, err => {
@@ -88,7 +96,7 @@ channel.bind("queue-event", function(data) {
       zooqDOM().deleteCustomerFromQueue(customerId);
       zooqApi().queuesGet().then( () => {
         zooqDOM().buildQueueList();
-        zooqDOM().setQueueTitle();      
+        zooqDOM().setQueueTitle();
         setLoaded();
       }, err => {
         zooq.consoleError(err);

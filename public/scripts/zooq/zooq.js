@@ -48,7 +48,9 @@ function ZooQ() {
 		CUSTOMER_FORM_FIRST_NAME_OR_SERVICE_INVALID: "Please enter a first name and select a service.",
 		QUEUE_FORM_QUEUE_NAME_OR_SERVICE_INVALID: "Please enter a name for the queue and assign at least one service.",
 		PRIORITY_CUSTOMER_CANNOT_BE_DELETED: "Priority customers cannot be removed from the queue.",
-		QUEUE_NOT_FOUND: "No queue found. Please check that you have created a queue before trying to add a customer."
+		QUEUE_NOT_FOUND: "No queue found.",
+		ADD_CUSTOMER__QUEUE_NOT_FOUND: "No queue found. Please check that you have created a queue before trying to add a customer.",
+		SWITCH_QUEUE__QUEUE_NOT_FOUND: "There are no queues to switch between. You need to create at least two queues to use this option."
 	}
 	let alertTimeout = null;
 	// =====================
@@ -165,6 +167,7 @@ function ZooQ() {
 		// 1. create copies of staff and customers (anything we do here STAYS here)
 		// ==========================================================================
 		let staff__COPY = [];
+		// console.log('zooq.getStaff()[zooq.companyIdAsKey()]', zooq.getStaff()[zooq.companyIdAsKey()]);
 		for (let staffMember of zooq.getStaff()[zooq.companyIdAsKey()]) {
 			staff__COPY.push(Object.assign({}, staffMember));
 		}

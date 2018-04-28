@@ -1,8 +1,9 @@
 // dependencies...
 const fs = require("fs");
 // methods...
-const authGetAll = (function configGetAll () {
+const authGetAll = (function authGetAll () {
 	const $run = (payload) => {
+		console.log('payload', payload);
 		return new Promise( (resolve, reject) => {
       resolve(JSON.stringify({
 				authToken: payload.authToken,

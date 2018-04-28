@@ -191,6 +191,8 @@ const zooqApi = (function zooqApi () {
 		// ------------------------------------------------------------------------------------
 		// Update queuing staff database with people available for the current company
 		// ------------------------------------------------------------------------------------
+		console.log('zooq.companyId()', zooq.companyId());
+		console.log('data (staff)', data);
 		return $http("PUT", `api/staff/?companyId=${zooq.companyId()}`, data, requestHeaders);
 	};
 	const $staffSetBookings = (data) => {
@@ -404,6 +406,7 @@ const zooqApi = (function zooqApi () {
 						if(JSON.parse(staff).error) {
 							return reject(JSON.parse(staff).error);
 						}
+						console.log('about to call zooq.setStaff with =>', staff);
 						zooq.setStaff(JSON.parse(staff));
 						resolve("DATABASE_UPDATE: staff");
 					}, err => {

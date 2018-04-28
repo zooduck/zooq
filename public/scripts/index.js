@@ -8,26 +8,71 @@ function zooqueueInit() {
 	// ==============================
 	// initialisation code here...
 	// ==============================
-	Promise.all([bookingbugApis(), zooqApi().queuesGet()]).then( (results) => {
 
-		zooq.consoleLog("Services from bookingbug api:", JSON.parse(results[0].services));
-		zooq.consoleLog("People from bookingbug api:", JSON.parse(results[0].people));
-		zooq.consoleLog("Queues from zooqueue api:", results[1]);
+	// ---------------------------------------
+	// GET SERVICES AND STAFF FROM MOCK API
+	// ---------------------------------------
+	const test = function () {
+		return new Promise( (resolve, reject) => {
+			const promisesToResolve = new Array(2);
+			mockApi().then( (results) => {
+				const mockData = {
+					services: results.services,
+					staff: results.staff
+				}
+				// const services = results.services;
+				// const staff = results.staff;
+				zooqApi().servicesSet(JSON.stringify(mockData.services)).then( (results) => {
+					console.log('results', results);
+					promisesToResolve.pop();
+					if (promisesToResolve.length == 0) return resolve(mockData);
+				});
+				zooqApi().staffSet(JSON.stringify(mockData.staff)).then( (results) => {
+					console.log('results', results);
+					promisesToResolve.pop();
+					if (promisesToResolve.length == 0) return resolve(mockData);
+				});
+			})
+		});
+	}
+	// mockApi().then( (results) => {
+	// 	console.log('results from mockApis()', results);
+	// 	const services = results.services;
+	// 	const staff = results.staff;
+	// 	zooqApi().servicesSet(JSON.stringify(services));
+	// 	zooqApi().staffSet(JSON.stringify(staff));
+	// });
+
+	Promise.all([test(), zooqApi().queuesGet()]).then( (results) => {
+	// Promise.all([bookingbugApis(), zooqApi().queuesGet()]).then( (results) => {
+
+		// zooq.consoleLog("Services from bookingbug api:", JSON.parse(results[0].services));
+		// zooq.consoleLog("People from bookingbug api:", JSON.parse(results[0].people));
+		// zooq.consoleLog("Queues from zooqueue api:", results[1]);
+
+		zooq.consoleLog("Services from MOCK API", results[0].services);
+		zooq.consoleLog("Staff from MOCK API:", results[0].staff);
+		zooq.consoleLog("Queues from ZOOQ API:", results[1]);
 
 		if (zooq.hasQueues()) {
 			zooq.setCurrentQueueIndex(0);
 		}
 
-		bookingbugBookingsApi().then( (result) => {
-			setEventListenersForStaticContent(); // once only
-			zooq.setReady();
-			setLoaded();
-			zooq.consoleLog(zooq);
-			zooq.consoleLog("ALL SYSTEMS ARE GO!");
-			buildDom();
-		}, err => {
-			zooq.consoleError(err);
-		});
+		// bookingbugBookingsApi().then( (result) => {
+		// 	setEventListenersForStaticContent(); // once only
+		// 	zooq.setReady();
+		// 	setLoaded();
+		// 	zooq.consoleLog(zooq);
+		// 	zooq.consoleLog("ALL SYSTEMS ARE GO!");
+		// 	buildDom();
+		// }, err => {
+		// 	zooq.consoleError(err);
+		// });
+
+		setEventListenersForStaticContent(); // once only
+		zooq.setReady();
+		setLoaded();
+		buildDom();
 
 		// ==============================================================================
 		// POLL BOOKINGBUG SERVER FOR:
@@ -35,13 +80,13 @@ function zooqueueInit() {
 		// 2. STAFF MEMBER UPDATES (SUPPORTED SERVICES CHANGE, NAME CHANGE, EXISTANCE)
 		// 3. SERVICE UPDATES (SERVICE NAME CHANGE, QUEUING DISABLED CHANGE, EXISTANCE)
 		// ==============================================================================
-		setInterval( () => {
-			Promise.all([bookingbugApis(), bookingbugBookingsApi()]).then( (results) => {
-				zooq.consolePoll(results);
-			}, err => {
-				zooq.consoleError(err);
-			});
-		}, zooq.bookingbugApi__POLL_DELAY());
+		// setInterval( () => {
+		// 	Promise.all([bookingbugApis(), bookingbugBookingsApi()]).then( (results) => {
+		// 		zooq.consolePoll(results);
+		// 	}, err => {
+		// 		zooq.consoleError(err);
+		// 	});
+		// }, zooq.bookingbugApi__POLL_DELAY());
 
 		// =============================================
 		// REFRESH STAFF AND QUEUE CARDS EACH MINUTE
@@ -100,6 +145,7 @@ function setEventListenersForStaticContent () {
 	zooq.elements("switchColumnsCtrl").addEventListener("click", function (e) {
 		switchColumnsCtrl__EVENT();
 	});
+
 	// ====================
 	// CTRL: CREATE QUEUE
 	// ====================

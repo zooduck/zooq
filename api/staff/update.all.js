@@ -24,12 +24,21 @@ const staffUpdateAll = (function staffUpdateAll () {
 			const requestsPending = new Array(payloadStaff.length);
 			for (let staffMember of payloadStaff) {
 				const options = {
+					uri:  staffMember._links.images.href,
 					url: staffMember._links.images.href,
 					headers: {
 						"Content-Type": "application/json",
 						"App-Id": "f6b16c23",
 						"App-Key": "f0bc4f65f4fbfe7b4b3b7264b655f5eb"
 					}
+				}
+				if (!staffMember._links.images.href) {
+					staffMember.avatarUrl = null;
+					requestsPending.pop();
+					if (requestsPending.length == 0) {
+						resolve(payloadStaff);
+					}
+					continue;
 				}
 				request(options, (err, response, body) => {
 					if (err) {
@@ -52,6 +61,7 @@ const staffUpdateAll = (function staffUpdateAll () {
 				// 3. DELETE if gone
 				// ===================
 				for (let staffMember of payloadStaff) {
+					console.log("staffMember of payloadStaff =>", staffMember);
 					payload.dbo.collection("staff").findOne({id: staffMember.id}, (err, dbStaffMember) => {
 						if (err) {
 							console.log(err);
@@ -76,6 +86,7 @@ const staffUpdateAll = (function staffUpdateAll () {
 							// ==========
 							// INSERT...
 							// ==========
+							console.log("INSERT NEW STAFF MEMBER =>>>>>>>>>>>>>>>>>>>>>");
 							staffMember.activeBookingType = null;
 							if (staffMember.attendance_status == 4) {
 								staffMember.activeBookingType = "CALENDAR";
@@ -140,8 +151,8 @@ const staffUpdateAll = (function staffUpdateAll () {
 			}); // end Promise
 		}, err => {
 			console.log(err);
-			reject(err);
-		}); // end Promise
+			// reject(err);
+		});
 	}
 	return function () {
 		return {
