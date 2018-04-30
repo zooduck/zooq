@@ -61,7 +61,6 @@ const staffUpdateAll = (function staffUpdateAll () {
 				// 3. DELETE if gone
 				// ===================
 				for (let staffMember of payloadStaff) {
-					console.log("staffMember of payloadStaff =>", staffMember);
 					payload.dbo.collection("staff").findOne({id: staffMember.id}, (err, dbStaffMember) => {
 						if (err) {
 							console.log(err);
@@ -86,7 +85,6 @@ const staffUpdateAll = (function staffUpdateAll () {
 							// ==========
 							// INSERT...
 							// ==========
-							console.log("INSERT NEW STAFF MEMBER =>>>>>>>>>>>>>>>>>>>>>");
 							staffMember.activeBookingType = null;
 							if (staffMember.attendance_status == 4) {
 								staffMember.activeBookingType = "CALENDAR";

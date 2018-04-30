@@ -1,54 +1,15 @@
 setLoading();
-loginComplete().then((result) => {
-	zooq.consoleLog(`auth-token: ${result}`);
-	zooqueueInit();
-});
 
-function zooqueueInit() {
+function zooqInit() {
 	// ==============================
 	// initialisation code here...
 	// ==============================
 
-	// ---------------------------------------
-	// GET SERVICES AND STAFF FROM MOCK API
-	// ---------------------------------------
-	const test = function () {
-		return new Promise( (resolve, reject) => {
-			const promisesToResolve = new Array(2);
-			mockApi().then( (results) => {
-				const mockData = {
-					services: results.services,
-					staff: results.staff
-				}
-				// const services = results.services;
-				// const staff = results.staff;
-				zooqApi().servicesSet(JSON.stringify(mockData.services)).then( (results) => {
-					console.log('results', results);
-					promisesToResolve.pop();
-					if (promisesToResolve.length == 0) return resolve(mockData);
-				});
-				zooqApi().staffSet(JSON.stringify(mockData.staff)).then( (results) => {
-					console.log('results', results);
-					promisesToResolve.pop();
-					if (promisesToResolve.length == 0) return resolve(mockData);
-				});
-			})
-		});
-	}
-	// mockApi().then( (results) => {
-	// 	console.log('results from mockApis()', results);
-	// 	const services = results.services;
-	// 	const staff = results.staff;
-	// 	zooqApi().servicesSet(JSON.stringify(services));
-	// 	zooqApi().staffSet(JSON.stringify(staff));
-	// });
-
-	Promise.all([test(), zooqApi().queuesGet()]).then( (results) => {
-	// Promise.all([bookingbugApis(), zooqApi().queuesGet()]).then( (results) => {
-
-		// zooq.consoleLog("Services from bookingbug api:", JSON.parse(results[0].services));
-		// zooq.consoleLog("People from bookingbug api:", JSON.parse(results[0].people));
-		// zooq.consoleLog("Queues from zooqueue api:", results[1]);
+	// -----------------------------------------------------
+	// NOTE: GET SERVICES AND STAFF FROM MOCK EXTERNAL API
+	// NOTE: GET QUEUES FROM LOCAL API
+	// -----------------------------------------------------
+	Promise.all([mockApi().staffAndServicesGet(), zooqApi().queuesGet()]).then( (results) => {
 
 		zooq.consoleLog("Services from MOCK API", results[0].services);
 		zooq.consoleLog("Staff from MOCK API:", results[0].staff);
@@ -58,35 +19,10 @@ function zooqueueInit() {
 			zooq.setCurrentQueueIndex(0);
 		}
 
-		// bookingbugBookingsApi().then( (result) => {
-		// 	setEventListenersForStaticContent(); // once only
-		// 	zooq.setReady();
-		// 	setLoaded();
-		// 	zooq.consoleLog(zooq);
-		// 	zooq.consoleLog("ALL SYSTEMS ARE GO!");
-		// 	buildDom();
-		// }, err => {
-		// 	zooq.consoleError(err);
-		// });
-
 		setEventListenersForStaticContent(); // once only
 		zooq.setReady();
 		setLoaded();
 		buildDom();
-
-		// ==============================================================================
-		// POLL BOOKINGBUG SERVER FOR:
-		// 1. NEW BOOKINGS THAT WERE NOT MADE BY ZOOQUEUE
-		// 2. STAFF MEMBER UPDATES (SUPPORTED SERVICES CHANGE, NAME CHANGE, EXISTANCE)
-		// 3. SERVICE UPDATES (SERVICE NAME CHANGE, QUEUING DISABLED CHANGE, EXISTANCE)
-		// ==============================================================================
-		// setInterval( () => {
-		// 	Promise.all([bookingbugApis(), bookingbugBookingsApi()]).then( (results) => {
-		// 		zooq.consolePoll(results);
-		// 	}, err => {
-		// 		zooq.consoleError(err);
-		// 	});
-		// }, zooq.bookingbugApi__POLL_DELAY());
 
 		// =============================================
 		// REFRESH STAFF AND QUEUE CARDS EACH MINUTE
@@ -94,6 +30,7 @@ function zooqueueInit() {
 		setInterval( () => {
 			if (zooq.hasQueues()) {
 				const filters = zooq.getFilters();
+				// update estimated wait times
 				zooq.setEstimatedWaitTimes();
 				// update time display
 				setQueueTitleInDOM();
@@ -107,14 +44,15 @@ function zooqueueInit() {
 				for (const staffMember of Array.from(staff).reverse()) {
 					zooqDOM().updateStaffCard(staffMember, false);
 				}
-				zooq.consoleLogC("60 second refresh: Staff Cards, Queue Cards");
+				zooq.consoleLogC("1 Minute Refresh for: Estimated Wait Times, Queue Title, Staff Cards, Queue Cards");
 			}
 		}, 60000); // each 60 seconds
 
 	}, err => {
 		zooq.errorLog(err);
 	});
-}
+} // \\ zooqInit
+zooqInit();
 
 function clearForm(form) {
 	const elements = Array.from(form.elements);
@@ -223,5 +161,3 @@ window.addEventListener("keyup", (e) => {
 		navBarHide();
 	}
 });
-
-// window.addEventListener("resize", setSuperContainerPositionAndSize);

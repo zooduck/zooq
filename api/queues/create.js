@@ -9,6 +9,21 @@ const queuesCreateOne = (function queuesCreateOne () {
     let payloadQueue = JSON.parse(payload.data);
     let oldQueues = {}
 
+		function genQCode (totalQueues, oldQueues) {
+			const codesChecked = [];
+			const codeKeys = Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+			const code = codeKeys[totalQueues] + codeKeys.reverse()[totalQueues];
+			const codeExists = oldQueues.find( (qItem) => {
+				return qItem.code == code;
+			});
+			const codeAlreadyChecked = codesChecked.find( (code) => codesChecked.indexOf(code) !== -1);
+			codesChecked.push(code);
+			if (codeExists && !codeAlreadyChecked) {
+				totalQueues += 1;
+				return genQCode(totalQueues, oldQueues);
+			} else return code;
+		}
+
     return new Promise( (resolve, reject) => {
 			payload.dbo.collection("q").find({}).toArray( (err, result) => {
 				if (err) {
@@ -21,7 +36,9 @@ const queuesCreateOne = (function queuesCreateOne () {
 				// ==================
 				const totalQueues = result.length;
 				const codeKeys = Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-				payloadQueue.code = codeKeys[totalQueues] + codeKeys.reverse()[totalQueues];
+				// payloadQueue.code = codeKeys[totalQueues] + codeKeys.reverse()[totalQueues];
+				const qCode = genQCode(totalQueues, oldQueues[companyIdAsKey]);
+				payloadQueue.code = qCode;
 				// ======================
 				//  set queue.createdAt
 				// ======================
@@ -55,13 +72,6 @@ const queuesCreateOne = (function queuesCreateOne () {
 					});
 				})
 			});
-
-
-
-
-
-
-
     }); // end Promise
 	}
 	return function () {

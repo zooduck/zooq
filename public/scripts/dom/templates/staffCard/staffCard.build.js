@@ -222,9 +222,9 @@ const staffCardBuild = (staffMember, buildType = "CREATE", reorderItemsByAttenda
 		} else if (staffMember.activeBookingType == "CALENDAR") {
 			zooq.consoleLogC(`${staffMember.name} is BUSY because they have an activeBooking with an activeBookingType of "${staffMember.activeBookingType}"`, customLogStyles);
 			appointmentInfo__el.classList.add("--active");
-			// ====================================================
-			// CURRENT BOOKING WAS MADE USING BOOKINGBUG CALENDAR
-			// ====================================================
+			// ================================================================
+			// CURRENT BOOKING WAS MADE USING EXTERNAL (THIRD-PARTY) CALENDAR
+			// ================================================================
 			const booking = staffMember.activeBooking;
 			const startDate = luxon.DateTime.fromISO(booking.datetime);
 			const startDate__simple = startDate.toLocaleString(luxon.DateTime.TIME_24_SIMPLE);

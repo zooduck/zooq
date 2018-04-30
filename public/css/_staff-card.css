@@ -133,7 +133,14 @@
 	padding: 0 5px;
 	transition: all .20s;
 }
-.staff-card:active > .staff-card__row__services-info {
+.staff-card__row__services-info__ctrl {
+	display: flex;
+	align-self: flex-end;
+	margin: 0 10px;
+	cursor: pointer;
+	color: rgba(0, 0, 0, .55);
+}
+.staff-card__row__services-info__ctrl:active ~ .staff-card__row__services-info {
 	height: 50px;
 	padding: 5px;
 }

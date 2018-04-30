@@ -30,7 +30,6 @@ const zooqApi = (function zooqApi () {
 			customers: [],
 			customersBeingServed: [],
 			serviceIds: []
-			// services: []
 		};
 		for (let pair of formData) {
 			let key = pair[0];
@@ -38,10 +37,6 @@ const zooqApi = (function zooqApi () {
 			if (key == "serviceId") {
 				let serviceId = parseInt(val);
 				data.serviceIds.push(serviceId);
-
-				// let service = zooq.getService(serviceId);
-				// data.services.push(service);
-
 			} else data[key] = val;
 		}
 
@@ -97,10 +92,6 @@ const zooqApi = (function zooqApi () {
 		const ticketRefCode = data.ticketRef.match(/\D+/);
 		const ticketRefNumber = data.ticketRef.match(/\d+/);
 		data.ticketRefDisplay = `${ticketRefCode[0]}${ticketRefNumber[0]}`;
-		// console.log("ticketRefCode", ticketRefCode);
-		// data.ticketRefDisplay = `${serviceCode}${data.ticketRef.substr(0, data.ticketRef.length - 1)}`;
-
-		console.log("customerAdd data:", data);
 
 		return JSON.stringify(data);
 	};
@@ -142,7 +133,6 @@ const zooqApi = (function zooqApi () {
 		return $http("POST", `api/customers/${JSON.parse(data).id}/?companyId=${zooq.companyId()}&queueId=${queueId}`, data, requestHeaders);
 	};
 	const $customerServe = (data) => {
-		console.log("customer to serve data", JSON.parse(data));
 		const staffMember = JSON.parse(data).staffMember;
 		const queueId = encodeURIComponent(zooq.getCurrentQueue().id);
 		const requestHeaders = [["Content-Type", "application/json"]];
@@ -153,14 +143,14 @@ const zooqApi = (function zooqApi () {
 	};
 	const $customerServeComplete = (staffMember) => {
 		const id = staffMember.id;
-		const queueId = encodeURIComponent(zooq.getCurrentQueue().id);
+		const queueId = encodeURIComponent(staffMember.activeQueue.id || zooq.getCurrentQueue().id);
 		const customerId = staffMember.serving[0].id;
-		// --------------------------------------------------------------------------------------
+		// -----------------------------------------------------------
 		// Finish serving customer:
 		// 1. delete customer from staff member
 		// 2. update staff member status
-		// 3. TODO!!! send info about completed booking to bookingbug
-		// --------------------------------------------------------------------------------------
+		// 3. TODO: store details of completed booking in database
+		// -----------------------------------------------------------
 		return $http("DELETE", `api/customers/serve/${id}/?companyId=${zooq.companyId()}&queueId=${queueId}&customerId=${customerId}`);
 	};
 	const $customerDelete = (id) => {
@@ -191,14 +181,12 @@ const zooqApi = (function zooqApi () {
 		// ------------------------------------------------------------------------------------
 		// Update queuing staff database with people available for the current company
 		// ------------------------------------------------------------------------------------
-		console.log('zooq.companyId()', zooq.companyId());
-		console.log('data (staff)', data);
 		return $http("PUT", `api/staff/?companyId=${zooq.companyId()}`, data, requestHeaders);
 	};
 	const $staffSetBookings = (data) => {
 		const requestHeaders = [["Content-Type", "application/json"]];
 		// -------------------------------------------------------------------------------------------------------------
-		// Update bookings in queuing staff database (with new bookings that we got back from bookingbug bookings api)
+		// Update bookings in queuing staff database (with new bookings that we got back from external bookings api)
 		// -------------------------------------------------------------------------------------------------------------
 		return $http("PUT", `api/staff/bookings/?companyId=${zooq.companyId()}`, data, requestHeaders);
 	};
@@ -235,22 +223,12 @@ const zooqApi = (function zooqApi () {
 		// ------------------------------------------------------
 		return $http("PUT", `api/staff/attendance/3_busy/${id}/?companyId=${zooq.companyId()}`);
 	};
-	// const $staffMemberSetBusy__4 = (data) => {
-	// 	// --------------------------------------------------------
-	// 	// set staff member busy (serving) - attendance_status 4
-	// 	// --------------------------------------------------------
-	// 	const id = data.id;
-	// 	const staffMemberActiveBooking = data.activeBooking;
-	// 	let requestHeaders = [["Content-Type", "application/json"]];
-	// 	return $http("PUT", `api/staff/attendance/4_busy/${id}/?companyId=${zooq.companyId()}`, data, requestHeaders);
-	// };
 	const $staffMemberEndShift = (id) => {
 		// ===================================
 		// STAFF MEMBER END SHIFT
 		// ===================================
 		return $http("PUT", `api/staff/attendance/0_awol/${id}/?companyId=${zooq.companyId()}`);
 	};
-
 	return function () {
 		return {
 			convertQueueFormDataToJson(formData) {
@@ -275,18 +253,14 @@ const zooqApi = (function zooqApi () {
 			queueCreate(data) {
 				return new Promise((resolve, reject) => {
 					$queueCreate(data).then( (queues) => {
-
 						if(JSON.parse(queues).error) {
 							return reject(JSON.parse(queues).error);
 						}
-
 						zooq.setQueues(JSON.parse(queues));
-
 						let queueIndex = zooq.getQueues()[zooq.companyIdAsKey()].length -1;
 						zooq.setCurrentQueueIndex(queueIndex);
-
+						zooq.consoleLog("DATABASE_UPDATE: q");
 						resolve("DATABASE_UPDATE: q");
-
 					}, err => {
 						reject(err);
 					});
@@ -301,6 +275,7 @@ const zooqApi = (function zooqApi () {
 					} else delete queue.priorityCustomer;
 
 					$queueSetPriorityCustomer(JSON.stringify(queue)).then( (queues) => {
+						zooq.consoleLog("DATABASE_UPDATE: q");
 						resolve("DATABASE_UPDATE: q");
 					}, err => {
 						zooq.consoleError(err);
@@ -311,14 +286,12 @@ const zooqApi = (function zooqApi () {
 			customerCreate(data) {
 				return new Promise((resolve, reject) => {
 					$customerCreate(data).then( (queues) => {
-
 						if(JSON.parse(queues).error) {
 							return reject(JSON.parse(queues).error);
 						}
-
 						zooq.setQueues(JSON.parse(queues));
+						zooq.consoleLog("DATABASE_UPDATE: q");
 						resolve("DATABASE_UPDATE: q");
-
 					}, err => {
 						reject(err);
 					});
@@ -330,15 +303,11 @@ const zooqApi = (function zooqApi () {
 						return reject({error: data});
 					}
 					$customerServe(data).then( (data) => {
-
 						if(JSON.parse(data).error) {
 							return reject(JSON.parse(data).error);
 						}
-
-						// zooq.setQueues(JSON.parse(data).queues);
-						// zooq.setStaff(JSON.parse(data).staff);
+						zooq.consoleLog("DATABASE_UPDATE: [q, staff]");
 						resolve("DATABASE_UPDATE: [q, staff]");
-
 					}, err => {
 						reject(err);
 					});
@@ -350,8 +319,7 @@ const zooqApi = (function zooqApi () {
 						if (JSON.parse(data).error) {
 							return reject(JSON.parse(data).error);
 						}
-						// zooq.setQueues(JSON.parse(data).queues);
-						// zooq.setStaff(JSON.parse(data).staff);
+						zooq.consoleLog("DATABASE_UPDATE: [q, staff]");
 						resolve("DATABASE_UPDATE: [q, staff]");
 					});
 				});
@@ -363,6 +331,7 @@ const zooqApi = (function zooqApi () {
 							return reject(JSON.parse(data).error);
 						}
 						zooq.setQueues(JSON.parse(data));
+						zooq.consoleLog("DATABASE_UPDATE: q");
 						resolve("DATABASE_UPDATE: q");
 					}, err => {
 						reject(err);
@@ -372,14 +341,12 @@ const zooqApi = (function zooqApi () {
 			servicesSet(data) {
 				return new Promise((resolve, reject) => {
 					$servicesSet(data).then((services) => {
-
 						if(JSON.parse(services).error) {
 							return reject(JSON.parse(services).error);
 						}
-
 						zooq.setServices(JSON.parse(services));
-						resolve("services.db.json: updated");
-
+						zooq.consoleLog("DATABASE_UPDATE: services");
+						resolve("DATABASE_UPDATE: services");
 					}, err => {
 						reject(err);
 					});
@@ -393,7 +360,6 @@ const zooqApi = (function zooqApi () {
 						}
 						zooq.setServices(JSON.parse(services));
 						resolve(JSON.parse(services));
-						// console.log(JSON.parse(services));
 					}, err => {
 						zooq.consoleError(err);
 						reject(err);
@@ -406,8 +372,8 @@ const zooqApi = (function zooqApi () {
 						if(JSON.parse(staff).error) {
 							return reject(JSON.parse(staff).error);
 						}
-						console.log('about to call zooq.setStaff with =>', staff);
 						zooq.setStaff(JSON.parse(staff));
+						zooq.consoleLog("DATABASE_UPDATE: staff");
 						resolve("DATABASE_UPDATE: staff");
 					}, err => {
 						reject(err);
@@ -435,26 +401,13 @@ const zooqApi = (function zooqApi () {
 							return reject(JSON.parse(staff).error);
 						}
 						zooq.setStaff(JSON.parse(staff));
+						zooq.consoleLog("DATABASE_UPDATE: staff");
 						resolve("DATABASE_UPDATE: staff");
 					}, err => {
 						reject(err);
 					});
 				});
 			},
-			// staffMemberSetOnBreak(id) {
-			// 	return new Promise( (resolve, reject) => {
-			// 		$staffMemberSetOnBreak(id).then( (staff) => {
-			// 			if (JSON.parse(staff).error) {
-			// 				return reject(JSON.parse(staff).error);
-			// 			}
-			// 			zooq.setStaff(JSON.parse(staff));
-			// 			resolve(JSON.parse(staff));
-			// 		}, err => {
-			// 			zooq.consoleError(err);
-			// 			reject(err);
-			// 		});
-			// 	});
-			// },
 			staffMemberSetOnBreak(id) {
 				return new Promise( (resolve, reject) => {
 					$staffMemberSetOnBreak(id).then( (result) => {
@@ -477,19 +430,6 @@ const zooqApi = (function zooqApi () {
 					});
 				});
 			},
-			// staffMemberSetBusy__4(data) {
-			// 	return new Promise( (resolve, reject) => {
-			// 		$staffMemberSetBusy__4(data).then( (result) => {
-			// 			zooq.consoleLog("DATABASE_UPDATE: staff");
-			// 			resolve(JSON.parse(result));
-			// 		}, err => {
-			// 			zooq.consoleError(err);
-			// 			reject(err);
-			// 		})
-			// 	}, err => {
-			// 		zooq.consoleError(err);
-			// 	});
-			// },
 			staffMemberStartShift(id) {
 				return new Promise( (resolve, reject) => {
 					$staffMemberStartShift(id).then( (result) => {
@@ -504,8 +444,8 @@ const zooqApi = (function zooqApi () {
 			staffMemberSetFree(id) {
 				return new Promise( (resolve, reject) => {
 					$staffMemberSetFree(id).then( (result) => {
-						// zooq.consoleLog("DATABASE_UPDATE: staff");
 						const staffMember = JSON.parse(result);
+						zooq.consoleLog("DATABASE_UPDATE: staff");
 						resolve(staffMember);
 					}, err => {
 						zooq.consoleError(err);
@@ -517,8 +457,8 @@ const zooqApi = (function zooqApi () {
 				return new Promise( (resolve, reject) => {
 					$staffMemberEndShift(id).then( (result) => {
 						const staffMember = JSON.parse(result);
-						// console.log("updated staff member like: ", staffMember);
 						zooq.setStaffMember(staffMember);
+						zooq.consoleLog("DATABASE_UPDATE: staff");
 						resolve(staffMember);
 					}, err => {
 						zooq.consoleError(err);
