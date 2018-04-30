@@ -14,7 +14,7 @@ const customerCreateForm__submitCtrl__EVENT = () => {
   zooqApi().customerCreate(data).then( (result) => {
     clearForm(zooq.elements("customerCreateForm").querySelector("form"));
     zooq.removeFilters(["customer"]);
-    navBarHide();  
+    navBarHide();
   }, err => {
     zooq.consoleError(err);
   });

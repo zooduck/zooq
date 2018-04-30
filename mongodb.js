@@ -1,9 +1,7 @@
 const mongoDB = (function mongoDB() {
   const $run = () => {
     const mongodb = require("mongodb");
-    // const url = "mongodb://localhost:27017/data";
-    const url = "mongodb://test:bananas@ds219318.mlab.com:19318/zooq";
-    // const url = "mongodb://heroku_gpsdw9p6:23cjrn60p0osr8ltlp6d0uqn1t@ds121118.mlab.com:21118/heroku_gpsdw9p6";
+    const url = process.env.MONGODB_URL;
     let dbo = null;
     return new Promise( (resolve, reject) => {
       mongodb.MongoClient.connect(url, (err, db) => {
@@ -13,7 +11,7 @@ const mongoDB = (function mongoDB() {
         }
         dbo = db.db("zooq");
         return resolve({dbo: dbo});
-        
+
         // create services collection (IF NOT EXISTS)
         dbo.createCollection("services", (err, result) => {
           if (err) {

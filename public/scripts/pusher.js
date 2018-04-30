@@ -5,10 +5,10 @@ const pusher = new Pusher("991a027aa0c940510776", {
 });
 const channel = pusher.subscribe("queue-channel");
 channel.bind("queue-event", function(data) {
+
   zooq.pusherLog(data);
 
-  if (zooq.isReady()) {
-
+  if (zooq.isReady() && data.type) {
     // ==================
     // UPDATE ALL STAFF
     // ==================
@@ -38,8 +38,16 @@ channel.bind("queue-event", function(data) {
     if (data.type.match(/STAFF_MEMBER__ATTENDANCE/)) {
       zooqApi().staffGet().then( () => { // gets (from database) and sets (locally)
         const staffMember = zooq.getStaffMember(data.data.staffMember);
-        console.log("THE STAFF MEMBER WHOSE STATUS WAS CHANGED IS", staffMember.name);
+        zooq.consoleLog(`${staffMember.name}'s STATUS CHANGED TO: ${staffMember.attendance_status}`);
         zooqDOM().updateStaffCard(staffMember);
+        // ---------------------------------------------------------------------
+        // staff attendance_status has changed, so we need to re-calculate
+        // estimated wait times and update customer cards in the current queue
+        // ---------------------------------------------------------------------
+        zooq.setEstimatedWaitTimes();
+        for (const customer of zooq.getCurrentQueue().customers) {
+          zooqDOM().updateQueueCard(customer);
+        }
         zooq.elements("superContainer").scrollTo(0, 0);
         setLoaded();
       }, err => {
@@ -88,7 +96,11 @@ channel.bind("queue-event", function(data) {
       zooqDOM().deleteCustomerFromQueue(customerId);
       zooqApi().queuesGet().then( () => {
         zooqDOM().buildQueueList();
-        zooqDOM().setQueueTitle();      
+        zooqDOM().setQueueTitle();
+        zooq.setEstimatedWaitTimes();
+        for (const customer of zooq.getCurrentQueue().customers) {
+          zooqDOM().updateQueueCard(customer);
+        }
         setLoaded();
       }, err => {
         zooq.consoleError(err);
@@ -118,10 +130,16 @@ channel.bind("queue-event", function(data) {
       Promise.all(promises).then( () => {
         const staffMember = zooq.getStaffMember(data.data.staffMember);
         const customerId = data.data.customer;
-        console.log(`THE STAFF MEMBER WHOSE STATUS WAS CHANGED TO ${staffMember.attendance_status} IS`, staffMember.name);
+        zooq.consoleLog(`${staffMember.name}'s STATUS CHANGED TO: ${staffMember.attendance_status}`);
         zooqDOM().updateStaffCard(staffMember);
         if (data.type == "CUSTOMER__SERVE") {
           zooqDOM().deleteCustomerFromQueue(customerId);
+        }
+        zooqDOM().buildQueueList();
+        zooqDOM().setQueueTitle();
+        zooq.setEstimatedWaitTimes();
+        for (const customer of zooq.getCurrentQueue().customers) {
+          zooqDOM().updateQueueCard(customer);
         }
         zooq.elements("superContainer").scrollTo(0, 0);
         setLoaded();

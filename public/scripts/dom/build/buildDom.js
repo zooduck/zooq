@@ -3,7 +3,7 @@ function buildDom (filters = {}) {
 	filters = zooq.getFilters();
 
 	resetDom();
-
+	
 	if (zooq.hasServices()) {
 		buildQueueCreateFormServiceCheckboxes();
 	}

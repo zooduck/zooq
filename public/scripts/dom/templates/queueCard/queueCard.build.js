@@ -50,6 +50,7 @@ const queueCardBuild = (customer, options = {animate: false, buildType: "CREATE"
 	customerWaitTime__el.innerHTML = customerWaitTime.toTimeString();
 	customerServiceInfo__el.innerHTML = `${customer.services[0].name} (${customer.services[0].durations[0].toTimeString()})`;
 
+	customerWaitTimeEstimateInfo__el.parentNode.classList.remove("overdue");
   if (customer.estimatedWaitTime == "FOREVER_AND_A_DAY") {
     customerWaitTimeEstimateInfo__el.innerHTML = "N/A";
   } else if (customer.estimatedWaitTime <= 0) {

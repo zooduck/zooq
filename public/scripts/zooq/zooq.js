@@ -27,9 +27,6 @@ function ZooQ() {
 	// private vars...
 	// ====================
 	let started = false;
-	let bookingbugApiUrl__PUBLIC = "https://starfox.bookingbug.com/api/v1/";
-	let bookingbugApiUrl__ADMIN = "https://starfox.bookingbug.com/api/v1/admin/";
-	let bookingbugApi__POLL_DELAY = 15000; // 15 seconds
 	let queues = [];
 	let staff = [];
 	let services = [];
@@ -48,7 +45,9 @@ function ZooQ() {
 		CUSTOMER_FORM_FIRST_NAME_OR_SERVICE_INVALID: "Please enter a first name and select a service.",
 		QUEUE_FORM_QUEUE_NAME_OR_SERVICE_INVALID: "Please enter a name for the queue and assign at least one service.",
 		PRIORITY_CUSTOMER_CANNOT_BE_DELETED: "Priority customers cannot be removed from the queue.",
-		QUEUE_NOT_FOUND: "No queue found. Please check that you have created a queue before trying to add a customer."
+		QUEUE_NOT_FOUND: "No queue found.",
+		ADD_CUSTOMER__QUEUE_NOT_FOUND: "No queue found. Please check that you have created a queue before trying to add a customer.",
+		SWITCH_QUEUE__QUEUE_NOT_FOUND: "There are no queues to switch between. You need to create at least two queues to use this option."
 	}
 	let alertTimeout = null;
 	// =====================
@@ -165,6 +164,7 @@ function ZooQ() {
 		// 1. create copies of staff and customers (anything we do here STAYS here)
 		// ==========================================================================
 		let staff__COPY = [];
+		// console.log('zooq.getStaff()[zooq.companyIdAsKey()]', zooq.getStaff()[zooq.companyIdAsKey()]);
 		for (let staffMember of zooq.getStaff()[zooq.companyIdAsKey()]) {
 			staff__COPY.push(Object.assign({}, staffMember));
 		}
@@ -233,15 +233,15 @@ function ZooQ() {
 		staffMember.activeBookingType = null;
 		return staffMember;
 	};
-	const $deleteCancelledBookingsOnStaffMember = (bookingbugBookings, staffMember) => {
+	const $deleteCancelledBookingsOnStaffMember = (externalBookings, staffMember) => {
 		if (staffMember.calendarBookings) {
-			let bookingbugBookingsIds = bookingbugBookings.map( (item) => item.id);
-			filteredCalendarBookings = staffMember.calendarBookings.filter( (item) => bookingbugBookingsIds.indexOf(item.id) != -1);
+			let externalBookingsIds = externalBookings.map( (item) => item.id);
+			filteredCalendarBookings = staffMember.calendarBookings.filter( (item) => externalBookingsIds.indexOf(item.id) != -1);
 			staffMember.calendarBookings = filteredCalendarBookings;
 		}
 	};
-	const $applyMovedCalendarBookingsOnStaffMember = (bookingbugBookings, staffMember) => {
-		for (booking of bookingbugBookings) {
+	const $applyMovedCalendarBookingsOnStaffMember = (externalBookings, staffMember) => {
+		for (booking of externalBookings) {
 			// ======================
 			// 1. ADD NEW BOOKING
 			// ======================
@@ -270,12 +270,12 @@ function ZooQ() {
 		}
 	};
 
-	const $updateActiveBookingOnStaffMember = (bookingbugBookings, staffMember) => {
+	const $updateActiveBookingOnStaffMember = (externalBookings, staffMember) => {
 		// ============================
 		// UPDATE IF ALREADY EXISTS
 		// ============================
 		if (staffMember.activeBooking && staffMember.activeBookingType == "CALENDAR") {
-			let activeBookingInCalendar = bookingbugBookings.find( (item) => item.id == staffMember.activeBooking.id);
+			let activeBookingInCalendar = externalBookings.find( (item) => item.id == staffMember.activeBooking.id);
 			if (activeBookingInCalendar) {
 				staffMember.activeBooking = activeBookingInCalendar;
 				console.warn(`SET activeBooking to the one in calendar for ${staffMember.name}`);
@@ -322,10 +322,10 @@ function ZooQ() {
 	// ========================================
 	// SET BOOKINGS ON STAFF (CALLBACK)
 	// ========================================
-	const $setBookingsOnStaff = (bookingbugBookings, staff) => {
+	const $setBookingsOnStaff = (externalBookings, staff) => {
 		const staffOld = staff.map( (item) => Object.assign(new StaffMember({}), item));
 		for (const staffMember of staff) {
-			let bookingsForThisStaffMember = bookingbugBookings.filter( (item) => item.person_id == staffMember.id);
+			let bookingsForThisStaffMember = externalBookings.filter( (item) => item.person_id == staffMember.id);
 			// -----------------------------
 			// sort bookings by datetime
 			// -----------------------------
@@ -350,43 +350,6 @@ function ZooQ() {
 		// console.log("staffOld and staff same?", _.isEqual(staffOld, staff));
 		return _.isEqual(staffOld, staff);
 	}
-	// ============================================================================
-	// GENERATE A BOOKINGBUG ACCEPTED BASKET (REQ'D BY BOOKINGBUG CHECKOUT API)
-	// ============================================================================
-	const $buildBookingbugBasket = (data) => {
-		const bbBasket = {
-			client: {
-				first_name: data.client.first_name,
-				last_name: data.client.last_name,
-				country: "United Kingdom",
-				email: data.client.email,
-				id: data.client.id, // for bookingbug to accept the booking, a valid id for a current client must be passed in
-				mobile: data.client.mobile,
-				mobile_prefix: "44",
-				questions: data.client.questions,
-				extra_info: data.client.extra_info,
-				default_company_id: data.client.default_company_id
-			},
-			is_admin: true,
-			items: [
-					{
-						date: data.item.date, // the date in format 2018-01-16
-						time: data.item.time, // the time in format of minutes
-						company_id: data.item.company_id,
-						price: 0,
-						book: `${bookingbugApiUrl__PUBLIC}${data.item.company_id}/basket/add_item?service_id=${data.item.service_id}`,
-						duration: data.item.duration,
-						settings: { resource: -1, person: data.item.person_id },
-						child_client_ids: [],
-						service_id: data.item.service_id,
-						person_id: data.item.person_id,
-						status: 4,
-						ref: 0
-					}
-				]
-			}
-		return bbBasket;
-	};
 	// ======================
 	// public methods...
 	// ======================
@@ -423,23 +386,11 @@ function ZooQ() {
 	this.getLastStaffData = function () {
 		return lastStaffData;
 	}
-	this.bookingbugApi__POLL_DELAY = function () {
-		return bookingbugApi__POLL_DELAY;
-	}
-	this.bookingbugApiUrl__ADMIN = function () {
-		return bookingbugApiUrl__ADMIN;
-	}
-	this.bookingbugApiUrl__PUBLIC = function () {
-		return bookingbugApiUrl__PUBLIC;
-	}
-	this.buildBookingbugBasket = function (data) {
-		return $buildBookingbugBasket(data);
-	}
 	this.queryStringService = function () {
 		return $queryStringService();
 	}
 	this.companyId = function () {
-		return $queryStringService().get("companyId") || 37001;
+		return $queryStringService().get("companyId") || 123456;
 	}
 	this.companyIdAsKey = function () {
 		return `_${this.companyId()}`;
@@ -638,9 +589,6 @@ ZooQ.prototype.consoleLog = function (msg1 = "", msg2 = "") {
 };
 ZooQ.prototype.consoleWarn = function (msg1 = "", msg2 = "") {
 	return console.warn("%czooQ => warn:", "color: #333", msg1, msg2);
-};
-ZooQ.prototype.consolePoll = function (msg1 = "", msg2 = "") {
-	return console.log(`%czooQ => poll (${zooq.bookingbugApi__POLL_DELAY()/1000}s):`, "color: hotpink", msg1, msg2);
 };
 ZooQ.prototype.consoleError = function (msg1 = "", msg2 = "") {
 	setLoaded();

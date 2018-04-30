@@ -8,7 +8,6 @@ function buildCustomerCreateFormServiceSelectOptions() {
   });
 
   for (let service of services) {
-    console.log("service", service);
     if (!service.queuing_disabled) {
       buildServiceOption(service);
     }

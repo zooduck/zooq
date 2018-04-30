@@ -10,8 +10,6 @@ const customersServeOne = (function customersServeOne () {
 		const payloadStaffMember = JSON.parse(payload.data).staffMember;
 		const payloadCustomer = JSON.parse(payload.data).customer;
 
-		console.log(payloadCustomerId, payloadQueueId, payloadStaffMember.id, payloadCustomer.id);
-
     return new Promise( (resolve, reject) => {
 
 			payloadCustomer.status = "BEING_SEEN";

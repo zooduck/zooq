@@ -20,7 +20,7 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 				// let code = serviceCodes.slice(index, index + 1) + serviceCodes.slice((index? index + 1 : 2) * -1, (index? index : 1) * -1);
 				const code = serviceCodes[index];
 				item.code = code;
-			});			
+			});
 			// ===========================================================
 			// INSERT services that are not there (but exist in payload)
 			// DELETE services which are there (but not in payload)
@@ -35,7 +35,7 @@ const servicesUpdateAll = (function servicesUpdateAll () {
 					const serviceToUpdate = payloadServices.find( (item) => item.id == dbService.id);
 					// DA
 					if (serviceToUpdate) {
-						// update service in database with latest data from bookingbug api (in payloadServices)
+						// update service in database with latest data from external api (in payloadServices)
 						// -------------------------------------------------------------------------------------------------------------
 						// NOTE: this will not modify (overwrite) the document in the collection if it contains exactly the same data
 						// -------------------------------------------------------------------------------------------------------------

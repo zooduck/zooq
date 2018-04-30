@@ -43,5 +43,11 @@ loader span {
 	width: 200px;
 	height: 80px;
 	margin-bottom: 40px;
-	background-image: var(--loader-image-url);
+	text-align: center;
+}
+loader span:before {
+	content: "ZOOQ";
+	font: normal 42px impact;
+	letter-spacing: 5px;
+	color: rgba(0, 0, 0, .85);
 }
