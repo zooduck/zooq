@@ -175,11 +175,11 @@ const zooqApi = (function zooqApi () {
 	};
 	const $staffSet = (data) => {
 		if (zooq.queryStringService().get("staff") == 0) {
-			data = JSON.stringify([]); // TEST: MOCK NO PEOPLE FROM API
+			data = JSON.stringify([]); // TEST: MOCK NO STAFF FROM API
 		}
 		const requestHeaders = [["Content-Type", "application/json"]];
 		// ------------------------------------------------------------------------------------
-		// Update queuing staff database with people available for the current company
+		// Update queuing staff database with staff available for the current company
 		// ------------------------------------------------------------------------------------
 		return $http("PUT", `api/staff/?companyId=${zooq.companyId()}`, data, requestHeaders);
 	};
