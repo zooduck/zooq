@@ -28,6 +28,7 @@ const customersDeleteOne = (function customersDeleteOne () {
 						// push message to client...
 						const data = {
 							queue: {
+								id: payloadQueueId,
 								customer: payloadCustomerId
 							}
 						}

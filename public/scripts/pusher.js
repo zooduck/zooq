@@ -60,22 +60,19 @@ channel.bind("queue-event", function(data) {
     // ADD CUSTOMER TO QUEUE
     // ========================
     if (data.type == "QUEUE__CUSTOMER_ADD") {
-      if (zooq.getCurrentQueue().id == data.data.queue.id) {
-        zooqApi().queuesGet().then( () => {
-          const customerId = data.data.queue.customer;
-          zooq.setEstimatedWaitTimes();
+      zooqApi().queuesGet().then( () => {
+        const customerId = data.data.queue.customer;
+        zooq.setEstimatedWaitTimes();
+        zooqDOM().buildQueueList();
+        zooqDOM().setQueueTitle();
+        if (zooq.getCurrentQueue().id == data.data.queue.id) {
           zooqDOM().addCustomerToQueue(customerId);
-          zooqDOM().buildQueueList();
-          zooqDOM().setQueueTitle();
-          setLoaded();
-        }, err => {
-          zooq.consoleError(err);
-          setLoaded();
-        });
-      } else {
-        setQueueTitleInDOM();
+        }
         setLoaded();
-      }
+      }, err => {
+        zooq.consoleError(err);
+        setLoaded();
+      });
     }
     // ====================
     // CREATE NEW QUEUE
@@ -93,7 +90,9 @@ channel.bind("queue-event", function(data) {
     // =============================
     if (data.type == "QUEUE__CUSTOMER_DELETE") {
       const customerId = data.data.queue.customer;
-      zooqDOM().deleteCustomerFromQueue(customerId);
+      if (zooq.getCurrentQueue().id == data.data.queue.id) {
+        zooqDOM().deleteCustomerFromQueue(customerId);
+      }
       zooqApi().queuesGet().then( () => {
         zooqDOM().buildQueueList();
         zooqDOM().setQueueTitle();
