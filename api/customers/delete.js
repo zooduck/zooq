@@ -7,6 +7,7 @@ const customersDeleteOne = (function customersDeleteOne () {
     // DELETE customer from queue
     // ============================
     const companyIdAsKey = `_${payload.params.companyId}`;
+		const payloadCompanyId = payload.params.companyId;
     const payloadQueueId = payload.params.queueId;
     const payloadCustomerId = payload.id;
 
@@ -20,7 +21,7 @@ const customersDeleteOne = (function customersDeleteOne () {
 						return reject(err);
 					}
 					console.log(`DELETE CUSTOMER result.nModified => ${result.nModified}`);
-					payload.dbo.collection("q").find({}).toArray( (err, result) =>  {
+					payload.dbo.collection("q").find({}).sort({createdAt: 1}).toArray( (err, result) => {
 						if (err) {
 							console.log(err);
 							return reject(err);
