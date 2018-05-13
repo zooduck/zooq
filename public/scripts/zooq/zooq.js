@@ -491,6 +491,12 @@ function ZooQ() {
 			return item.id == id;
 		}) || {}
 	}
+	this.getShiftDuration = function (staffMember) {
+		const shiftStartDate = luxon.DateTime.fromISO(staffMember.attendance_started);
+		const shiftEndDate = luxon.DateTime.fromISO(staffMember.attendance_ended);
+		const shiftDuration = luxon.Interval.fromDateTimes(shiftStartDate, shiftEndDate).length("minutes").toTimeString();
+		return shiftDuration;
+	}
 	this.hasStaff = function () {
 		return staff[this.companyIdAsKey()] && staff[this.companyIdAsKey()].length > 0 || false;
 	}

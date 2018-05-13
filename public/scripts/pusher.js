@@ -38,7 +38,11 @@ channel.bind("queue-event", function(data) {
     if (data.type.match(/STAFF_MEMBER__ATTENDANCE/)) {
       zooqApi().staffGet().then( () => { // gets (from database) and sets (locally)
         const staffMember = zooq.getStaffMember(data.data.staffMember);
-        zooq.consoleLog(`${staffMember.name}'s STATUS CHANGED TO: ${staffMember.attendance_status}`);
+        zooq.consoleLog(`${staffMember.name}'s status changed to: ${staffMember.attendance_status}`);
+        if (staffMember.attendance_status === 0) {
+          const shiftDuration = zooq.getShiftDuration(staffMember);
+          zooq.consoleLog(`${staffMember.name}'s shift ended with a total duration of: ${shiftDuration}`);
+        }
         zooqDOM().updateStaffCard(staffMember);
         // ---------------------------------------------------------------------
         // staff attendance_status has changed, so we need to re-calculate
