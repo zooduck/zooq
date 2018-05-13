@@ -1,4 +1,8 @@
 # zooq
-### To run the project locally:
+
+### To view on Heroku:
+- https://zooq.herokuapp.com/
+
+### To run project locally:
 - npm install
-- npm run serve
+- npm run serve (starts a local node.js server and opens a browser tab at http://localhost:8080)
