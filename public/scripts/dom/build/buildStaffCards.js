@@ -32,7 +32,7 @@ function buildStaffCards(filters) {
     if (zooq.staffMemberHasServices(staffMember) && !staffMember.queuing_disabled) {
       return staffMember.name;
     }
-  }).join(', ').replace(/,\s(?![^,])+/g, ""), "have services in this queue");
+  }).join(", ").replace(/,\s(?![^,])+/g, ""), "have services in this queue");
   // == \log ========================================================================
 
   staffBusy.sort( (a, b) => {
