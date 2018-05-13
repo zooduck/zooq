@@ -12,48 +12,19 @@ const staffUpdateAll = (function staffUpdateAll () {
 		// remove staff with queuing_disabled or who don't support any services...
 		let payloadStaff = JSON.parse(payload.data).filter( (staffMember) => !staffMember.queuing_disabled && staffMember.service_ids.length > 0);
 
-		let oldStaff = {}
-		payload.dbo.collection("staff").find({}).toArray( (err, result) => {
-			if (err) {
-				console.log(err);
-				return reject(err);
-			} else oldStaff[companyIdAsKey] = result;
+		const oldStaffPromise = new Promise( (resolve, reject) => {
+			let oldStaff = {}
+			payload.dbo.collection("staff").find({}).toArray( (err, result) => {
+				if (err) {
+					console.log(err);
+					return reject(err);
+				} else {
+					oldStaff[companyIdAsKey] = result;
+					return resolve(oldStaff);
+				}
+			});
 		});
-
-		return new Promise( (resolve, reject) => {
-			const requestsPending = new Array(payloadStaff.length);
-			for (let staffMember of payloadStaff) {
-				const options = {
-					uri:  staffMember._links.images.href,
-					url: staffMember._links.images.href,
-					headers: {
-						"Content-Type": "application/json",
-						"App-Id": "f6b16c23",
-						"App-Key": "f0bc4f65f4fbfe7b4b3b7264b655f5eb"
-					}
-				}
-				if (!staffMember._links.images.href) {
-					staffMember.avatarUrl = null;
-					requestsPending.pop();
-					if (requestsPending.length == 0) {
-						resolve(payloadStaff);
-					}
-					continue;
-				}
-				request(options, (err, response, body) => {
-					if (err) {
-						console.log(err);
-						return reject(err);
-					} else {
-						staffMember.avatarUrl = JSON.parse(body)._embedded.images[0]? JSON.parse(body)._embedded.images[0].url : null;
-						requestsPending.pop();
-						if (requestsPending.length == 0) {
-							resolve(payloadStaff);
-						}
-					}
-				});
-			}
-		}).then ( (payloadStaff) => {
+		return oldStaffPromise.then( (oldStaff) => {
 			return new Promise( (resolve, reject) => {
 				// ===================
 				// 1. INSERT if new
@@ -75,12 +46,18 @@ const staffUpdateAll = (function staffUpdateAll () {
 								service_ids: staffMember.service_ids,
 								avatarUrl: staffMember.avatarUrl
 							}
-							payload.dbo.collection("staff").updateOne({id: staffMember.id}, {$set: newVals}, (err, result) => {
-								if (err) {
-									console.log(err);
-									return reject(err);
-								}
+							const changedVals = Object.keys(newVals).filter( (key) => {
+								return !_.isEqual(newVals[key], dbStaffMember[key]);
 							});
+							if (changedVals.length > 0) {
+								// console.log("UPDATING STAFF MEMBER:", staffMember.name, "WITH UPDATED KEYS OF:", changedVals);
+								payload.dbo.collection("staff").updateOne({id: staffMember.id}, {$set: newVals}, (err, result) => {
+									if (err) {
+										console.log(err);
+										return reject(err);
+									}
+								});
+							}
 						} else {
 							// ==========
 							// INSERT...
@@ -149,8 +126,7 @@ const staffUpdateAll = (function staffUpdateAll () {
 			}); // end Promise
 		}, err => {
 			console.log(err);
-			// reject(err);
-		});
+		}); // end oldStaffPromise
 	}
 	return function () {
 		return {

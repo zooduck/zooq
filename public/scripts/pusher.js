@@ -38,7 +38,11 @@ channel.bind("queue-event", function(data) {
     if (data.type.match(/STAFF_MEMBER__ATTENDANCE/)) {
       zooqApi().staffGet().then( () => { // gets (from database) and sets (locally)
         const staffMember = zooq.getStaffMember(data.data.staffMember);
-        zooq.consoleLog(`${staffMember.name}'s STATUS CHANGED TO: ${staffMember.attendance_status}`);
+        zooq.consoleLog(`${staffMember.name}'s status changed to: ${staffMember.attendance_status}`);
+        if (staffMember.attendance_status === 0) {
+          const shiftDuration = zooq.getShiftDuration(staffMember);
+          zooq.consoleLog(`${staffMember.name}'s shift ended with a total duration of: ${shiftDuration}`);
+        }
         zooqDOM().updateStaffCard(staffMember);
         // ---------------------------------------------------------------------
         // staff attendance_status has changed, so we need to re-calculate
@@ -60,22 +64,19 @@ channel.bind("queue-event", function(data) {
     // ADD CUSTOMER TO QUEUE
     // ========================
     if (data.type == "QUEUE__CUSTOMER_ADD") {
-      if (zooq.getCurrentQueue().id == data.data.queue.id) {
-        zooqApi().queuesGet().then( () => {
-          const customerId = data.data.queue.customer;
-          zooq.setEstimatedWaitTimes();
+      zooqApi().queuesGet().then( () => {
+        const customerId = data.data.queue.customer;
+        zooq.setEstimatedWaitTimes();
+        zooqDOM().buildQueueList();
+        zooqDOM().setQueueTitle();
+        if (zooq.getCurrentQueue().id == data.data.queue.id) {
           zooqDOM().addCustomerToQueue(customerId);
-          zooqDOM().buildQueueList();
-          zooqDOM().setQueueTitle();
-          setLoaded();
-        }, err => {
-          zooq.consoleError(err);
-          setLoaded();
-        });
-      } else {
-        setQueueTitleInDOM();
+        }
         setLoaded();
-      }
+      }, err => {
+        zooq.consoleError(err);
+        setLoaded();
+      });
     }
     // ====================
     // CREATE NEW QUEUE
@@ -93,7 +94,9 @@ channel.bind("queue-event", function(data) {
     // =============================
     if (data.type == "QUEUE__CUSTOMER_DELETE") {
       const customerId = data.data.queue.customer;
-      zooqDOM().deleteCustomerFromQueue(customerId);
+      if (zooq.getCurrentQueue().id == data.data.queue.id) {
+        zooqDOM().deleteCustomerFromQueue(customerId);
+      }
       zooqApi().queuesGet().then( () => {
         zooqDOM().buildQueueList();
         zooqDOM().setQueueTitle();

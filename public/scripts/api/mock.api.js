@@ -78,7 +78,7 @@ const mockApi = (function mockApi() {
         }
       },
       {
-        id: 3,
+        id: 4,
         name: 'Daffy Duck',
         queuing_disabled: false,
         attendance_status: 1,
