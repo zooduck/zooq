@@ -1,5 +1,7 @@
 # zooq
 
+![image](https://github.com/zooduck/screenshots/blob/master/zooq/zooq-1.png)
+
 ### To view on Heroku:
 - https://zooq.herokuapp.com/
 
